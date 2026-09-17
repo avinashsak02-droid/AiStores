@@ -1,59 +1,163 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --primary: #06b6d4;
-  --primary-dark: #0891b2;
-  --accent: #ff6b35;
-  --accent-light: #ff8555;
-  --bg-dark: #0a0e27;
-  --bg-card: #111827;
-  --bg-hover: #1f2937;
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --border: #1e293b;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1629 100%);
-  color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-  background-attachment: fixed;
-  min-height: 100vh;
-}
-
 .App {
-  min-height: 100vh;
-  background: transparent;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
 }
 
-button {
-  font-family: inherit;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.app-main {
+  flex: 1;
 }
 
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
+/* Section rhythm shared across pages */
+.section {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
+.section-head h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+.section-head .section-sub {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 0.35rem;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--accent);
+  font-weight: 550;
+  font-size: 0.92rem;
+  transition: gap 0.18s ease;
+}
+.text-link:hover {
+  gap: 0.6rem;
+}
+
+/* ---- Creator login gate ---- */
+.auth-screen {
+  min-height: calc(100svh - 72px);
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.auth-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1.25rem;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.auth-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-card p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 1.75rem;
+}
+
+.auth-note {
+  margin-top: 1.1rem;
+  font-size: 0.8rem;
+  color: var(--faint);
+}
+
+/* ---- Loading skeletons ---- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-3);
+  border-radius: var(--r-sm);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ---- Generic empty state ---- */
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: clamp(2.5rem, 6vw, 4rem) 1.5rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+}
+.empty-glyph {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 1.5rem;
+}
+.empty h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+.empty p {
+  color: var(--muted);
+  max-width: 34ch;
+  margin: 0 auto 1.25rem;
+  font-size: 0.95rem;
+}
+
+/* Reusable fade-in */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise {
+  animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }

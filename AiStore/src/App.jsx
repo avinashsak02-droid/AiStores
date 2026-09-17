@@ -13,6 +13,7 @@ function App() {
   const handleViewTool = (tool) => {
     setSelectedTool(tool)
     setCurrentPage('tool-details')
+    window.scrollTo({ top: 0 })
   }
 
   const handleBackToMarketplace = () => {
@@ -22,24 +23,46 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar 
-        currentPage={currentPage} 
+      <Navbar
+        currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         sellerLoggedIn={sellerLoggedIn}
         setSellerLoggedIn={setSellerLoggedIn}
       />
-      
-      {currentPage === 'marketplace' && <Marketplace onViewTool={handleViewTool} />}
-      {currentPage === 'tool-details' && selectedTool && (
-        <ToolDetails tool={selectedTool} onBack={handleBackToMarketplace} />
-      )}
-      {currentPage === 'seller' && sellerLoggedIn && <SellerDashboard />}
-      {currentPage === 'seller' && !sellerLoggedIn && (
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <h2>Seller Login Required</h2>
-          <button onClick={() => setSellerLoggedIn(true)}>Login as Seller</button>
-        </div>
-      )}
+
+      <main className="app-main">
+        {currentPage === 'marketplace' && (
+          <Marketplace
+            onViewTool={handleViewTool}
+            onOpenCreator={() => setCurrentPage('seller')}
+          />
+        )}
+        {currentPage === 'tool-details' && selectedTool && (
+          <ToolDetails tool={selectedTool} onBack={handleBackToMarketplace} />
+        )}
+        {currentPage === 'seller' && sellerLoggedIn && <SellerDashboard />}
+        {currentPage === 'seller' && !sellerLoggedIn && (
+          <div className="auth-screen">
+            <div className="auth-card rise">
+              <div className="auth-badge">A</div>
+              <h2>Creator sign in</h2>
+              <p>
+                Access your creator console to publish, manage and track the
+                performance of your AI tools on AIStore.
+              </p>
+              <button
+                className="btn btn-primary btn-lg btn-block"
+                onClick={() => setSellerLoggedIn(true)}
+              >
+                Continue to console
+              </button>
+              <p className="auth-note">
+                Publishing is free — you keep full ownership of your product.
+              </p>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   )
 }
