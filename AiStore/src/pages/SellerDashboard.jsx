@@ -42,18 +42,26 @@ export default function SellerDashboard({ user }) {
     return () => unsubscribe()
   }, [user])
 
-  const handleGoogleLogin = async () => {
-    try {
-      setLoggingIn(true)
-      await signInWithPopup(auth, googleProvider)
-      // User state updates automatically via App.jsx
-    } catch (error) {
+const handleGoogleLogin = async () => {
+  try {
+    setLoggingIn(true)
+    const result = await signInWithPopup(auth, googleProvider)
+    console.log('Login successful:', result.user.email)
+  } catch (error) {
+    if (error.code === 'auth/popup-blocked') {
+      alert('Pop-up was blocked. Please allow pop-ups and try again.')
+    } else if (error.code === 'auth/cancelled-popup-request') {
+      console.log('User cancelled login')
+    } else if (error.code === 'auth/network-request-failed') {
+      alert('Network error. Check your connection and try again.')
+    } else {
       console.error('Login error:', error)
-      alert('Login failed. Please try again.')
-    } finally {
-      setLoggingIn(false)
+      alert(`Login failed: ${error.message}`)
     }
+  } finally {
+    setLoggingIn(false)
   }
+}
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
