@@ -1,0 +1,37 @@
+# AI Store — Important Decisions
+
+## Decision 001 — Marketplace concept
+
+AI Store will be a marketplace for AI tools and AI agents.
+
+Users should be able to discover, use and purchase AI products.
+
+Sellers should be able to list and sell their AI products.
+
+---
+
+## Decision 002 — Development approach
+
+AI coding assistants are being used heavily to develop the project.
+
+The developer has basic coding knowledge and therefore AI assistants should provide clear explanations when making complicated changes.
+
+---
+
+## Decision 003 — Authentication
+
+Google login authentication has been implemented.
+
+The implementation currently has reliability problems and needs debugging.
+
+---
+
+## Decision 004 — Shared AI project memory
+
+GitHub is being used as the central source of truth for project context.
+
+AI assistants working on the project should use the files inside:
+
+AI-CONTEXT/
+
+as project memory.
