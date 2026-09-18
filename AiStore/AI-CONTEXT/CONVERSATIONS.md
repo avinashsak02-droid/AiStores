@@ -348,3 +348,47 @@ If directory structure seems wrong:
 ## Source Of Truth
 
 **The actual source code in the repository** (`/src` directory, `package.json`, `vite.config.js`, `src/firebase.js`) is the authoritative source for the current implementation. This markdown file is historical context only and reflects what was known/discussed at the end of this conversation. If code differs from this document, the code is correct and this context may be slightly outdated. Always check actual implementation in the repo when in doubt.
+
+
+
+#####Conversation 2
+# Session 2 — Google Authentication Fix
+
+## Objective
+
+Investigate why Google authentication was not working in the AI Store application.
+
+## Investigation
+
+The repository's authentication implementation was reviewed.
+
+The authentication code appeared to be structurally correct. The investigation identified Firebase/Google authentication configuration as the likely cause of the Google login problem.
+
+The following Firebase configuration areas were checked/addressed:
+
+- Authorized JavaScript origins
+- Google Sign-In provider configuration
+- OAuth consent screen configuration
+- Authorized redirect URI configuration
+
+Additional error handling for Firebase authentication errors was also considered/provided.
+
+## Implementation
+
+The recommended fix was applied to the project in VS Code.
+
+## Confirmed Result
+
+Google authentication was tested after applying the fix and is now **working correctly**.
+
+## Important Notes
+
+- This session ended because Claude credits ran out shortly after the Google authentication issue was diagnosed/fixed.
+- The project source code was updated in VS Code.
+- Google authentication was confirmed working by the user.
+- Previous conversation history must not be overwritten.
+- The repository source code remains the authoritative source for the current implementation.
+
+## Status
+
+**Google authentication: COMPLETED**
