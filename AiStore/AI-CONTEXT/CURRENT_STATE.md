@@ -18,24 +18,15 @@ Google login authentication has been added.
 
 ### Current problem
 
-Google authentication is not working reliably.
-
-It sometimes works and sometimes fails.
-
-This is currently an important unresolved issue.
+no problems
 
 ## Current priority
 
 The immediate priority is:
+next mission will be clarified in the next chat
 
-1. Investigate the existing Google authentication implementation.
-2. Find out why authentication fails intermittently.
-3. Fix the authentication system.
-4. Test the login flow thoroughly.
-5. Avoid changing unrelated parts of the application.
+
 
 ## Important instruction
 
-Before changing authentication code, inspect the existing implementation and understand how it currently works.
 
-Do not rebuild the entire authentication system unless there is a clear reason to do so.
