@@ -3,27 +3,32 @@ import './Navbar.css'
 export default function Navbar({ currentPage, setCurrentPage, sellerLoggedIn, setSellerLoggedIn }) {
   return (
     <nav className="navbar">
-      <div className="navbar-container">
-        <div className="navbar-logo" onClick={() => setCurrentPage('marketplace')}>
-          <span className="logo-icon">✨</span>
-          <span className="logo-text">AI Store</span>
+      <div className="navbar-inner">
+        <div 
+          className="navbar-logo"
+          onClick={() => setCurrentPage('marketplace')}
+        >
+          <span className="logo-text">AIStore</span>
+          <span className="logo-tagline">Discovery Platform</span>
         </div>
-        
-        <ul className="nav-menu">
+
+        <div className="navbar-divider"></div>
+
+        <ul className="navbar-menu">
           <li>
-            <button 
-              className={`nav-btn ${currentPage === 'marketplace' ? 'active' : ''}`} 
+            <button
+              className={`navbar-link ${currentPage === 'marketplace' ? 'active' : ''}`}
               onClick={() => setCurrentPage('marketplace')}
             >
-              Browse
+              Marketplace
             </button>
           </li>
           <li>
-            <button 
-              className={`nav-btn ${currentPage === 'seller' ? 'active' : ''}`} 
+            <button
+              className={`navbar-link ${currentPage === 'seller' ? 'active' : ''}`}
               onClick={() => setCurrentPage('seller')}
             >
-              {sellerLoggedIn ? 'Creator Hub' : 'Become Creator'}
+              {sellerLoggedIn ? 'Creator Hub' : 'For Creators'}
             </button>
           </li>
         </ul>

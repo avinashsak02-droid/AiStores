@@ -1,21 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Lora:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Design Tokens */
+:root {
+  --bg: #F9F9F7;
+  --fg: #111111;
+  --muted: #E5E5E0;
+  --accent: #CC0000;
+  
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Lora', serif;
+  --font-ui: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --border-thin: 1px solid var(--fg);
+  --border-heavy: 4px solid var(--fg);
+  --shadow-hard: 4px 4px 0 var(--fg);
+  
+  --transition: 200ms ease-out;
+  --max-width: 1280px;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-:root {
-  --primary: #06b6d4;
-  --primary-dark: #0891b2;
-  --accent: #ff6b35;
-  --accent-light: #ff8555;
-  --bg-dark: #0a0e27;
-  --bg-card: #111827;
-  --bg-hover: #1f2937;
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --border: #1e293b;
 }
 
 html {
@@ -23,37 +31,191 @@ html {
 }
 
 body {
-  background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1629 100%);
-  color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-  background-attachment: fixed;
-  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  font-size: 16px;
 }
 
 .App {
   min-height: 100vh;
-  background: transparent;
+  background: var(--bg);
 }
 
-button {
-  font-family: inherit;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Scrollbar Styling */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
+  background: var(--fg);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
+}
+
+/* Typography System */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+h1 {
+  font-size: 4rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 2.5rem;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5, h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--fg);
+}
+
+button {
+  font-family: var(--font-ui);
+  transition: all var(--transition);
+  cursor: pointer;
+  border: none;
+}
+
+input, textarea, select {
+  font-family: var(--font-ui);
+}
+
+/* Utility Classes */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.divider-h {
+  height: 1px;
+  background: var(--muted);
+  margin: 2rem 0;
+}
+
+.divider-heavy {
+  height: 4px;
+  background: var(--fg);
+  margin: 3rem 0;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+/* Grid Utilities */
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2rem;
+}
+
+.col-8 {
+  grid-column: span 8;
+}
+
+.col-4 {
+  grid-column: span 4;
+}
+
+.col-7 {
+  grid-column: span 7;
+}
+
+.col-5 {
+  grid-column: span 5;
+}
+.seller-Login{
+  margin-top: 30px;
+    background: transparent;
+  border: var(--border-thin);
+  color: var(--fg);
+  padding: 0.6rem 1.2rem;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all var(--transition);
+  cursor: pointer;
+  white-space: nowrap;
+}
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 3rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+  
+  .col-8, .col-7 {
+    grid-column: span 12;
+  }
+  
+  .col-4, .col-5 {
+    grid-column: span 12;
+  }
+  
+  .grid-12 {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .divider-h, .divider-heavy {
+    margin: 1.5rem 0;
+  }
 }

@@ -7,59 +7,102 @@ export default function ToolDetails({ tool, onBack }) {
 
   return (
     <div className="tool-details">
-      <button className="btn-back" onClick={onBack}>
-        ← Back to Marketplace
+      <button className="back-button" onClick={onBack}>
+        ← Back to Catalog
       </button>
 
-      <div className="details-container">
-        <div className="details-hero">
-          <div className="details-icon">{tool.icon}</div>
+      <article className="tool-article">
+        <header className="tool-header">
+          <div className="tool-hero-icon">{tool.icon}</div>
           <h1>{tool.name}</h1>
-          <p className="details-category">{tool.category}</p>
-          <p className="details-price">{tool.price}</p>
-        </div>
+          <p className="tool-tagline">{tool.description}</p>
+          
+          <div className="tool-meta-header">
+            <div className="meta">
+              <span className="meta-label">Category</span>
+              <span className="meta-value">{tool.category}</span>
+            </div>
+            <div className="meta">
+              <span className="meta-label">Status</span>
+              <span className="meta-value">{tool.price}</span>
+            </div>
+            <div className="meta">
+              <span className="meta-label">Rating</span>
+              <span className="meta-value">★ {tool.rating || 4.5}</span>
+            </div>
+            <div className="meta">
+              <span className="meta-label">Users</span>
+              <span className="meta-value">{(tool.downloads || 0).toLocaleString()}</span>
+            </div>
+          </div>
+        </header>
 
-        <div className="details-content">
-          <div className="details-main">
-            <section className="details-section">
-              <h2>About</h2>
-              <p>{tool.description || 'No description provided.'}</p>
+        <div className="divider-heavy"></div>
+
+        <div className="tool-content-grid">
+          <main className="tool-main">
+            <section className="tool-section">
+              <h2>About This Product</h2>
+              <p>{tool.description}</p>
+              <p>Explore {tool.name} to discover powerful capabilities designed for {tool.category.toLowerCase()} workflows.</p>
             </section>
 
-            <section className="details-section">
-              <h2>Details</h2>
-              <div className="details-stats">
-                <div className="stat-box">
-                  <span className="stat-label">Rating</span>
-                  <span className="stat-value">⭐ {tool.rating || 4.5}</span>
+            <section className="tool-section">
+              <h2>Product Information</h2>
+              <div className="info-grid">
+                <div className="info-item">
+                  <span className="info-label">Category</span>
+                  <span className="info-value">{tool.category}</span>
                 </div>
-                <div className="stat-box">
-                  <span className="stat-label">Downloads</span>
-                  <span className="stat-value">{(tool.downloads || 0).toLocaleString()}</span>
+                <div className="info-item">
+                  <span className="info-label">Creator</span>
+                  <span className="info-value">{tool.sellerId || 'Unknown'}</span>
                 </div>
-                <div className="stat-box">
-                  <span className="stat-label">Creator</span>
-                  <span className="stat-value">{tool.sellerId || 'Unknown'}</span>
+                <div className="info-item">
+                  <span className="info-label">Pricing Model</span>
+                  <span className="info-value">{tool.price}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Community Rating</span>
+                  <span className="info-value">★ {tool.rating || 4.5} / 5.0</span>
                 </div>
               </div>
             </section>
 
-            <section className="details-section">
-              <h2>Link</h2>
-              <a href={tool.link} target="_blank" rel="noopener noreferrer" className="details-link">
-                {tool.link}
-              </a>
+            <section className="tool-section">
+              <h2>Access the Product</h2>
+              <div className="link-box">
+                <div className="link-label">Official URL</div>
+                <a href={tool.link} target="_blank" rel="noopener noreferrer" className="link-value">
+                  {tool.link}
+                </a>
+              </div>
             </section>
-          </div>
+          </main>
 
-          <div className="details-sidebar">
-            <button className="btn-try-now" onClick={handleTryNow}>
-              Try Now →
-            </button>
-            <button className="btn-rate">Rate This Tool</button>
-          </div>
+          <aside className="tool-sidebar">
+            <div className="sidebar-card">
+              <div className="sidebar-label">Launch Now</div>
+              <button className="btn-primary" onClick={handleTryNow}>
+                Access Product
+              </button>
+            </div>
+
+            <div className="divider-h"></div>
+
+            <div className="sidebar-stats">
+              <div className="sidebar-stat">
+                <span className="stat-number">{(tool.downloads || 0).toLocaleString()}</span>
+                <span className="stat-desc">Users</span>
+              </div>
+              <div className="sidebar-stat">
+                <span className="stat-number">★ {tool.rating || 4.5}</span>
+                <span className="stat-desc">Rating</span>
+              </div>
+            </div>
+          </aside>
         </div>
-      </div>
+      </article>
     </div>
   )
 }

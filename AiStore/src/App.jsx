@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { auth } from './firebase'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
 import './App.css'
 import Navbar from './components/Navbar'
 import Marketplace from './pages/Marketplace'
@@ -7,8 +9,18 @@ import SellerDashboard from './pages/SellerDashboard'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('marketplace')
-  const [sellerLoggedIn, setSellerLoggedIn] = useState(false)
   const [selectedTool, setSelectedTool] = useState(null)
+  const [user, setUser] = useState(null)
+  const [loadingAuth, setLoadingAuth] = useState(true)
+
+  // Check if user is already logged in (on page load)
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser)
+      setLoadingAuth(false)
+    })
+    return () => unsubscribe()
+  }, [])
 
   const handleViewTool = (tool) => {
     setSelectedTool(tool)
@@ -20,25 +32,36 @@ function App() {
     setCurrentPage('marketplace')
   }
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth)
+      setCurrentPage('marketplace')
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }
+
+  if (loadingAuth) {
+    return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
+  }
+
   return (
     <div className="App">
       <Navbar 
         currentPage={currentPage} 
         setCurrentPage={setCurrentPage}
-        sellerLoggedIn={sellerLoggedIn}
-        setSellerLoggedIn={setSellerLoggedIn}
+        user={user}
+        onLogout={handleLogout}
       />
       
       {currentPage === 'marketplace' && <Marketplace onViewTool={handleViewTool} />}
+      
       {currentPage === 'tool-details' && selectedTool && (
         <ToolDetails tool={selectedTool} onBack={handleBackToMarketplace} />
       )}
-      {currentPage === 'seller' && sellerLoggedIn && <SellerDashboard />}
-      {currentPage === 'seller' && !sellerLoggedIn && (
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <h2>Seller Login Required</h2>
-          <button onClick={() => setSellerLoggedIn(true)}>Login as Seller</button>
-        </div>
+      
+      {currentPage === 'seller' && (
+        <SellerDashboard user={user} />
       )}
     </div>
   )

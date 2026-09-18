@@ -34,46 +34,71 @@ export default function Marketplace({ onViewTool }) {
 
   return (
     <div className="marketplace">
-      <div className="marketplace-header">
-        <h1>AI Store Marketplace</h1>
-        <p>Discover and use powerful AI tools for your projects</p>
+      <div className="marketplace-hero">
+        <h1>The AI Product Catalog</h1>
+        <p>Discover, compare, and launch AI tools tailored to your needs.</p>
       </div>
 
-      <div className="search-section">
+      <div className="marketplace-search">
         <input
           type="text"
-          placeholder="Search AI tools..."
+          placeholder="Search AI products, creators, categories..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
         />
       </div>
 
-      <div className="category-filter">
-        {categories.map(category => (
-          <button
-            key={category}
-            className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(category)}
-          >
-            {category}
-          </button>
-        ))}
+      <div className="marketplace-filters">
+        <div className="filter-label">Category</div>
+        <div className="filter-buttons">
+          {categories.map(category => (
+            <button
+              key={category}
+              className={`filter-btn ${selectedCategory === category ? 'active' : ''}`}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="tools-grid">
+      <div className="marketplace-stats">
+        <div className="stat">
+          <span className="stat-number">{filteredTools.length}</span>
+          <span className="stat-label">Products Found</span>
+        </div>
+        {selectedCategory !== 'All' && (
+          <div className="stat">
+            <span className="stat-label">{selectedCategory}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="divider-h"></div>
+
+      <div className="tools-container">
         {loading ? (
-          <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#999' }}>Loading tools...</p>
+          <div className="loading-state">
+            <p>Loading AI products...</p>
+          </div>
         ) : filteredTools.length > 0 ? (
-          filteredTools.map(tool => (
-            <AICard 
-              key={tool.id} 
-              tool={tool}
-              onClick={() => onViewTool(tool)}
-            />
-          ))
+          <div className="tools-grid">
+            {filteredTools.map((tool, index) => (
+              <AICard 
+                key={tool.id} 
+                tool={tool}
+                index={index}
+                onClick={() => onViewTool(tool)}
+              />
+            ))}
+          </div>
         ) : (
-          <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#999' }}>No AI tools found. Try a different search.</p>
+          <div className="empty-state">
+            <p>No AI products match your search.</p>
+            <p className="empty-subtext">Try adjusting your filters or search terms.</p>
+          </div>
         )}
       </div>
     </div>
