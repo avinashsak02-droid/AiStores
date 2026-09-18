@@ -1,13 +1,9 @@
 # AI Store — TODO
 
 ## 🔴 HIGH PRIORITY
+- [ ] to make the prototype market ready
 
-- [ ] Fix Google login authentication
-- [ ] Test Google login repeatedly
-- [ ] Test logout
-- [ ] Test authentication persistence
-- [ ] Make sure users are correctly recognized after login
-
+ 
 ## 🟡 MEDIUM PRIORITY
 
 - [ ] Seller accounts
