@@ -86,10 +86,49 @@
   font-weight: 700;
 }
 
+/* Logged-in user info + logout button (right side of navbar) */
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.navbar-user-name {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--fg);
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar-logout {
+  background: transparent;
+  border: var(--border-thin);
+  color: var(--fg);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.navbar-logout:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
 @media (max-width: 768px) {
   .navbar-inner {
     padding: 1rem 1rem;
     gap: 1rem;
+    flex-wrap: wrap;
   }
   
   .logo-text {
@@ -103,5 +142,9 @@
   .navbar-link {
     padding: 0 1rem 0.5rem 1rem;
     font-size: 0.85rem;
+  }
+
+  .navbar-user-name {
+    display: none;
   }
 }

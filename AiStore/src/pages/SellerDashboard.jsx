@@ -4,7 +4,7 @@ import { signInWithPopup } from 'firebase/auth'
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot } from 'firebase/firestore'
 import './SellerDashboard.css'
 
-export default function SellerDashboard({ user }) {
+export default function SellerDashboard({ user, onLogout }) {
   const [tools, setTools] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState(null)
@@ -181,6 +181,9 @@ const handleGoogleLogin = async () => {
           <p>Welcome, {user.displayName || user.email}!</p>
           <p className="subtitle">Manage and publish your AI products to the marketplace.</p>
         </div>
+        <button className="btn-logout" onClick={onLogout}>
+          Log Out
+        </button>
       </div>
 
       <div className="divider-heavy"></div>

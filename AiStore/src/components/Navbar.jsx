@@ -1,6 +1,6 @@
 import './Navbar.css'
 
-export default function Navbar({ currentPage, setCurrentPage, sellerLoggedIn, setSellerLoggedIn }) {
+export default function Navbar({ currentPage, setCurrentPage, user, onLogout }) {
   return (
     <nav className="navbar">
       <div className="navbar-inner">
@@ -28,10 +28,19 @@ export default function Navbar({ currentPage, setCurrentPage, sellerLoggedIn, se
               className={`navbar-link ${currentPage === 'seller' ? 'active' : ''}`}
               onClick={() => setCurrentPage('seller')}
             >
-              {sellerLoggedIn ? 'Creator Hub' : 'For Creators'}
+              {user ? 'Creator Hub' : 'For Creators'}
             </button>
           </li>
         </ul>
+
+        {user && (
+          <div className="navbar-user">
+            <span className="navbar-user-name">{user.displayName || user.email}</span>
+            <button className="navbar-logout" onClick={onLogout}>
+              Log Out
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   )

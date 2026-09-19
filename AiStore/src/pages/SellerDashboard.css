@@ -9,6 +9,10 @@
   margin: 0 auto;
   padding: 3rem 2rem 2rem;
   border-bottom: var(--border-thin);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 .dashboard-header h1 {
@@ -310,6 +314,7 @@
   font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
   transition: all 200ms ease-out;
+  flex-shrink: 0;
 }
 
 .btn-logout:hover {
