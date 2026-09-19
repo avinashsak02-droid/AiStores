@@ -392,3 +392,76 @@ Google authentication was tested after applying the fix and is now **working cor
 ## Status
 
 **Google authentication: COMPLETED**
+
+
+
+
+#####Conversation 3
+
+# Session — Full-Screen UI, Logout & Login Persistence
+
+## Objective
+
+Continue developing the AIStore website and move it toward a fully finished website.
+
+## Changes Implemented
+
+### 1. Full-Screen Website Layout
+
+The website previously appeared inside a fixed-width boxed layout because of a leftover Vite starter `#root` CSS rule in `src/index.css`.
+
+The `#root` styling was changed so that the application uses the full width and height of the browser.
+
+The previous fixed-width box and left/right borders were removed.
+
+**Status: IMPLEMENTED and confirmed working.**
+
+### 2. Logout Functionality
+
+The website previously had no way for a logged-in creator to log out.
+
+Logout functionality was added to:
+
+- The main navbar
+- The Creator Hub / Seller Dashboard
+
+The logout flow uses Firebase Authentication's `signOut(auth)`.
+
+The navbar now receives the authenticated `user` and `onLogout` handler from `App.jsx`.
+
+The Seller Dashboard also receives `onLogout` and provides its own Log Out button.
+
+**Status: IMPLEMENTED by the user after the code was provided by Claude.**
+
+### 3. Login State Persistence
+
+The existing Firebase authentication state handling was reviewed.
+
+`App.jsx` already uses `onAuthStateChanged` to detect the current authenticated user when the application loads.
+
+Firebase Authentication already persists the user's login state in the browser by default, so no separate custom login-storage system was required.
+
+The logout functionality now allows the user to explicitly end that persisted login session.
+
+**Status: IMPLEMENTED / existing functionality confirmed.**
+
+## Files Involved
+
+The development changes involved:
+
+- `src/index.css`
+- `src/App.jsx`
+- `src/components/Navbar.jsx`
+- `src/components/Navbar.css`
+- `src/pages/SellerDashboard.jsx`
+- `src/pages/SellerDashboard.css`
+
+## Important Development Note
+
+The Claude development conversation ended because Claude credits ran out immediately after Claude provided the logout-related code.
+
+The user then manually applied the provided changes in VS Code.
+
+The changes were therefore implemented even though Claude did not receive a final confirmation or perform a `SYNC PROJECT` during that conversation.
+
+Previous conversation history must be preserved.
