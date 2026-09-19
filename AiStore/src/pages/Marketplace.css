@@ -130,9 +130,9 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--fg);  /* CHANGE FROM: var(--muted) */
+  color: var(--fg);
   font-weight: 700;
-  opacity: 0.5;  /* ADD THIS */
+  opacity: 0.5;
 }
 
 .tools-container {
@@ -141,10 +141,17 @@
   padding: 2rem 2rem;
 }
 
+/* Featured Section */
+.featured-section {
+  margin-bottom: 4rem;
+}
+
+/* Regular Grid - Newspaper Masonry Style */
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
+  -ms-grid-rows: auto;
 }
 
 .loading-state, .empty-state {
@@ -170,7 +177,7 @@
   }
   
   .tools-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
   }
   
@@ -213,5 +220,9 @@
   .filter-btn {
     padding: 0.5rem 1rem;
     font-size: 0.75rem;
+  }
+
+  .featured-section {
+    margin-bottom: 2rem;
   }
 }

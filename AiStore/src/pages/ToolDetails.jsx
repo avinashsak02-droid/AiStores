@@ -1,3 +1,4 @@
+import PhotoCarousel from '../components/PhotoCarousel'
 import './ToolDetails.css'
 
 export default function ToolDetails({ tool, onBack }) {
@@ -13,8 +14,14 @@ export default function ToolDetails({ tool, onBack }) {
 
       <article className="tool-article">
         <header className="tool-header">
-          <div className="tool-hero-icon">{tool.icon}</div>
-          <h1>{tool.name}</h1>
+          <div className="tool-hero-section">
+            {tool.logo ? (
+              <img src={tool.logo} alt={tool.name} className="tool-logo" />
+            ) : (
+              <div className="tool-hero-icon">{tool.icon}</div>
+            )}
+            <h1>{tool.name}</h1>
+          </div>
           <p className="tool-tagline">{tool.description}</p>
           
           <div className="tool-meta-header">
@@ -39,6 +46,14 @@ export default function ToolDetails({ tool, onBack }) {
 
         <div className="divider-heavy"></div>
 
+        {/* NEW: Photo Carousel */}
+        {tool.photos && tool.photos.length > 0 && (
+          <section className="tool-photos">
+            <h2>Gallery</h2>
+            <PhotoCarousel photos={tool.photos} />
+          </section>
+        )}
+
         <div className="tool-content-grid">
           <main className="tool-main">
             <section className="tool-section">
@@ -56,7 +71,7 @@ export default function ToolDetails({ tool, onBack }) {
                 </div>
                 <div className="info-item">
                   <span className="info-label">Creator</span>
-                  <span className="info-value">{tool.sellerId || 'Unknown'}</span>
+                  <span className="info-value">{tool.sellerName || 'Unknown'}</span>
                 </div>
                 <div className="info-item">
                   <span className="info-label">Pricing Model</span>

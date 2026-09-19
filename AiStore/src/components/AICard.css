@@ -7,107 +7,90 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  min-height: 200px;
 }
 
 .ai-card:hover {
   border-color: var(--accent);
   box-shadow: var(--shadow-hard);
-  transform: translate(-4px, -4px);
+  transform: translate(-2px, -2px);
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+.card-number {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--fg);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.4;
+  margin-bottom: 0.75rem;
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  line-height: 1;
   margin-bottom: 1rem;
 }
 
-.card-index {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--fg);  /* CHANGE FROM: var(--muted) */
-  font-weight: 600;
-  opacity: 0.5;  /* ADD THIS */
-}
-.card-icon {
-  font-size: 2rem;
-  line-height: 1;
+.card-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .card-title {
   font-size: 1.25rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   font-weight: 700;
-}
-
-.card-description {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
+  letter-spacing: -0.01em;
   color: var(--fg);
-  line-height: 1.5;
-  margin-bottom: 1rem;
-  flex-grow: 1;
+  line-height: 1.3;
 }
 
 .card-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
   gap: 0.75rem;
-  padding: 1rem 0;
-  border-top: var(--border-thin);
-  border-bottom: var(--border-thin);
+  flex-wrap: wrap;
   margin-bottom: 1rem;
 }
 
-.meta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.meta-label {
+.card-category {
   font-family: var(--font-ui);
   font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--fg);  /* CHANGE FROM: var(--muted) */
+  letter-spacing: 0.08em;
+  color: var(--fg);
   font-weight: 700;
-  opacity: 0.7;  /* ADD THIS */
+  padding: 0.3rem 0.6rem;
+  background: #FAFAF9;
+  border: var(--border-thin);
 }
-.meta-value {
+
+.card-status {
   font-family: var(--font-ui);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--fg);
-}
-
-.meta-value.status-free {
-  color: var(--fg);
-  font-weight: 700;
-}
-
-.meta-value.status-paid {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--accent);
   font-weight: 700;
 }
 
-.card-footer {
-  display: flex;
-  gap: 0.5rem;
-}
-
 .card-cta {
-  flex: 1;
   background: var(--fg);
   color: var(--bg);
   border: var(--border-thin);
-  padding: 0.75rem;
+  padding: 0.6rem 1rem;
   font-family: var(--font-ui);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   transition: all var(--transition);
+  cursor: pointer;
+  align-self: flex-start;
 }
 
 .card-cta:hover {
@@ -120,18 +103,14 @@
 @media (max-width: 768px) {
   .ai-card {
     padding: 1rem;
+    min-height: auto;
   }
   
   .card-icon {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
   
   .card-title {
     font-size: 1.1rem;
-  }
-  
-  .card-meta {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
   }
 }

@@ -1,6 +1,10 @@
 import './Navbar.css'
 
 export default function Navbar({ currentPage, setCurrentPage, user, onLogout }) {
+  const handleLogout = async () => {
+    await onLogout()
+  }
+
   return (
     <nav className="navbar">
       <div className="navbar-inner">
@@ -34,10 +38,10 @@ export default function Navbar({ currentPage, setCurrentPage, user, onLogout }) 
         </ul>
 
         {user && (
-          <div className="navbar-user">
-            <span className="navbar-user-name">{user.displayName || user.email}</span>
-            <button className="navbar-logout" onClick={onLogout}>
-              Log Out
+          <div className="navbar-auth">
+            <span className="navbar-user">{user.displayName || user.email}</span>
+            <button className="navbar-logout" onClick={handleLogout}>
+              Logout
             </button>
           </div>
         )}

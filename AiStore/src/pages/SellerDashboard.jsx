@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
 import { auth, db, googleProvider } from '../firebase'
-import { signInWithPopup } from 'firebase/auth'
+import { signInWithPopup, signOut } from 'firebase/auth'
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot } from 'firebase/firestore'
 import './SellerDashboard.css'
 
-export default function SellerDashboard({ user, onLogout }) {
+export default function SellerDashboard({ user }) {
   const [tools, setTools] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [loggingIn, setLoggingIn] = useState(false)
+  const [saving, setSaving] = useState(false)
   
   const [formData, setFormData] = useState({
     name: '',
@@ -17,7 +18,9 @@ export default function SellerDashboard({ user, onLogout }) {
     icon: '🤖',
     category: 'Coding',
     link: '',
-    price: 'Free'
+    price: 'Free',
+    logo: '',
+    photos: ['', '', '', '', '']
   })
 
   const categories = ['Coding', 'Image', 'Video', 'Writing', 'Music', 'SEO', 'Design', 'Other']
@@ -42,30 +45,33 @@ export default function SellerDashboard({ user, onLogout }) {
     return () => unsubscribe()
   }, [user])
 
-const handleGoogleLogin = async () => {
-  try {
-    setLoggingIn(true)
-    const result = await signInWithPopup(auth, googleProvider)
-    console.log('Login successful:', result.user.email)
-  } catch (error) {
-    if (error.code === 'auth/popup-blocked') {
-      alert('Pop-up was blocked. Please allow pop-ups and try again.')
-    } else if (error.code === 'auth/cancelled-popup-request') {
-      console.log('User cancelled login')
-    } else if (error.code === 'auth/network-request-failed') {
-      alert('Network error. Check your connection and try again.')
-    } else {
+  const handleGoogleLogin = async () => {
+    try {
+      setLoggingIn(true)
+      await signInWithPopup(auth, googleProvider)
+    } catch (error) {
       console.error('Login error:', error)
-      alert(`Login failed: ${error.message}`)
+      alert('Login failed. Please try again.')
+    } finally {
+      setLoggingIn(false)
     }
-  } finally {
-    setLoggingIn(false)
   }
-}
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  // Handle photo URL changes
+  const handlePhotoChange = (index, value) => {
+    const newPhotos = [...formData.photos]
+    newPhotos[index] = value
+    setFormData(prev => ({ ...prev, photos: newPhotos }))
+  }
+
+  // Filter out empty photo URLs
+  const getValidPhotos = () => {
+    return formData.photos.filter(photo => photo.trim() !== '')
   }
 
   const handleAddTool = async () => {
@@ -75,18 +81,31 @@ const handleGoogleLogin = async () => {
     }
 
     try {
+      setSaving(true)
+
+      const toolData = {
+        name: formData.name,
+        description: formData.description,
+        icon: formData.icon,
+        category: formData.category,
+        link: formData.link,
+        price: formData.price,
+        logo: formData.logo || null,
+        photos: getValidPhotos(),
+        rating: 4.5,
+        downloads: 0,
+        createdAt: new Date()
+      }
+
       if (editingId) {
-        await updateDoc(doc(db, 'tools', editingId), formData)
+        await updateDoc(doc(db, 'tools', editingId), toolData)
         setEditingId(null)
       } else {
         await addDoc(collection(db, 'tools'), {
-          ...formData,
-          sellerId: user.uid,  // ✅ Use actual user ID instead of hardcoded seller_1
+          ...toolData,
+          sellerId: user.uid,
           sellerEmail: user.email,
-          sellerName: user.displayName,
-          rating: 4.5,
-          downloads: 0,
-          createdAt: new Date()
+          sellerName: user.displayName
         })
       }
 
@@ -96,12 +115,17 @@ const handleGoogleLogin = async () => {
         icon: '🤖',
         category: 'Coding',
         link: '',
-        price: 'Free'
+        price: 'Free',
+        logo: '',
+        photos: ['', '', '', '', '']
       })
       setShowForm(false)
+      alert(editingId ? 'Product updated!' : 'Product published!')
     } catch (error) {
       console.error('Error:', error)
-      alert('Error saving tool.')
+      alert('Error saving tool: ' + error.message)
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -112,7 +136,9 @@ const handleGoogleLogin = async () => {
       icon: tool.icon,
       category: tool.category,
       link: tool.link,
-      price: tool.price
+      price: tool.price,
+      logo: tool.logo || '',
+      photos: [...(tool.photos || []), '', '', '', ''].slice(0, 5)
     })
     setEditingId(tool.id)
     setShowForm(true)
@@ -138,11 +164,13 @@ const handleGoogleLogin = async () => {
       icon: '🤖',
       category: 'Coding',
       link: '',
-      price: 'Free'
+      price: 'Free',
+      logo: '',
+      photos: ['', '', '', '', '']
     })
   }
 
-  // ✅ NOT LOGGED IN - Show login screen
+  // NOT LOGGED IN
   if (!user) {
     return (
       <div className="seller-dashboard">
@@ -168,7 +196,7 @@ const handleGoogleLogin = async () => {
     )
   }
 
-  // ✅ LOGGED IN - Show dashboard
+  // LOGGED IN - Show dashboard
   if (loading) {
     return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading your products...</div>
   }
@@ -181,9 +209,6 @@ const handleGoogleLogin = async () => {
           <p>Welcome, {user.displayName || user.email}!</p>
           <p className="subtitle">Manage and publish your AI products to the marketplace.</p>
         </div>
-        <button className="btn-logout" onClick={onLogout}>
-          Log Out
-        </button>
       </div>
 
       <div className="divider-heavy"></div>
@@ -268,6 +293,51 @@ const handleGoogleLogin = async () => {
             </div>
           </div>
 
+          {/* Logo URL Input */}
+          <div className="form-group">
+            <label htmlFor="logo">App Logo URL</label>
+            <input
+              id="logo"
+              type="url"
+              placeholder="https://example.com/logo.png"
+              value={formData.logo}
+              onChange={(e) => setFormData(prev => ({ ...prev, logo: e.target.value }))}
+              className="form-input"
+            />
+            {formData.logo && (
+              <div className="url-preview">
+                <img src={formData.logo} alt="Logo preview" onError={(e) => { e.target.src = ''; e.target.alt = 'Image failed to load' }} />
+                <span>Logo preview</span>
+              </div>
+            )}
+          </div>
+
+          {/* Photos URL Inputs */}
+          <div className="form-group">
+            <label>App Photos (max 5 URLs)</label>
+            <div className="photos-urls">
+              {formData.photos.map((photo, idx) => (
+                <div key={idx} className="photo-url-item">
+                  <label htmlFor={`photo-${idx}`}>Photo {idx + 1}</label>
+                  <input
+                    id={`photo-${idx}`}
+                    type="url"
+                    placeholder="https://example.com/photo.png"
+                    value={photo}
+                    onChange={(e) => handlePhotoChange(idx, e.target.value)}
+                    className="form-input"
+                  />
+                  {photo && (
+                    <div className="url-preview-small">
+                      <img src={photo} alt={`Photo ${idx + 1} preview`} onError={(e) => { e.target.src = ''; e.target.alt = 'Failed' }} />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="form-hint">Added: {getValidPhotos().length} photos</p>
+          </div>
+
           <div className="form-group">
             <label htmlFor="link">Product URL *</label>
             <input
@@ -296,8 +366,12 @@ const handleGoogleLogin = async () => {
           </div>
 
           <div className="form-actions">
-            <button className="btn-primary" onClick={handleAddTool}>
-              {editingId ? 'Update Product' : 'Publish Product'}
+            <button 
+              className="btn-primary" 
+              onClick={handleAddTool}
+              disabled={saving}
+            >
+              {saving ? 'Saving...' : (editingId ? 'Update Product' : 'Publish Product')}
             </button>
             <button className="btn-secondary" onClick={handleCancel}>
               Cancel

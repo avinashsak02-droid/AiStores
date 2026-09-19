@@ -303,3 +303,63 @@
     grid-template-columns: 1fr;
   }
 }
+/* Logo Styles */
+.tool-hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.tool-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border: var(--border-thin);
+  padding: 1rem;
+  background: #FAFAF9;
+}
+
+.tool-hero-icon {
+  font-size: 5rem;
+  line-height: 1;
+}
+
+/* Gallery Section */
+.tool-photos {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: var(--border-thin);
+}
+
+.tool-photos h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .tool-hero-section {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tool-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .tool-hero-icon {
+    font-size: 4rem;
+  }
+
+  .tool-photos {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .tool-photos h2 {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+}

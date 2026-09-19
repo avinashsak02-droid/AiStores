@@ -47,12 +47,12 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar 
-        currentPage={currentPage} 
-        setCurrentPage={setCurrentPage}
-        user={user}
-        onLogout={handleLogout}
-      />
+ <Navbar 
+  currentPage={currentPage} 
+  setCurrentPage={setCurrentPage}
+  user={user}
+  onLogout={handleLogout}
+/>
       
       {currentPage === 'marketplace' && <Marketplace onViewTool={handleViewTool} />}
       

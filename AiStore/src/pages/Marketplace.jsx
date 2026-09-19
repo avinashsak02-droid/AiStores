@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { db } from '../firebase'
 import { collection, onSnapshot } from 'firebase/firestore'
 import AICard from '../components/AICard'
+import FeaturedCard from '../components/FeaturedCard'
 import './Marketplace.css'
 
 export default function Marketplace({ onViewTool }) {
@@ -31,6 +32,10 @@ export default function Marketplace({ onViewTool }) {
     const matchesCategory = selectedCategory === 'All' || tool.category === selectedCategory
     return matchesSearch && matchesCategory
   })
+
+  // Featured product is the first one
+  const featuredTool = filteredTools.length > 0 ? filteredTools[0] : null
+  const regularTools = filteredTools.slice(1)
 
   return (
     <div className="marketplace">
@@ -84,16 +89,31 @@ export default function Marketplace({ onViewTool }) {
             <p>Loading AI products...</p>
           </div>
         ) : filteredTools.length > 0 ? (
-          <div className="tools-grid">
-            {filteredTools.map((tool, index) => (
-              <AICard 
-                key={tool.id} 
-                tool={tool}
-                index={index}
-                onClick={() => onViewTool(tool)}
-              />
-            ))}
-          </div>
+          <>
+            {/* Featured Section */}
+            {featuredTool && (
+              <div className="featured-section">
+                <FeaturedCard 
+                  tool={featuredTool}
+                  onClick={() => onViewTool(featuredTool)}
+                />
+              </div>
+            )}
+
+            {/* Regular Grid */}
+            {regularTools.length > 0 && (
+              <div className="tools-grid">
+                {regularTools.map((tool, index) => (
+                  <AICard 
+                    key={tool.id} 
+                    tool={tool}
+                    index={index + 2}
+                    onClick={() => onViewTool(tool)}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           <div className="empty-state">
             <p>No AI products match your search.</p>
