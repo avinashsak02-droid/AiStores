@@ -1,45 +1,38 @@
-import CoverArt from './CoverArt'
-import { ArrowRight } from './Icons'
-import { getCreator, getPrice, isFree } from '../utils/tool'
-import './AICard.css'
-
-// One row of the "Marketplace index"
 export default function AICard({ tool, index, onClick }) {
-  const free = isFree(tool)
-
   return (
-    <li
-      className="tool-row reveal"
-      style={{ '--d': Math.min(index, 8) }}
-      onClick={onClick}
-    >
-      <span className="tool-row-index">{String(index + 1).padStart(2, '0')}</span>
-
-      <CoverArt
-        className="tool-row-thumb"
-        seed={tool.id || tool.name}
-        image={tool.image}
-        showIcon={false}
-      />
-
-      <div className="tool-row-main">
-        <h3 className="tool-row-title">{tool.name}</h3>
-        <p className="tool-row-desc">{tool.description}</p>
+    <div className="ai-card" onClick={onClick} role="button" tabIndex={0} onKeyPress={(e) => e.key === 'Enter' && onClick()}>
+      <div className="card-header">
+        <span className="card-index">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <div className="card-icon">
+          {tool.logo ? (
+            <img src={tool.logo} alt={tool.name} className="card-logo-img" />
+          ) : (
+            tool.icon || '🤖'
+          )}
+        </div>
       </div>
 
-      <span className="tool-row-category">{tool.category}</span>
+      <div className="card-body">
+        <h3 className="card-title">{tool.name}</h3>
+        <p className="card-description">{tool.description}</p>
 
-      <div className="tool-row-meta">
-        <span className="tool-row-creator">{getCreator(tool)}</span>
-        <span className={`tool-row-price ${free ? 'is-free' : ''}`}>{getPrice(tool)}</span>
+        <div className="card-footer">
+          <span className={`card-category ${tool.category.toLowerCase()}`}>
+            {tool.category}
+          </span>
+          <span className={`card-price ${tool.price.toLowerCase()}`}>
+            {tool.price}
+          </span>
+        </div>
       </div>
 
-      <div className="tool-row-action">
-        {/* No onClick needed: the click bubbles up to the row */}
-        <button type="button" className="btn btn--ghost btn--sm">
-          Explore <ArrowRight />
+      <div className="card-hover-overlay">
+        <button className="card-launch-btn">
+          Launch →
         </button>
       </div>
-    </li>
+    </div>
   )
 }
