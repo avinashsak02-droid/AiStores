@@ -1,6 +1,6 @@
 import { collection, addDoc } from 'firebase/firestore'
 import { db } from '../firebase'
-import { seedProducts } from '../seedData'
+import { seedProducts } from './seedData'
 
 export const addSeedDataToFirebase = async () => {
   try {
