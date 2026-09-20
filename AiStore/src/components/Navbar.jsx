@@ -38,11 +38,13 @@ export default function Navbar({ currentPage, setCurrentPage, user, onLogout }) 
         </ul>
 
         {user && (
+          <div className="navbar-actions">
           <div className="navbar-auth">
             <span className="navbar-user">{user.displayName || user.email}</span>
             <button className="navbar-logout" onClick={handleLogout}>
               Logout
             </button>
+          </div>
           </div>
         )}
       </div>

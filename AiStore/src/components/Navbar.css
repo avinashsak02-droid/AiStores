@@ -90,7 +90,7 @@
 
 /* Right side: user + logout */
 .navbar-actions {
-  margin-left: auto;
+  margin-left:auto;
   display: flex;
   align-items: center;
   gap: 1.25rem;
@@ -99,6 +99,8 @@
 .navbar-user {
   font-size: 0.9rem;
   font-weight: 500;
+  margin-right: 10px;
+  
 }
 
 .navbar-btn {
@@ -134,4 +136,21 @@
 
   .navbar-link { padding: 0.85rem 0; margin-right: 1.5rem; }
   .navbar-link::after { left: 0; right: 0; }
+}
+.navbar-auth{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+ 
+}
+.navbar-logout{
+  border:solid 0.2px var(--muted);
+  padding: 5px;
+  border-radius: 2px;
+  
+}
+.navbar-logout:hover{
+  
+color: rgb(226, 226, 226);
+background-color:#930202d4 ;
 }
