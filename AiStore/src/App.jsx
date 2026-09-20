@@ -42,27 +42,34 @@ function App() {
   }
 
   if (loadingAuth) {
-    return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
+    return <div className="app-loading">Loading…</div>
   }
 
   return (
     <div className="App">
- <Navbar 
-  currentPage={currentPage} 
-  setCurrentPage={setCurrentPage}
-  user={user}
-  onLogout={handleLogout}
-/>
-      
-      {currentPage === 'marketplace' && <Marketplace onViewTool={handleViewTool} />}
-      
+      <Navbar
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        user={user}
+        onLogout={handleLogout}
+      />
+
+      {currentPage === 'marketplace' && (
+        <Marketplace
+          onViewTool={handleViewTool}
+          onOpenCreatorHub={() => setCurrentPage('seller')}
+        />
+      )}
+
       {currentPage === 'tool-details' && selectedTool && (
-        <ToolDetails tool={selectedTool} onBack={handleBackToMarketplace} />
+        <ToolDetails
+          tool={selectedTool}
+          onBack={handleBackToMarketplace}
+          onViewTool={handleViewTool}
+        />
       )}
-      
-      {currentPage === 'seller' && (
-        <SellerDashboard user={user} />
-      )}
+
+      {currentPage === 'seller' && <SellerDashboard user={user} />}
     </div>
   )
 }
