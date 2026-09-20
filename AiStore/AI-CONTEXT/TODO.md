@@ -1,8 +1,7 @@
 # AI Store — TODO
 
 ## 🔴 HIGH PRIORITY
-- [ ] to remove  the bug of 2 log out buttons
-- [ ] to enhance the tool details page by adding more options to the product form
+- [ ] to change the ui
 
 ## 🟡 MEDIUM PRIORITY
 
