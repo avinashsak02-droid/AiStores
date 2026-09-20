@@ -1,16 +1,10 @@
 # AI Store — TODO
 
 ## 🔴 HIGH PRIORITY
-- [ ] to change the ui
+- [ ] APP LOGO and APP Imgs or galley
 
 ## 🟡 MEDIUM PRIORITY
 
-- [ ] Seller accounts
-- [ ] Seller dashboard
-- [ ] AI product listing
-- [ ] AI product pages
-- [ ] Search
-- [ ] AI tool discovery
 
 ## 🟢 FUTURE
 

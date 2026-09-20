@@ -21,13 +21,13 @@ log out/log in buttons also added
 
 ### Current problem
 
-when we switch to the seller dashboard page-- we can see 2 log out buttons 1) the button in navbar and 2) the button in the page 
+img upload for tool details
 
 ## Current priority
 
 The immediate priority is:
-fix the issue of 2 log out buttons 
-enhance the product add form by adding a option to add logos and other stuff to make it like the playstore tool details
+enhance the tool details page by adding app logo and app imgs
+remove the emoji for every tool and keep logo only
 
 
 

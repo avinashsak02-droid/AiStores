@@ -1,41 +1,40 @@
 # Last Checkpoint
 
 ## Feature
-Full-Screen UI, Logout Functionality, and Login Persistence
+Editorial UI redesign (parchment / wine-red / serif look, based on user's reference screenshots)
 
 ## Status
 IMPLEMENTED
 
 ## Files Changed
-- `src/index.css`
-- `src/App.jsx`
-- `src/components/Navbar.jsx`
-- `src/components/Navbar.css`
-- `src/pages/SellerDashboard.jsx`
-- `src/pages/SellerDashboard.css`
+Replaced:
+- src/index.css
+- src/App.css
+- src/App.jsx
+- src/components/Navbar.jsx
+- src/components/Navbar.css
+- src/components/AICard.jsx
+- src/components/AICard.css
+- src/pages/Marketplace.jsx
+- src/pages/Marketplace.css
+- src/pages/ToolDetails.jsx (rewritten once after a parse error at line 93)
+- src/pages/ToolDetails.css
+- src/pages/SellerDashboard.css
+
+New:
+- src/components/Icons.jsx
+- src/components/CoverArt.jsx
+- src/components/CoverArt.css
+- src/utils/tool.js
 
 ## What Changed
-
-### Full-Screen UI
-Removed the old fixed-width Vite `#root` layout so the AIStore website now uses the full browser width and height.
-
-### Logout Functionality
-Added logout functionality to:
-- The main navbar
-- The Creator Hub / Seller Dashboard
-
-Logout uses Firebase Authentication's `signOut(auth)`.
-
-### Login Persistence
-Confirmed that the existing Firebase Authentication setup uses `onAuthStateChanged` to restore the user's authentication state when the application loads.
-
-Firebase's existing browser authentication persistence is used rather than creating a separate custom login-storage system.
+Full visual redesign: new design tokens, frosted sticky navbar with user name + Logout, list-style product rows, featured entry block, category chips, search across name/description/category/creator, generated SVG cover art, restyled product page with "Related AI tools", and restyled Creator Hub. SellerDashboard.jsx, firebase.js and all auth/Firestore logic are unchanged.
 
 ## Confirmed By User
-Yes — the user implemented the provided changes in VS Code after the Claude development conversation ended because of credit exhaustion.
-
-## Important Note
-The previous Claude conversation ended before Claude could synchronize the project context. The user manually implemented the provided code and then manually updated the relevant AI-CONTEXT files.
+Yes — user implemented/tested the changes in VS Code.
 
 ## Next Task
-Continue developing AIStore toward a fully polished website.
+User to test the redesign and confirm. Then change Status to IMPLEMENTED and "Confirmed By User" to Yes, and update CURRENT_STATE.md and TODO.md.
+
+## Previous confirmed checkpoint
+Google authentication fix (Session 2), confirmed working by the user.
