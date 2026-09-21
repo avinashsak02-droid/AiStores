@@ -6,8 +6,6 @@ import Navbar from './components/Navbar'
 import Marketplace from './pages/Marketplace'
 import ToolDetails from './pages/ToolDetails'
 import SellerDashboard from './pages/SellerDashboard'
-import { addSeedDataToFirebase } from './utils/addSeedData'
-
 
 function App() {
   const [currentPage, setCurrentPage] = useState('marketplace')
@@ -15,7 +13,6 @@ function App() {
   const [user, setUser] = useState(null)
   const [loadingAuth, setLoadingAuth] = useState(true)
 
-  // Check if user is already logged in (on page load)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser)
@@ -37,6 +34,7 @@ function App() {
   const handleLogout = async () => {
     try {
       await signOut(auth)
+      setUser(null)
       setCurrentPage('marketplace')
     } catch (error) {
       console.error('Logout error:', error)
@@ -44,34 +42,31 @@ function App() {
   }
 
   if (loadingAuth) {
-    return <div className="app-loading">Loading…</div>
+    return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
   }
 
   return (
     <div className="App">
-      <Navbar
-        currentPage={currentPage}
+      <Navbar 
+        currentPage={currentPage} 
         setCurrentPage={setCurrentPage}
         user={user}
         onLogout={handleLogout}
       />
-
-      {currentPage === 'marketplace' && (
-        <Marketplace
-          onViewTool={handleViewTool}
-          onOpenCreatorHub={() => setCurrentPage('seller')}
+      
+      {currentPage === 'marketplace' && <Marketplace onViewTool={handleViewTool} />}
+      
+      {currentPage === 'tool-details' && selectedTool && (
+        <ToolDetails tool={selectedTool} onBack={handleBackToMarketplace} />
+      )}
+      
+      {currentPage === 'seller' && (
+        <SellerDashboard 
+          user={user} 
+          setUser={setUser}
+          setCurrentPage={setCurrentPage}
         />
       )}
-
-{currentPage === 'tool-details' && selectedTool && (
-  <ToolDetails 
-    tool={selectedTool} 
-    onBack={handleBackToMarketplace}
-    onViewTool={handleViewTool}
-  />
-)}
-
-      {currentPage === 'seller' && <SellerDashboard user={user} />}
     </div>
   )
 }

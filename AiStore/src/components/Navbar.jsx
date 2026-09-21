@@ -1,8 +1,8 @@
 import './Navbar.css'
 
 export default function Navbar({ currentPage, setCurrentPage, user, onLogout }) {
-  const handleLogout = async () => {
-    await onLogout()
+  const handleLogout = () => {
+    onLogout()
   }
 
   return (
@@ -13,40 +13,36 @@ export default function Navbar({ currentPage, setCurrentPage, user, onLogout }) 
           onClick={() => setCurrentPage('marketplace')}
         >
           <span className="logo-text">AIStore</span>
-          <span className="logo-tagline">Discovery Platform</span>
+          <span className="logo-tagline">DISCOVERY PLATFORM</span>
         </div>
 
         <div className="navbar-divider"></div>
 
-        <ul className="navbar-menu">
-          <li>
-            <button
-              className={`navbar-link ${currentPage === 'marketplace' ? 'active' : ''}`}
-              onClick={() => setCurrentPage('marketplace')}
-            >
-              Marketplace
-            </button>
-          </li>
-          <li>
-            <button
-              className={`navbar-link ${currentPage === 'seller' ? 'active' : ''}`}
-              onClick={() => setCurrentPage('seller')}
-            >
-              {user ? 'Creator Hub' : 'For Creators'}
-            </button>
-          </li>
-        </ul>
+        <div className="navbar-center">
+          <button
+            className={`navbar-link ${currentPage === 'marketplace' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('marketplace')}
+          >
+            MARKETPLACE
+          </button>
+          <button
+            className={`navbar-link ${currentPage === 'seller' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('seller')}
+          >
+            FOR CREATORS
+          </button>
+        </div>
 
-        {user && (
-          <div className="navbar-actions">
-          <div className="navbar-auth">
-            <span className="navbar-user">{user.displayName || user.email}</span>
-            <button className="navbar-logout" onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
-          </div>
-        )}
+        <div className="navbar-right">
+          {user && (
+            <>
+              <span className="user-name">{user.displayName || user.email}</span>
+              <button onClick={handleLogout} className="btn-logout-nav">
+                Logout
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   )

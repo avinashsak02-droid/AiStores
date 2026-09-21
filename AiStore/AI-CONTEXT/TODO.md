@@ -1,16 +1,14 @@
 # AI Store — TODO
 
 ## 🔴 HIGH PRIORITY
-- [ ] APP LOGO and APP Imgs or galley
+- [ ] app images (preview images on tool details) upload feature.
+- [ ] fix bugs
 
 ## 🟡 MEDIUM PRIORITY
-
+- [ ] fix seller dashboard design
+- [ ] fix the showcase your product button
 
 ## 🟢 FUTURE
+- [ ] buyer accounts
+- [ ] history of visited sites
 
-
-- [ ] Payments
-- [ ] Reviews
-- [ ] Seller analytics
-- [ ] Marketplace categories
-- [ ] AI agent execution
