@@ -24,11 +24,18 @@ function App() {
   const handleViewTool = (tool) => {
     setSelectedTool(tool)
     setCurrentPage('tool-details')
+    window.scrollTo(0, 0)
   }
 
   const handleBackToMarketplace = () => {
     setSelectedTool(null)
     setCurrentPage('marketplace')
+    window.scrollTo(0, 0)
+  }
+
+  const handleOpenCreatorHub = () => {
+    setCurrentPage('seller')
+    window.scrollTo(0, 0)
   }
 
   const handleLogout = async () => {
@@ -47,22 +54,31 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar 
-        currentPage={currentPage} 
+      <Navbar
+        currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         user={user}
         onLogout={handleLogout}
       />
-      
-      {currentPage === 'marketplace' && <Marketplace onViewTool={handleViewTool} />}
-      
-      {currentPage === 'tool-details' && selectedTool && (
-        <ToolDetails tool={selectedTool} onBack={handleBackToMarketplace} />
+
+      {currentPage === 'marketplace' && (
+        <Marketplace
+          onViewTool={handleViewTool}
+          onOpenCreatorHub={handleOpenCreatorHub}
+        />
       )}
-      
+
+      {currentPage === 'tool-details' && selectedTool && (
+        <ToolDetails
+          tool={selectedTool}
+          onBack={handleBackToMarketplace}
+          onViewTool={handleViewTool}
+        />
+      )}
+
       {currentPage === 'seller' && (
-        <SellerDashboard 
-          user={user} 
+        <SellerDashboard
+          user={user}
           setUser={setUser}
           setCurrentPage={setCurrentPage}
         />

@@ -1,38 +1,51 @@
+import { useState } from 'react'
+import CoverArt from './CoverArt'
+import { ArrowRight } from './Icons'
+import { getCreator, getPrice, isFree } from '../utils/tool'
+import './AICard.css'
+
+// One numbered row in the Marketplace index.
+// Marketplace renders these inside a <ul>, so each row is an <li>.
 export default function AICard({ tool, index, onClick }) {
+  // Remember which logo URL failed to load, so we can show cover art instead.
+  const [failedLogo, setFailedLogo] = useState(null)
+  const showLogo = tool.logo && tool.logo !== failedLogo
+
   return (
-    <div className="ai-card" onClick={onClick} role="button" tabIndex={0} onKeyPress={(e) => e.key === 'Enter' && onClick()}>
-      <div className="card-header">
-        <span className="card-index">
-          {String(index + 1).padStart(2, '0')}
-        </span>
-        <div className="card-icon">
-          {tool.logo ? (
-            <img src={tool.logo} alt={tool.name} className="card-logo-img" />
+    <li className="tool-row">
+      <button type="button" className="tool-row-btn" onClick={onClick}>
+        <span className="tool-row-index">{String(index + 1).padStart(2, '0')}</span>
+
+        <span className="tool-row-thumb">
+          {showLogo ? (
+            <img
+              src={tool.logo}
+              alt=""
+              className="tool-row-logo"
+              loading="lazy"
+              onError={() => setFailedLogo(tool.logo)}
+            />
           ) : (
-            tool.icon || '🤖'
+            <CoverArt seed={tool.id || tool.name} showIcon={false} />
           )}
-        </div>
-      </div>
+        </span>
 
-      <div className="card-body">
-        <h3 className="card-title">{tool.name}</h3>
-        <p className="card-description">{tool.description}</p>
-
-        <div className="card-footer">
-          <span className={`card-category ${tool.category.toLowerCase()}`}>
-            {tool.category}
+        <span className="tool-row-body">
+          <span className="tool-row-meta">
+            <span className="tool-row-cat">{tool.category || 'Other'}</span>
+            {' / '}By {getCreator(tool)}
           </span>
-          <span className={`card-price ${tool.price.toLowerCase()}`}>
-            {tool.price}
-          </span>
-        </div>
-      </div>
+          <span className="tool-row-title">{tool.name}</span>
+          <span className="tool-row-desc">{tool.description}</span>
+        </span>
 
-      <div className="card-hover-overlay">
-        <button className="card-launch-btn">
-          Launch →
-        </button>
-      </div>
-    </div>
+        <span className="tool-row-side">
+          <span className={`tool-row-price ${isFree(tool) ? 'is-free' : ''}`}>
+            {getPrice(tool)}
+          </span>
+          <ArrowRight />
+        </span>
+      </button>
+    </li>
   )
 }

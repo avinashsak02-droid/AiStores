@@ -181,7 +181,7 @@ export const seedProducts = [
     price: 'Free',
     rating: 4.3,
     downloads: 66000
-  },
+  },//ab
   {
     name: 'Adobe Firefly',
     description: 'Generative AI for creative professionals. Generate images, text effects, and more.',

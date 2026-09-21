@@ -7,7 +7,7 @@ import { ArrowRight, SearchIcon } from '../components/Icons'
 import { getCreator, getPrice, isFree } from '../utils/tool'
 import './Marketplace.css'
 
-const CATEGORIES = ['All', 'Video', 'Image', 'Writing', 'Coding', 'Music', 'SEO', 'Design', 'Other']
+const CATEGORIES = ['All', 'Coding', 'Writing', 'Image', 'Video', 'Audio', 'Music', 'Other']
 
 export default function Marketplace({ onViewTool, onOpenCreatorHub }) {
   const [allTools, setAllTools] = useState([])
@@ -114,7 +114,6 @@ export default function Marketplace({ onViewTool, onOpenCreatorHub }) {
             <CoverArt
               className="mk-featured-cover"
               seed={featured.id || featured.name}
-              icon={featured.icon}
               image={featured.image}
             />
             <span className="mk-featured-tag">Featured entry</span>

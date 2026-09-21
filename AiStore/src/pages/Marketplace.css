@@ -187,10 +187,12 @@
   color: var(--muted);
 }
 
-.mk-index-wrap,
-.mk-index {
+.mk-index-wrap {
   width: var(--content-w);
   margin-inline: auto;
+}
+.mk-index {
+  width: 100%;
 }
 
 /* ---------- Loading skeleton ---------- */

@@ -19,8 +19,8 @@
   max-width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border: var(--border-thin);
-  background: #FAFAF9;
+  border: 1px solid var(--fg);
+  background: var(--bg-soft);
 }
 
 .carousel-image {
@@ -34,7 +34,7 @@
 .carousel-arrow {
   background: var(--fg);
   color: var(--bg);
-  border: var(--border-thin);
+  border: 1px solid var(--fg);
   width: 44px;
   height: 44px;
   display: flex;
@@ -42,15 +42,13 @@
   justify-content: center;
   font-size: 1.25rem;
   cursor: pointer;
-  transition: all var(--transition);
   flex-shrink: 0;
+  transition: background var(--transition), border-color var(--transition);
 }
 
 .carousel-arrow:hover {
-  background: var(--bg);
-  color: var(--fg);
-  box-shadow: var(--shadow-hard);
-  transform: translate(-2px, -2px);
+  background: var(--wine);
+  border-color: var(--wine);
 }
 
 .carousel-prev {
@@ -67,11 +65,10 @@
 }
 
 .indicator-counter {
-  font-family: var(--font-ui);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--fg);
-  opacity: 0.7;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
   white-space: nowrap;
 }
 
@@ -86,6 +83,7 @@
   height: 8px;
   border-radius: 50%;
   background: var(--muted);
+  opacity: 0.4;
   border: none;
   cursor: pointer;
   transition: all var(--transition);
@@ -99,6 +97,7 @@
 
 .dot.active {
   background: var(--fg);
+  opacity: 1;
   width: 20px;
   border-radius: 4px;
 }
@@ -115,12 +114,8 @@
     font-size: 1rem;
   }
 
-  .carousel-image-wrapper {
-    aspect-ratio: 16 / 9;
-  }
-
   .indicator-counter {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .dot {
@@ -142,10 +137,6 @@
     width: 36px;
     height: 36px;
     font-size: 0.9rem;
-  }
-
-  .carousel-image-wrapper {
-    aspect-ratio: 16 / 9;
   }
 
   .carousel-indicators {
