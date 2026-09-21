@@ -8,25 +8,7 @@ import ToolDetails from './pages/ToolDetails'
 import SellerDashboard from './pages/SellerDashboard'
 import { addSeedDataToFirebase } from './utils/addSeedData'
 
-// Inside your App component JSX, add this (top of page):
-{user && (
-  <button 
-    onClick={addSeedDataToFirebase} 
-    style={{ 
-      position: 'fixed', 
-      top: '100px', 
-      right: '20px', 
-      padding: '10px 15px', 
-      background: '#CC0000', 
-      color: 'white', 
-      border: 'none', 
-      cursor: 'pointer',
-      zIndex: 9999
-    }}
-  >
-    🌱 Seed Database
-  </button>
-)}
+
 function App() {
   const [currentPage, setCurrentPage] = useState('marketplace')
   const [selectedTool, setSelectedTool] = useState(null)
