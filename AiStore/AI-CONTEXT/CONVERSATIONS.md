@@ -536,3 +536,72 @@ See `DECISIONS.md`, Decisions 005 to 008. All are pending user confirmation.
 - If a parse error appears after a large paste, ask for the surrounding lines of the user's actual file (for example lines 85 to 100) and check for paste problems before rewriting code.
 - Prefix or scope CSS class names. The project uses plain global CSS, and duplicate names have already caused conflicts.
 - This session's redesign supersedes the Session 1 visual identity (Playfair Display / Lora / Inter, `#F9F9F7` cream, `#CC0000` red, hard `4px` shadows) if it is confirmed.
+#####Conversation 6
+# Session 6 — Completed the Half-Applied Editorial Redesign
+
+Date: 2026-09-22
+
+## Objective
+
+Analyse the current repository state, since Session 5's redesign was left in an unknown/unconfirmed state (no LAST_CHECKPOINT entry for it), identify what was actually broken, and fix it.
+
+## Findings at start of session
+
+Comparing the repo against Session 5's proposal showed the redesign was only half-applied:
+- Already using new design tokens/editorial style: `App.css`, `index.css`, `Marketplace.jsx/css`, `CoverArt.jsx/css`, `Icons.jsx`, `utils/tool.jsx`.
+- Still on the old (Session 1) implementation: `App.jsx`, `AICard.jsx/css`, `ToolDetails.jsx/css`.
+
+This mismatch was the direct cause of several bugs:
+1. `App.jsx` didn't pass `onOpenCreatorHub` to Marketplace or `onViewTool` to ToolDetails — dead "Showcase your product" button, and a crash when clicking a related tool.
+2. `Marketplace.jsx` rendered the old `AICard` (a `<div>`-based grid card, no CSS import) inside a `<ul>` meant for the new numbered-row layout — list rendered essentially unstyled.
+3. `ToolDetails.css` and `PhotoCarousel.css` referenced CSS variables removed from the new `App.css` (`--border-thin`, `--accent`, `--font-ui`, `--shadow-hard`) — missing borders, invisible Launch button background.
+4. Marketplace category chips (`SEO`, `Design`, no `Audio`) didn't match the Creator Hub form's actual category list or seed data.
+5. Global class name collisions from the partial migration: `.tool-logo` (ToolDetails.css vs SellerDashboard.css) and `.divider-h` (App.css vs old ToolDetails.css).
+6. `.mk-index-wrap` and `.mk-index` both applied `var(--content-w)`, narrowing the product list relative to the hero/featured sections above it.
+7. Leftover emoji in Marketplace/ToolDetails (🚀, tool.icon, 🤖) that contradicted the "logo only" instruction in the (then) CURRENT_STATE.md.
+8. No `onError` fallback on any `<img>` logo — a dead logo URL left a blank tile.
+
+Also noted (not fixed this session): `DECISIONS.md` had two conflicting "Decision 005" entries; emoji still present in `SellerDashboard.jsx`; placeholder rating/downloads shown as if real; seed logo URLs unverified; no Firestore rules visible in-repo to review.
+
+## What was implemented
+
+Delivered as copy-paste code across two messages, per the "never edit the repo directly" instruction:
+
+1. `App.jsx` — wired `onOpenCreatorHub` and `onViewTool` props correctly; added scroll-to-top on page change.
+2. `AICard.jsx`/`.css` — rewritten as numbered list rows (`tool-row-` prefix) matching the editorial index design; falls back to `CoverArt` if no logo or broken logo URL.
+3. `ToolDetails.jsx`/`.css` — rewritten with `td-` class prefix; removed all emoji; logo falls back to `CoverArt`; related-tool click now works.
+4. `PhotoCarousel.css` — swapped removed CSS variables for current tokens.
+5. `Marketplace.jsx` — category list corrected to match the Creator Hub form (`Coding, Writing, Image, Video, Audio, Music, Other`); removed emoji icon badge from the featured cover art.
+6. `Marketplace.css` — fixed the doubled `var(--content-w)` causing the index list to be narrower than the hero/featured sections.
+
+## Confirmed Result
+
+User copied all code into VS Code, tested it, and confirmed: **"ok it works."**
+
+## Status
+
+**Editorial redesign (Session 5, completed Session 6): CONFIRMED IMPLEMENTED.**
+
+## Context file cleanup performed during SYNC PROJECT
+
+- Fixed `DECISIONS.md`'s duplicate "Decision 005" numbering (Firebase Auth Persistence is now 005; Visual direction, Design tokens, Cover art, Optional fields shifted to 006–009; new Decision 010 added for the category list fix).
+- Confirmed Decisions 006–008 (old numbering) as IMPLEMENTED, since the full redesign is now verified working.
+- Decision 009 (optional product fields — creator/overview/useCases/features) remains NOT YET CONFIRMED — the Creator Hub form still doesn't collect these fields, so this is unchanged.
+- `CURRENT_STATE.md` rewritten to reflect the fully-applied redesign and the newly identified open items.
+- `TODO.md` updated: marked the "showcase your product" button and "seller dashboard design" as complete; added newly discovered items (emoji in SellerDashboard, placeholder rating/downloads, URL validation, unverified seed logos, dead code cleanup).
+
+## Remaining Work / Known Issues (not addressed this session)
+
+- Emoji still present in `SellerDashboard.jsx`.
+- Marketplace featured block shows generated cover art instead of the tool's real logo.
+- Placeholder rating (4.5) and downloads (0) defaults shown prominently on the details page.
+- Seed data logo URLs not individually verified.
+- No Firestore security rules visible in the repository to review.
+- Image upload feature (long-standing high-priority TODO) not started.
+- Creator Hub form doesn't collect `overview`, `useCases`, `features`.
+
+## Lessons for future AI sessions
+
+- A redesign proposed in one session can be left half-applied if the session ends before a checkpoint is written (this is exactly the failure mode LAST_CHECKPOINT.md exists to prevent). Always diff the actual repo files against what a prior session's CONVERSATIONS.md entry proposed, rather than assuming "proposed" became "implemented" or vice versa.
+- CSS variable renames during a redesign are a common silent-breakage source — grep for old variable names across *all* CSS files, not just the ones being actively rewritten.
+- When class-prefixing (Decision 007), an old file left un-migrated will keep using bare/generic class names and can collide with newly-prefixed files from other pages.
