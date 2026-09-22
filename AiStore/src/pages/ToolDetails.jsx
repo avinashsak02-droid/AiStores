@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { db } from '../firebase'
 import { collection, query, where, onSnapshot } from 'firebase/firestore'
 import PhotoCarousel from '../components/PhotoCarousel'
+import ImageFullscreenViewer from '../components/ImageFullScreenViewer'
 import CoverArt from '../components/CoverArt'
 import { ArrowLeft, ArrowUpRight } from '../components/Icons'
 import { getPrice } from '../utils/tool'
@@ -27,6 +28,7 @@ function ToolLogo({ tool }) {
 
 export default function ToolDetails({ tool, onBack, onViewTool }) {
   const [relatedTools, setRelatedTools] = useState([])
+  const [fullscreenIndex, setFullscreenIndex] = useState(null)
 
   // Fetch more tools in the same category
   useEffect(() => {
@@ -104,8 +106,14 @@ export default function ToolDetails({ tool, onBack, onViewTool }) {
         {/* GALLERY */}
         {tool.photos && tool.photos.length > 0 && (
           <section className="td-section">
-            <h2 className="td-section-title">Gallery</h2>
-            <PhotoCarousel photos={tool.photos} />
+            <h2 className="td-section-title">Product Gallery</h2>
+            <div className="gallery-wrapper">
+              <PhotoCarousel 
+                photos={tool.photos}
+                onPhotoClick={(index) => setFullscreenIndex(index)}
+              />
+              <p className="gallery-hint">Click image to view fullscreen</p>
+            </div>
           </section>
         )}
 
@@ -141,6 +149,15 @@ export default function ToolDetails({ tool, onBack, onViewTool }) {
       <footer className="td-footer">
         <p>&copy; {new Date().getFullYear()} AIStore. All rights reserved.</p>
       </footer>
+
+      {/* Fullscreen viewer */}
+      {fullscreenIndex !== null && tool.photos && (
+        <ImageFullscreenViewer
+          photos={tool.photos}
+          initialIndex={fullscreenIndex}
+          onClose={() => setFullscreenIndex(null)}
+        />
+      )}
     </div>
   )
 }

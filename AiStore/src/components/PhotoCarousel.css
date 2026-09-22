@@ -157,3 +157,32 @@
     width: 12px;
   }
 }
+/* Gallery section */
+.gallery-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.gallery-hint {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  margin: 0;
+}
+
+.carousel-image-wrapper {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.carousel-image-wrapper:hover {
+  opacity: 0.95;
+}
+
+.carousel-image {
+  cursor: pointer;
+}

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './PhotoCarousel.css'
 
-export default function PhotoCarousel({ photos }) {
+export default function PhotoCarousel({ photos, onPhotoClick }) {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   if (!photos || photos.length === 0) {
@@ -24,6 +24,12 @@ export default function PhotoCarousel({ photos }) {
     setCurrentIndex(index)
   }
 
+  const handleImageClick = () => {
+    if (onPhotoClick) {
+      onPhotoClick(currentIndex)
+    }
+  }
+
   return (
     <div className="photo-carousel">
       <div className="carousel-main">
@@ -37,11 +43,18 @@ export default function PhotoCarousel({ photos }) {
           </button>
         )}
 
-        <div className="carousel-image-wrapper">
+        <div className="carousel-image-wrapper" onClick={handleImageClick}>
           <img
             src={photos[currentIndex]}
             alt={`Gallery ${currentIndex + 1}`}
             className="carousel-image"
+            role="button"
+            tabIndex={0}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleImageClick()
+              }
+            }}
           />
         </div>
 

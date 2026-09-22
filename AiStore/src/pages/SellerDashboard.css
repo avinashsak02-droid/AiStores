@@ -515,3 +515,13 @@
     min-height: 110px;
   }
 }
+/* Add this to show photo count on tool cards */
+.tool-photos-count {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  color: var(--wine, #CC0000);
+  font-weight: 600;
+  margin: 0.5rem 0 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

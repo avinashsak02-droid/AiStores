@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot } from 'firebase/firestore'
-import { auth, db, googleProvider } from '../firebase'
+import { auth, db, storage } from '../firebase'
+import { googleProvider } from '../firebase'
 import { signInWithPopup, signOut } from 'firebase/auth'
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
+import ImageUploadPreview from '../components/ImageUploadPreview'
 import './SellerDashboard.css'
 
 export default function SellerDashboard({ user, setUser, setCurrentPage }) {
@@ -10,13 +13,15 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
   const [editingId, setEditingId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [loggingIn, setLoggingIn] = useState(false)
+  const [uploadingImages, setUploadingImages] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     logo: '',
     category: 'Coding',
     link: '',
-    price: 'Free'
+    price: 'Free',
+    photos: []
   })
 
   const categories = ['Coding', 'Writing', 'Image', 'Video', 'Audio', 'Music', 'Other']
@@ -47,7 +52,7 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
     }
   }, [user])
 
-  // ✅ GOOGLE LOGIN HANDLER
+  // Google login handler
   const handleGoogleLogin = async () => {
     try {
       setLoggingIn(true)
@@ -61,7 +66,7 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
     }
   }
 
-  // ✅ LOGOUT HANDLER
+  // Logout handler
   const handleLogout = async () => {
     try {
       await signOut(auth)
@@ -78,6 +83,60 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
+  // Handle image upload
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files)
+    if (!files.length) return
+
+    setUploadingImages(true)
+    try {
+      const uploadedUrls = []
+
+      for (const file of files) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          console.error(`${file.name} is not an image`)
+          continue
+        }
+
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          console.error(`${file.name} is too large (max 5MB)`)
+          continue
+        }
+
+        // Upload to Firebase Storage
+        const timestamp = Date.now()
+        const storagePath = `tools/${user.uid}/${timestamp}-${file.name}`
+        const storageRef = ref(storage, storagePath)
+
+        await uploadBytes(storageRef, file)
+        const url = await getDownloadURL(storageRef)
+        uploadedUrls.push(url)
+      }
+
+      // Add uploaded URLs to formData
+      setFormData(prev => ({
+        ...prev,
+        photos: [...(prev.photos || []), ...uploadedUrls]
+      }))
+    } catch (error) {
+      console.error('Error uploading images:', error)
+      alert('Error uploading images. Please try again.')
+    } finally {
+      setUploadingImages(false)
+    }
+  }
+
+  // Remove a photo from the form
+  const handleRemovePhoto = (photoUrlToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      photos: prev.photos.filter(url => url !== photoUrlToRemove)
+    }))
+  }
+
+  // Save tool (create or update)
   const handleAddTool = async () => {
     if (!formData.name || !formData.link || !formData.logo) {
       alert('App Name, Product URL, and Logo URL are all required!')
@@ -117,7 +176,8 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
         logo: '',
         category: 'Coding',
         link: '',
-        price: 'Free'
+        price: 'Free',
+        photos: []
       })
       setShowForm(false)
       setEditingId(null)
@@ -134,7 +194,8 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
       logo: tool.logo || '',
       category: tool.category,
       link: tool.link,
-      price: tool.price
+      price: tool.price,
+      photos: tool.photos || []
     })
     setEditingId(tool.id)
     setShowForm(true)
@@ -159,11 +220,12 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
       logo: '',
       category: 'Coding',
       link: '',
-      price: 'Free'
+      price: 'Free',
+      photos: []
     })
   }
 
-  // ✅ NOT LOGGED IN - SHOW LOGIN SCREEN
+  // Not logged in
   if (!user) {
     return (
       <div className="seller-dashboard">
@@ -189,7 +251,7 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
     )
   }
 
-  // ✅ LOGGED IN - SHOW DASHBOARD
+  // Logged in
   if (loading) {
     return (
       <div className="seller-dashboard">
@@ -308,6 +370,14 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
             )}
           </div>
 
+          {/* Image Gallery Upload */}
+          <ImageUploadPreview
+            photos={formData.photos}
+            onUpload={handleImageUpload}
+            onRemove={handleRemovePhoto}
+            uploading={uploadingImages}
+          />
+
           <div className="form-actions">
             <button onClick={handleAddTool} className="btn-submit">
               {editingId ? '✓ Update Tool' : '+ List Tool'}
@@ -338,6 +408,11 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
                   <h3>{tool.name}</h3>
                   <p className="tool-category">{tool.category}</p>
                   <p className="tool-description">{tool.description}</p>
+                  {tool.photos && tool.photos.length > 0 && (
+                    <p className="tool-photos-count">
+                      📸 {tool.photos.length} photo{tool.photos.length === 1 ? '' : 's'}
+                    </p>
+                  )}
                   <div className="tool-meta">
                     <span className={`tool-price ${tool.price.toLowerCase()}`}>{tool.price}</span>
                     <a href={tool.link} target="_blank" rel="noopener noreferrer" className="tool-link">
