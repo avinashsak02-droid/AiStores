@@ -1,527 +1,374 @@
-/* ====== SELLER DASHBOARD CONTAINER ====== */
 .seller-dashboard {
-  background: var(--bg, #F9F9F7);
-  min-height: 100vh;
-  padding: 2.5rem 2rem;
-  color: var(--fg, #111111);
-}
-
-/* ====== LOGIN SCREEN ====== */
-.login-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 70vh;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 2rem;
-}
-
-.login-card {
-  background: #ffffff;
-  border: 1px solid var(--line, #E5E5E0);
-  padding: 4rem 3rem;
-  max-width: 550px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-.login-card h1 {
-  font-family: var(--font-display, Georgia, serif);
-  font-size: 2.2rem;
-  font-weight: 600;
+  font-family: var(--font-ui, 'Inter', sans-serif);
   color: var(--fg, #111111);
-  margin: 0 0 1rem 0;
-  letter-spacing: -0.02em;
 }
 
-.login-card > p:first-of-type {
-  font-family: var(--font-ui, -apple-system, BlinkMacSystemFont, sans-serif);
-  font-size: 1rem;
-  color: var(--muted, #666);
-  margin: 0 0 2.5rem 0;
-  line-height: 1.6;
-}
-
-.btn-google-login {
-  width: 100%;
-  background: var(--fg, #111111);
-  color: var(--bg, white);
-  border: 1px solid var(--fg, #111111);
-  padding: 1.1rem;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.btn-google-login:hover:not(:disabled) {
-  background: var(--wine, #CC0000);
-  border-color: var(--wine, #CC0000);
-  color: #ffffff;
-}
-
-.btn-google-login:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.login-subtext {
-  font-family: var(--font-ui, -apple-system, BlinkMacSystemFont, sans-serif);
-  font-size: 0.85rem;
-  color: var(--muted, #999);
-  margin: 2rem 0 0 0;
-  line-height: 1.5;
-}
-
-/* ====== DASHBOARD HEADER ====== */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--line, #E5E5E0);
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: var(--border-thin, 1px solid #E5E5E0);
 }
 
 .dashboard-header h1 {
-  font-family: var(--font-display, Georgia, serif);
+  font-family: var(--font-serif, 'Playfair Display', serif);
   font-size: 2.5rem;
-  font-weight: 600;
-  color: var(--fg, #111111);
   margin: 0;
-  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
-.dashboard-header p {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.85rem;
-  color: var(--wine, #CC0000);
-  margin: 0.75rem 0 0 0;
-  letter-spacing: 0.05em;
+.seller-email {
+  font-size: 0.875rem;
+  color: var(--muted, #666);
+  margin: 0.5rem 0 0 0;
 }
 
-/* ====== BUTTONS ====== */
 .btn-add-tool {
-  background: var(--fg, #111111);
-  color: var(--bg, #ffffff);
-  border: 1px solid var(--fg, #111111);
-  padding: 0.85rem 1.75rem;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--accent, #CC0000);
+  color: white;
+  border: none;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  letter-spacing: 0.05em;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
 .btn-add-tool:hover {
-  background: var(--wine, #CC0000);
-  border-color: var(--wine, #CC0000);
-  color: #ffffff;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
 }
 
-.btn-logout {
-  background: transparent;
-  color: var(--fg, #111111);
-  border: 1px solid var(--fg, #111111);
-  padding: 0.85rem 1.75rem;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.btn-logout:hover {
-  background: var(--fg, #111111);
-  color: var(--bg, #ffffff);
-}
-
-/* ====== FORM CONTAINER ====== */
+/* Form Styles */
 .form-container {
-  background: white;
-  border: 1px solid var(--line, #E5E5E0);
-  padding: 2.5rem;
-  margin-bottom: 3rem;
+  background: var(--bg, #F9F9F7);
+  border: var(--border-thin, 1px solid #E5E5E0);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.08);
 }
 
 .form-container h2 {
-  font-family: var(--font-display, Georgia, serif);
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--fg, #111111);
-  margin: 0 0 2rem 0;
-  letter-spacing: -0.02em;
+  font-family: var(--font-serif, 'Playfair Display', serif);
+  font-size: 1.75rem;
+  margin: 0 0 1.5rem 0;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
-}
-
-.form-row .form-group {
-  margin-bottom: 0;
 }
 
 .form-group label {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.72rem;
+  font-size: 0.875rem;
   font-weight: 600;
+  margin-bottom: 0.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   color: var(--fg, #111111);
-  margin-bottom: 0.6rem;
 }
 
 .form-input,
 .form-textarea {
-  background: var(--bg, #F9F9F7);
-  border: 1px solid var(--line, #E5E5E0);
-  padding: 0.85rem;
-  font-family: var(--font-ui, -apple-system, BlinkMacSystemFont, sans-serif);
-  font-size: 0.9rem;
+  padding: 0.75rem;
+  border: var(--border-thin, 1px solid #E5E5E0);
+  background: white;
+  font-size: 1rem;
+  font-family: var(--font-ui, 'Inter', sans-serif);
   color: var(--fg, #111111);
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  background: white;
-  border-color: var(--wine, #CC0000);
+  border-color: var(--accent, #CC0000);
+  box-shadow: inset 0 0 0 2px rgba(204, 0, 0, 0.1);
 }
 
 .form-textarea {
   resize: vertical;
-  min-height: 110px;
+  min-height: 120px;
 }
 
+/* Logo Preview */
 .logo-preview-form {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: var(--bg, #F9F9F7);
-  border: 1px solid var(--line, #E5E5E0);
+  background: white;
+  border: var(--border-thin, 1px solid #E5E5E0);
 }
 
 .logo-preview-img {
   width: 60px;
   height: 60px;
   object-fit: contain;
-  border: 1px solid var(--line, #E5E5E0);
-  padding: 0.4rem;
-  background: white;
+  background: #FAFAF9;
+  border: var(--border-thin, 1px solid #E5E5E0);
+  padding: 0.5rem;
 }
 
 .preview-label {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.7rem;
-  color: var(--muted, #999);
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  color: var(--fg, #111111);
+  opacity: 0.6;
+  font-weight: 600;
 }
 
+/* Form Actions */
 .form-actions {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--line, #E5E5E0);
 }
 
 .btn-submit,
 .btn-cancel {
-  flex: 1;
-  padding: 0.9rem;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  font-size: 0.95rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: none;
+  letter-spacing: 0.05em;
 }
 
 .btn-submit {
-  background: var(--fg, #111111);
-  color: var(--bg, #ffffff);
-  border: 1px solid var(--fg, #111111);
+  background: var(--accent, #CC0000);
+  color: white;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.15);
 }
 
 .btn-submit:hover {
-  background: var(--wine, #CC0000);
-  border-color: var(--wine, #CC0000);
-  color: #ffffff;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
 }
 
 .btn-cancel {
-  background: transparent;
+  background: var(--muted, #E5E5E0);
   color: var(--fg, #111111);
-  border: 1px solid var(--line, #E5E5E0);
+  border: var(--border-thin, 1px solid #D0D0CB);
 }
 
 .btn-cancel:hover {
-  background: var(--fg, #111111);
-  color: var(--bg, #ffffff);
-  border-color: var(--fg, #111111);
+  background: #D0D0CB;
 }
 
-/* ====== TOOLS LIST ====== */
+/* Tools List */
 .tools-list {
-  background: white;
-  border: 1px solid var(--line, #E5E5E0);
-  padding: 2.5rem;
+  margin-top: 2rem;
 }
 
 .tools-list h2 {
-  font-family: var(--font-display, Georgia, serif);
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--fg, #111111);
-  margin: 0 0 2rem 0;
-  letter-spacing: -0.02em;
+  font-family: var(--font-serif, 'Playfair Display', serif);
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .empty-state {
-  font-family: var(--font-ui, -apple-system, BlinkMacSystemFont, sans-serif);
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--muted, #999);
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 2rem;
+  background: var(--bg, #F9F9F7);
+  border: var(--border-thin, 1px solid #E5E5E0);
 }
 
 .tools-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
-/* ====== TOOL CARDS ====== */
 .tool-card {
-  border: 1px solid var(--line, #E5E5E0);
-  transition: border-color 0.2s ease;
+  background: white;
+  border: var(--border-thin, 1px solid #E5E5E0);
   display: flex;
   flex-direction: column;
-  background: var(--bg, #F9F9F7);
+  overflow: hidden;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
 }
 
 .tool-card:hover {
-  border-color: var(--wine, #CC0000);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.12);
+  transform: translate(-2px, -2px);
 }
 
 .tool-header {
-  background: white;
-  padding: 2rem 1.5rem;
+  background: #FAFAF9;
+  padding: 1rem;
+  border-bottom: var(--border-thin, 1px solid #E5E5E0);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 130px;
-  border-bottom: 1px solid var(--line, #E5E5E0);
+  min-height: 100px;
 }
 
 .tool-logo {
-  max-width: 80px;
-  max-height: 80px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
 }
 
 .tool-logo-placeholder {
-  font-size: 3rem;
-  color: var(--line, #E5E5E0);
+  font-size: 2rem;
+  opacity: 0.5;
 }
 
 .tool-content {
-  padding: 1.5rem;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+  padding: 1rem;
+  flex: 1;
 }
 
 .tool-content h3 {
-  font-family: var(--font-display, Georgia, serif);
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--fg, #111111);
-  margin: 0 0 0.4rem 0;
-  letter-spacing: -0.01em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
 }
 
 .tool-category {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--wine, #CC0000);
-  font-weight: 600;
-  margin: 0 0 1rem 0;
+  color: var(--muted, #999);
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem 0;
 }
 
 .tool-description {
-  font-family: var(--font-ui, -apple-system, BlinkMacSystemFont, sans-serif);
-  font-size: 0.88rem;
-  color: var(--muted, #666);
-  margin: 0 0 1.25rem 0;
+  font-size: 0.9rem;
   line-height: 1.5;
-  flex-grow: 1;
+  color: var(--fg, #333);
+  margin: 0 0 1rem 0;
 }
 
 .tool-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line, #E5E5E0);
-  margin-bottom: 1rem;
 }
 
 .tool-price {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border: var(--border-thin, 1px solid #E5E5E0);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.3rem 0.6rem;
-  background: white;
-  color: var(--fg, #111111);
-  border: 1px solid var(--line, #E5E5E0);
+  letter-spacing: 0.05em;
 }
 
 .tool-price.free {
-  color: #2D8C3D;
-  border-color: #2D8C3D;
+  background: #E8F5E9;
+  border-color: #4CAF50;
+  color: #2E7D32;
 }
 
 .tool-price.paid {
-  color: var(--wine, #CC0000);
-  border-color: var(--wine, #CC0000);
+  background: #FFF3E0;
+  border-color: #FF9800;
+  color: #E65100;
 }
 
 .tool-link {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
-  color: var(--fg, #111111);
+  color: var(--accent, #CC0000);
   text-decoration: none;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-size: 0.9rem;
   transition: color 0.2s ease;
 }
 
 .tool-link:hover {
-  color: var(--wine, #CC0000);
+  color: #990000;
 }
 
+/* Tool Actions */
 .tool-actions {
   display: flex;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem 1.5rem 1.5rem;
-  border-top: 1px solid var(--line, #E5E5E0);
+  gap: 0.5rem;
+  padding: 1rem;
+  border-top: var(--border-thin, 1px solid #E5E5E0);
+  background: #FAFAF9;
 }
 
 .btn-edit,
 .btn-delete {
   flex: 1;
-  padding: 0.65rem;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.72rem;
+  padding: 0.6rem;
+  border: var(--border-thin, 1px solid #E5E5E0);
+  font-size: 0.85rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid var(--line, #E5E5E0);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn-edit {
   background: white;
   color: var(--fg, #111111);
 }
 
 .btn-edit:hover {
-  background: var(--fg, #111111);
-  color: var(--bg, #ffffff);
-  border-color: var(--fg, #111111);
+  background: var(--accent, #CC0000);
+  color: white;
+  border-color: var(--accent, #CC0000);
+}
+
+.btn-delete {
+  background: white;
+  color: #C62828;
+  border-color: #C62828;
 }
 
 .btn-delete:hover {
-  background: var(--wine, #CC0000);
+  background: #C62828;
   color: white;
-  border-color: var(--wine, #CC0000);
 }
 
-/* ====== MOBILE RESPONSIVENESS ====== */
+/* Responsive Design */
 @media (max-width: 768px) {
   .seller-dashboard {
-    padding: 1.5rem 1rem;
-  }
-
-  .login-card {
-    padding: 2.5rem 1.5rem;
-  }
-
-  .login-card h1 {
-    font-size: 1.6rem;
+    padding: 1rem;
   }
 
   .dashboard-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   .dashboard-header h1 {
-    font-size: 1.8rem;
-  }
-
-  .dashboard-header > div:last-child {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .btn-add-tool,
-  .btn-logout {
-    width: 100%;
+    font-size: 1.75rem;
   }
 
   .form-row {
     grid-template-columns: 1fr;
-    gap: 0;
   }
 
   .tools-grid {
     grid-template-columns: 1fr;
   }
 
-  .form-container,
-  .tools-list {
+  .form-container {
     padding: 1.5rem;
   }
-
-  .tool-header {
-    min-height: 110px;
-  }
-}
-/* Add this to show photo count on tool cards */
-.tool-photos-count {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
-  color: var(--wine, #CC0000);
-  font-weight: 600;
-  margin: 0.5rem 0 0 0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }

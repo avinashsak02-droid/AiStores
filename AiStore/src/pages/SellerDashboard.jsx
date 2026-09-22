@@ -1,189 +1,102 @@
 import { useState, useEffect } from 'react'
-import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot } from 'firebase/firestore'
-import { auth, db, storage } from '../firebase'
-import { googleProvider } from '../firebase'
-import { signInWithPopup, signOut } from 'firebase/auth'
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
-import ImageUploadPreview from '../components/ImageUploadPreview'
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where } from 'firebase/firestore'
+import { db } from '../firebase'
 import './SellerDashboard.css'
 
-export default function SellerDashboard({ user, setUser, setCurrentPage }) {
+export default function SellerDashboard({ user }) {
   const [tools, setTools] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [loggingIn, setLoggingIn] = useState(false)
-  const [uploadingImages, setUploadingImages] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     logo: '',
     category: 'Coding',
     link: '',
-    price: 'Free',
-    photos: []
+    price: 'Free'
   })
+  const [loading, setLoading] = useState(true)
 
-  const categories = ['Coding', 'Writing', 'Image', 'Video', 'Audio', 'Music', 'Other']
-
-  // Fetch tools when user is logged in
+  // Fetch tools from Firestore
   useEffect(() => {
-    if (!user) {
-      setLoading(false)
-      return
-    }
-
-    setLoading(true)
-    try {
-      const q = query(collection(db, 'tools'), where('sellerId', '==', user.uid))
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const toolsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-        setTools(toolsList)
+    const fetchTools = async () => {
+      try {
+        const q = query(collection(db, 'tools'), where('sellerId', '==', user?.uid))
+        const snapshot = await getDocs(q)
+        setTools(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })))
+      } catch (error) {
+        console.error('Error fetching tools:', error)
+      } finally {
         setLoading(false)
-      }, (err) => {
-        console.error('Error fetching tools:', err)
-        setLoading(false)
-      })
-
-      return () => unsubscribe()
-    } catch (error) {
-      console.error('Error:', error)
-      setLoading(false)
+      }
     }
+    if (user) fetchTools()
   }, [user])
-
-  // Google login handler
-  const handleGoogleLogin = async () => {
-    try {
-      setLoggingIn(true)
-      const result = await signInWithPopup(auth, googleProvider)
-      setUser(result.user)
-    } catch (error) {
-      console.error('Login error:', error)
-      alert('Login failed: ' + error.message)
-    } finally {
-      setLoggingIn(false)
-    }
-  }
-
-  // Logout handler
-  const handleLogout = async () => {
-    try {
-      await signOut(auth)
-      setUser(null)
-      setCurrentPage('marketplace')
-    } catch (error) {
-      console.error('Logout error:', error)
-      alert('Logout failed')
-    }
-  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  // Handle image upload
-  const handleImageUpload = async (e) => {
-    const files = Array.from(e.target.files)
-    if (!files.length) return
-
-    setUploadingImages(true)
-    try {
-      const uploadedUrls = []
-
-      for (const file of files) {
-        // Validate file type
-        if (!file.type.startsWith('image/')) {
-          console.error(`${file.name} is not an image`)
-          continue
-        }
-
-        // Validate file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-          console.error(`${file.name} is too large (max 5MB)`)
-          continue
-        }
-
-        // Upload to Firebase Storage
-        const timestamp = Date.now()
-        const storagePath = `tools/${user.uid}/${timestamp}-${file.name}`
-        const storageRef = ref(storage, storagePath)
-
-        await uploadBytes(storageRef, file)
-        const url = await getDownloadURL(storageRef)
-        uploadedUrls.push(url)
-      }
-
-      // Add uploaded URLs to formData
-      setFormData(prev => ({
-        ...prev,
-        photos: [...(prev.photos || []), ...uploadedUrls]
-      }))
-    } catch (error) {
-      console.error('Error uploading images:', error)
-      alert('Error uploading images. Please try again.')
-    } finally {
-      setUploadingImages(false)
-    }
-  }
-
-  // Remove a photo from the form
-  const handleRemovePhoto = (photoUrlToRemove) => {
-    setFormData(prev => ({
-      ...prev,
-      photos: prev.photos.filter(url => url !== photoUrlToRemove)
-    }))
-  }
-
-  // Save tool (create or update)
   const handleAddTool = async () => {
     if (!formData.name || !formData.link || !formData.logo) {
       alert('App Name, Product URL, and Logo URL are all required!')
       return
     }
 
+    // Validate logo URL format
     try {
       new URL(formData.logo)
+    } catch (e) {
+      alert('Please enter a valid Logo URL')
+      return
+    }
+
+    // Validate product link URL format
+    try {
       new URL(formData.link)
     } catch (e) {
-      alert('Please enter valid URLs')
+      alert('Please enter a valid Product URL')
       return
     }
 
     try {
       if (editingId) {
+        // Update existing tool
         const toolRef = doc(db, 'tools', editingId)
         await updateDoc(toolRef, {
           ...formData,
           updatedAt: new Date()
         })
       } else {
+        // Add new tool
         await addDoc(collection(db, 'tools'), {
           ...formData,
           sellerId: user.uid,
           sellerEmail: user.email,
           sellerName: user.displayName || 'Anonymous',
-          rating: 4.5,
+          rating: 0,
           downloads: 0,
           createdAt: new Date()
         })
       }
-
       setFormData({
         name: '',
         description: '',
         logo: '',
         category: 'Coding',
         link: '',
-        price: 'Free',
-        photos: []
+        price: 'Free'
       })
       setShowForm(false)
       setEditingId(null)
+      // Refresh tools list
+      const q = query(collection(db, 'tools'), where('sellerId', '==', user.uid))
+      const snapshot = await getDocs(q)
+      setTools(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })))
     } catch (error) {
-      console.error('Error:', error)
-      alert('Error saving tool')
+      console.error('Error adding/updating tool:', error)
+      alert('Error saving tool. Please try again.')
     }
   }
 
@@ -194,20 +107,20 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
       logo: tool.logo || '',
       category: tool.category,
       link: tool.link,
-      price: tool.price,
-      photos: tool.photos || []
+      price: tool.price
     })
     setEditingId(tool.id)
     setShowForm(true)
   }
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this tool?')) return
+    if (!window.confirm('Are you sure you want to delete this tool?')) return
     try {
       await deleteDoc(doc(db, 'tools', id))
+      setTools(tools.filter(t => t.id !== id))
     } catch (error) {
-      console.error('Error deleting:', error)
-      alert('Error deleting tool')
+      console.error('Error deleting tool:', error)
+      alert('Error deleting tool. Please try again.')
     }
   }
 
@@ -220,61 +133,24 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
       logo: '',
       category: 'Coding',
       link: '',
-      price: 'Free',
-      photos: []
+      price: 'Free'
     })
   }
 
-  // Not logged in
-  if (!user) {
-    return (
-      <div className="seller-dashboard">
-        <div className="login-screen">
-          <div className="login-card">
-            <h1>Welcome to Creator Hub</h1>
-            <p>Publish your AI products and reach millions of users.</p>
-            
-            <button 
-              className="btn-google-login"
-              onClick={handleGoogleLogin}
-              disabled={loggingIn}
-            >
-              {loggingIn ? 'Logging in...' : '🔐 Login with Google'}
-            </button>
-            
-            <p className="login-subtext">
-              Sign in to publish and manage your AI products. Your data is secure and private.
-            </p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Logged in
   if (loading) {
-    return (
-      <div className="seller-dashboard">
-        <div style={{ padding: '2rem', textAlign: 'center' }}>Loading your products...</div>
-      </div>
-    )
+    return <div className="seller-dashboard"><p>Loading...</p></div>
   }
 
   return (
     <div className="seller-dashboard">
       <div className="dashboard-header">
         <div>
-          <h1>Creator Hub</h1>
-          <p>👤 {user.displayName || user.email}</p>
+          <h1>Seller Dashboard</h1>
+          <p className="seller-email">{user?.email}</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <button onClick={() => setShowForm(!showForm)} className="btn-add-tool">
-            {showForm ? '✕ Cancel' : '+ Add AI Tool'}
-          </button>
-          <button onClick={handleLogout} className="btn-logout">
-            Logout
-          </button>
-        </div>
+        <button onClick={() => setShowForm(!showForm)} className="btn-add-tool">
+          {showForm ? '✕ Cancel' : '+ Add AI Tool'}
+        </button>
       </div>
 
       {showForm && (
@@ -288,7 +164,7 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
                 id="name"
                 type="text"
                 name="name"
-                placeholder="e.g., ChatGPT"
+                placeholder="e.g., ChatGPT, Midjourney"
                 value={formData.name}
                 onChange={handleInputChange}
                 className="form-input"
@@ -303,9 +179,13 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
                 onChange={handleInputChange}
                 className="form-input"
               >
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
+                <option>Coding</option>
+                <option>Writing</option>
+                <option>Image</option>
+                <option>Video</option>
+                <option>Audio</option>
+                <option>Music</option>
+                <option>Other</option>
               </select>
             </div>
           </div>
@@ -370,14 +250,6 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
             )}
           </div>
 
-          {/* Image Gallery Upload */}
-          <ImageUploadPreview
-            photos={formData.photos}
-            onUpload={handleImageUpload}
-            onRemove={handleRemovePhoto}
-            uploading={uploadingImages}
-          />
-
           <div className="form-actions">
             <button onClick={handleAddTool} className="btn-submit">
               {editingId ? '✓ Update Tool' : '+ List Tool'}
@@ -408,11 +280,6 @@ export default function SellerDashboard({ user, setUser, setCurrentPage }) {
                   <h3>{tool.name}</h3>
                   <p className="tool-category">{tool.category}</p>
                   <p className="tool-description">{tool.description}</p>
-                  {tool.photos && tool.photos.length > 0 && (
-                    <p className="tool-photos-count">
-                      📸 {tool.photos.length} photo{tool.photos.length === 1 ? '' : 's'}
-                    </p>
-                  )}
                   <div className="tool-meta">
                     <span className={`tool-price ${tool.price.toLowerCase()}`}>{tool.price}</span>
                     <a href={tool.link} target="_blank" rel="noopener noreferrer" className="tool-link">
