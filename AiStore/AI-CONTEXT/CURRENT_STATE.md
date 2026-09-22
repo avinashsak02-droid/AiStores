@@ -4,38 +4,42 @@ Last updated: 2026-09-22
 
 ## Overall status
 
-The AI Store prototype's editorial redesign (started in Session 5) is now fully and consistently applied across the codebase. Previously it was half-applied (new tokens/Marketplace but old App.jsx/AICard/ToolDetails), which caused several visible bugs. Those are now fixed and confirmed working.
+The AI Store prototype's editorial redesign is fully applied and confirmed working (see `LAST_CHECKPOINT.md`). This session (still same day) diagnosed a Seller Dashboard bug and proposed a photo carousel feature — **both are unconfirmed / not yet tested by the user.**
 
 ## Visual design
 
-Parchment/editorial look confirmed live: warm parchment background (`#e9e1d6`), near-black text, wine-red accent (`#7a1f26`), Instrument Serif / Work Sans / JetBrains Mono, thin rules, numbered rows, mono-font labels, frosted sticky navbar, load-in animations, subtle film grain. This replaces the old Session 1 look (Playfair Display/Lora/Inter, cream `#F9F9F7`, red `#CC0000`, hard shadows) — no trace of the old look remains in the CSS.
-
-Emoji have been removed from the Marketplace and ToolDetails pages (generated `CoverArt` is used instead when a tool has no logo). The Creator Hub (`SellerDashboard.jsx`) still contains emoji (📦, 🔐, 👤, ✕, ✓) — not yet addressed.
+Unchanged since last checkpoint — parchment/editorial look confirmed live. See `LAST_CHECKPOINT.md` and Decisions 006–010.
 
 ## Authentication
 
-Google login authentication works. Log out is available from the navbar and the Creator Hub. Firebase Authentication's built-in persistence is used (Decision 005); no custom login-storage system.
+Google login via Firebase Auth. **Scope decision (Decision 011, confirmed):** only sellers get accounts; buyers browse with no login. Sign-in is surfaced only inside the Creator Hub, not the navbar.
+
+Open bug (pending test): `SellerDashboard.jsx`'s data-fetch effect previously never called `setLoading(false)` when `user` was `null`, causing an infinite "Loading..." screen for signed-out visitors to the Creator Hub. A fix (adds an early `if (!user)` branch and a "Sign in with Google" prompt) has been written but not yet copied into the project or tested.
+
+Discrepancy noted (not a current blocker, see Decision 011): `Navbar.jsx` has no sign-in UI at all, which contradicts older claims in `DECISIONS.md` Decision 003 / `CONVERSATIONS.md` Session 2 that auth was fully working end-to-end. Source code is authoritative — treat navbar sign-in as not present.
 
 ## Navigation
 
-`App.jsx` now correctly wires all page-to-page callbacks: Marketplace → Creator Hub ("Showcase your product"), Marketplace → Tool Details, and Tool Details → Tool Details (via related tools). Page changes scroll to top.
+Unchanged — `App.jsx` correctly wires all page-to-page callbacks (confirmed in last checkpoint).
 
 ## Data / Firebase
 
-Firestore `tools` collection is the source of truth, with `onSnapshot` real-time sync on both the Marketplace and Seller Dashboard. Firebase Storage is initialized in `firebase.js` but not yet used — no image upload feature exists.
+Firestore `tools` collection is the source of truth, `onSnapshot`/`getDocs` used as before. Firebase Storage still initialized but unused.
+
+### Photo carousel (pending test)
+
+A bug was found in the existing carousel: `PhotoCarousel.jsx`'s markup didn't match `PhotoCarousel.css`'s expected structure (missing `.carousel-image-wrapper`, arrows placed outside `.carousel-main`, wrong dot/counter class names), so it rendered unstyled and non-responsive even though `ToolDetails.jsx` already passed `tool.photos` correctly. A rewrite of `PhotoCarousel.jsx` (no CSS changes needed) plus a new required "Product Photos" field (1–5 URLs) in `SellerDashboard.jsx`/`.css` has been provided. **Not yet copied into the project or tested.**
 
 ### Current problem
 
 - No image upload for tool details (logo URL / gallery photos are pasted as links, not uploaded).
 - Placeholder values (rating default 4.5, downloads default 0) are shown prominently on the details page as if real.
 - Seed data logo URLs have not been verified; broken ones now fall back to generated cover art instead of breaking the layout.
-
+- Seller Dashboard loading bug and photo carousel feature: code written, and confirmed by the user
 ## Current priority
 
-Candidates for next session (not yet decided by user):
-1. Image upload feature (logo + gallery) — longstanding high-priority TODO.
-2. Remove emoji from SellerDashboard.jsx for visual consistency.
-3. Decide whether to hide/relabel placeholder rating and download counts until real data exists.
+1. adding more pages to the site 
+2. improving rating and price and downloads sections from tool details 
 
 ## Important instruction
 

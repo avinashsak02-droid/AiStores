@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where } from 'firebase/firestore'
-import { db } from '../firebase'
+import { signInWithPopup } from 'firebase/auth'
+import { db, auth, googleProvider } from '../firebase'
 import './SellerDashboard.css'
+
+const MAX_PHOTOS = 5
 
 export default function SellerDashboard({ user }) {
   const [tools, setTools] = useState([])
@@ -13,15 +16,23 @@ export default function SellerDashboard({ user }) {
     logo: '',
     category: 'Coding',
     link: '',
-    price: 'Free'
+    price: 'Free',
+    photos: ['']
   })
   const [loading, setLoading] = useState(true)
 
   // Fetch tools from Firestore
   useEffect(() => {
+    if (!user) {
+      // Not logged in — nothing to fetch, stop showing the loading state
+      setLoading(false)
+      return
+    }
+
     const fetchTools = async () => {
+      setLoading(true)
       try {
-        const q = query(collection(db, 'tools'), where('sellerId', '==', user?.uid))
+        const q = query(collection(db, 'tools'), where('sellerId', '==', user.uid))
         const snapshot = await getDocs(q)
         setTools(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })))
       } catch (error) {
@@ -30,12 +41,56 @@ export default function SellerDashboard({ user }) {
         setLoading(false)
       }
     }
-    if (user) fetchTools()
+    fetchTools()
   }, [user])
+
+  const handleSignIn = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider)
+    } catch (error) {
+      console.error('Sign-in error:', error)
+      alert('Sign-in failed. Please try again.')
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  // ---- Photo fields (1-5 required) ----
+  const handlePhotoChange = (index, value) => {
+    setFormData(prev => {
+      const photos = [...prev.photos]
+      photos[index] = value
+      return { ...prev, photos }
+    })
+  }
+
+  const addPhotoField = () => {
+    setFormData(prev => {
+      if (prev.photos.length >= MAX_PHOTOS) return prev
+      return { ...prev, photos: [...prev.photos, ''] }
+    })
+  }
+
+  const removePhotoField = (index) => {
+    setFormData(prev => {
+      if (prev.photos.length <= 1) return prev
+      return { ...prev, photos: prev.photos.filter((_, i) => i !== index) }
+    })
+  }
+
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      description: '',
+      logo: '',
+      category: 'Coding',
+      link: '',
+      price: 'Free',
+      photos: ['']
+    })
   }
 
   const handleAddTool = async () => {
@@ -60,18 +115,40 @@ export default function SellerDashboard({ user }) {
       return
     }
 
+    // Validate photos: required (1-5), each must be a valid URL
+    const validPhotos = formData.photos.map(p => p.trim()).filter(p => p !== '')
+
+    if (validPhotos.length === 0) {
+      alert('Please add at least 1 product photo for the gallery (up to 5).')
+      return
+    }
+    if (validPhotos.length > MAX_PHOTOS) {
+      alert(`You can add a maximum of ${MAX_PHOTOS} photos.`)
+      return
+    }
+    for (const url of validPhotos) {
+      try {
+        new URL(url)
+      } catch (e) {
+        alert(`Please enter a valid URL for photo: "${url}"`)
+        return
+      }
+    }
+
+    const dataToSave = { ...formData, photos: validPhotos }
+
     try {
       if (editingId) {
         // Update existing tool
         const toolRef = doc(db, 'tools', editingId)
         await updateDoc(toolRef, {
-          ...formData,
+          ...dataToSave,
           updatedAt: new Date()
         })
       } else {
         // Add new tool
         await addDoc(collection(db, 'tools'), {
-          ...formData,
+          ...dataToSave,
           sellerId: user.uid,
           sellerEmail: user.email,
           sellerName: user.displayName || 'Anonymous',
@@ -80,14 +157,7 @@ export default function SellerDashboard({ user }) {
           createdAt: new Date()
         })
       }
-      setFormData({
-        name: '',
-        description: '',
-        logo: '',
-        category: 'Coding',
-        link: '',
-        price: 'Free'
-      })
+      resetForm()
       setShowForm(false)
       setEditingId(null)
       // Refresh tools list
@@ -107,7 +177,8 @@ export default function SellerDashboard({ user }) {
       logo: tool.logo || '',
       category: tool.category,
       link: tool.link,
-      price: tool.price
+      price: tool.price,
+      photos: tool.photos && tool.photos.length > 0 ? tool.photos : ['']
     })
     setEditingId(tool.id)
     setShowForm(true)
@@ -127,18 +198,28 @@ export default function SellerDashboard({ user }) {
   const handleCancel = () => {
     setShowForm(false)
     setEditingId(null)
-    setFormData({
-      name: '',
-      description: '',
-      logo: '',
-      category: 'Coding',
-      link: '',
-      price: 'Free'
-    })
+    resetForm()
   }
 
   if (loading) {
     return <div className="seller-dashboard"><p>Loading...</p></div>
+  }
+
+  // Not signed in — show a sign-in prompt instead of hanging or showing an empty dashboard
+  if (!user) {
+    return (
+      <div className="seller-dashboard">
+        <div className="dashboard-header">
+          <div>
+            <h1>Seller Dashboard</h1>
+            <p className="seller-email">Sign in to manage your AI tools.</p>
+          </div>
+          <button onClick={handleSignIn} className="btn-add-tool">
+            Sign in with Google
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -248,6 +329,47 @@ export default function SellerDashboard({ user }) {
                 <span className="preview-label">Logo Preview</span>
               </div>
             )}
+          </div>
+
+          {/* ---- Product photos (carousel) ---- */}
+          <div className="form-group">
+            <label>Product Photos * (1–{MAX_PHOTOS} required, for the gallery on the tool page)</label>
+            <div className="photo-fields">
+              {formData.photos.map((photoUrl, index) => (
+                <div className="photo-input-row" key={index}>
+                  <input
+                    type="url"
+                    placeholder={`https://example.com/screenshot-${index + 1}.png`}
+                    value={photoUrl}
+                    onChange={(e) => handlePhotoChange(index, e.target.value)}
+                    className="form-input"
+                  />
+                  {photoUrl.trim() && (
+                    <img src={photoUrl} alt="" className="photo-thumb-preview" />
+                  )}
+                  <button
+                    type="button"
+                    className="btn-photo-remove"
+                    onClick={() => removePhotoField(index)}
+                    disabled={formData.photos.length <= 1}
+                    aria-label={`Remove photo ${index + 1}`}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="btn-photo-add"
+              onClick={addPhotoField}
+              disabled={formData.photos.length >= MAX_PHOTOS}
+            >
+              + Add another photo
+            </button>
+            <p className="photo-hint">
+              {formData.photos.filter(p => p.trim()).length} / {MAX_PHOTOS} photos added
+            </p>
           </div>
 
           <div className="form-actions">

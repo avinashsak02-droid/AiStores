@@ -113,3 +113,19 @@ Status: **IMPLEMENTED and confirmed.**
 Marketplace category filter chips changed from `All, Video, Image, Writing, Coding, Music, SEO, Design, Other` to `All, Coding, Writing, Image, Video, Audio, Music, Other`.
 
 Reason: the Creator Hub form's category dropdown never offered "SEO" or "Design", so those chips could never match a real product. It also lacked "Audio", so existing Audio seed products (e.g. Eleven Labs) were only reachable via "All". The chip list must match the Creator Hub form's `categories` array.
+
+
+
+---
+
+## Decision 011 — Seller-only accounts (for now)
+
+Status: **CONFIRMED by user.**
+
+Only sellers require accounts at this stage. Buyers browse and use the Marketplace with no login at all.
+
+Consequence: no sign-in control is being added to `Navbar.jsx`. Sign-in is only surfaced inside the Creator Hub (`SellerDashboard.jsx`), triggered when a signed-out user opens it.
+
+Reason: matches the current product scope — buyer accounts are a "Future" item (see `TODO.md`), not needed yet.
+
+Note: this session found that `Navbar.jsx` currently has no sign-in UI at all (not even a "Sign in" link), which contradicts `DECISIONS.md` Decision 003 and `CONVERSATIONS.md` Session 2's claim that Google auth was "confirmed working." Since this decision means navbar sign-in is intentionally not being added, that discrepancy is now moot rather than a bug — but it's recorded here in case it resurfaces.

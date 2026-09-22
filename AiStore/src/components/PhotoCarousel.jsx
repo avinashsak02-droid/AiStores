@@ -21,33 +21,54 @@ export default function PhotoCarousel({ photos }) {
   return (
     <div className="photo-carousel">
       <div className="carousel-main">
-        <img src={photos[currentIndex]} alt={`Product photo ${currentIndex + 1}`} />
+        {photos.length > 1 && (
+          <button
+            type="button"
+            className="carousel-arrow carousel-prev"
+            onClick={handlePrev}
+            aria-label="Previous photo"
+          >
+            ←
+          </button>
+        )}
+
+        <div className="carousel-image-wrapper">
+          <img
+            src={photos[currentIndex]}
+            alt={`Product photo ${currentIndex + 1}`}
+            className="carousel-image"
+          />
+        </div>
+
+        {photos.length > 1 && (
+          <button
+            type="button"
+            className="carousel-arrow carousel-next"
+            onClick={handleNext}
+            aria-label="Next photo"
+          >
+            →
+          </button>
+        )}
       </div>
 
       {photos.length > 1 && (
-        <>
-          <button className="carousel-arrow carousel-prev" onClick={handlePrev}>
-            ←
-          </button>
-          <button className="carousel-arrow carousel-next" onClick={handleNext}>
-            →
-          </button>
-
-          <div className="carousel-dots">
+        <div className="carousel-indicators">
+          <div className="indicator-dots">
             {photos.map((_, index) => (
               <button
                 key={index}
+                type="button"
                 className={`dot ${index === currentIndex ? 'active' : ''}`}
                 onClick={() => goToSlide(index)}
                 aria-label={`Go to photo ${index + 1}`}
               />
             ))}
           </div>
-
-          <div className="carousel-counter">
+          <span className="indicator-counter">
             {currentIndex + 1} / {photos.length}
-          </div>
-        </>
+          </span>
+        </div>
       )}
     </div>
   )

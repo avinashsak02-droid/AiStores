@@ -372,3 +372,80 @@
     padding: 1.5rem;
   }
 }
+/* Product Photos (carousel source) */
+.photo-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.photo-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.photo-input-row .form-input {
+  flex: 1;
+}
+
+.photo-thumb-preview {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border: var(--border-thin, 1px solid #E5E5E0);
+  background: #FAFAF9;
+  flex-shrink: 0;
+}
+
+.btn-photo-remove {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: var(--border-thin, 1px solid #E5E5E0);
+  background: white;
+  color: #C62828;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-photo-remove:hover:not(:disabled) {
+  background: #C62828;
+  color: white;
+  border-color: #C62828;
+}
+
+.btn-photo-remove:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn-photo-add {
+  margin-top: 0.85rem;
+  padding: 0.6rem 1rem;
+  border: var(--border-thin, 1px solid #E5E5E0);
+  background: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-photo-add:hover:not(:disabled) {
+  background: var(--accent, #CC0000);
+  color: white;
+  border-color: var(--accent, #CC0000);
+}
+
+.btn-photo-add:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.photo-hint {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--muted, #666);
+}

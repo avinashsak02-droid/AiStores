@@ -605,3 +605,66 @@ User copied all code into VS Code, tested it, and confirmed: **"ok it works."**
 - A redesign proposed in one session can be left half-applied if the session ends before a checkpoint is written (this is exactly the failure mode LAST_CHECKPOINT.md exists to prevent). Always diff the actual repo files against what a prior session's CONVERSATIONS.md entry proposed, rather than assuming "proposed" became "implemented" or vice versa.
 - CSS variable renames during a redesign are a common silent-breakage source — grep for old variable names across *all* CSS files, not just the ones being actively rewritten.
 - When class-prefixing (Decision 007), an old file left un-migrated will keep using bare/generic class names and can collide with newly-prefixed files from other pages.
+
+
+
+#####Conversation 7
+# Session 7 — Seller Dashboard Loading Bug + Photo Carousel Feature (Status: PROPOSED / NOT YET CONFIRMED)
+
+Date: 2026-09-22
+
+## Objective
+
+Diagnose why the Seller Dashboard was stuck on "Loading...", confirm a product-scope decision about accounts, then add a required photo-carousel feature to the Creator Hub form and Tool Details page.
+
+## Bug diagnosed: Seller Dashboard infinite loading
+
+`SellerDashboard.jsx`'s fetch `useEffect` only called `fetchTools()` (and therefore only ever called `setLoading(false)`) when `if (user)` was true. A signed-out `user` (`null`) meant the effect did nothing, so `loading` stayed `true` forever.
+
+Root cause of `user` being `null`: `Navbar.jsx` currently has no sign-in UI at all — only a logout button that's conditionally rendered when already signed in. This contradicts `DECISIONS.md` Decision 003 and `CONVERSATIONS.md` Session 2, which claimed Google auth was fully working and confirmed. Source code is authoritative, so this is flagged as a discrepancy in `DECISIONS.md`.
+
+## Decision made
+
+**Decision 011 (confirmed by user):** Only sellers get accounts for now; buyers stay account-less. Navbar sign-in is intentionally deferred — sign-in only appears inside the Creator Hub. This makes the proposed fix's shape (sign-in prompt inside `SellerDashboard.jsx`, nothing in `Navbar.jsx`) the correct one for current scope.
+
+## Fix proposed (not yet tested)
+
+`SellerDashboard.jsx`: fetch effect now short-circuits with `setLoading(false)` when there's no user, and renders a "Sign in with Google" screen (using `signInWithPopup` with the existing `auth`/`googleProvider` from `firebase.js`) instead of hanging.
+
+## Feature proposed: Photo carousel (not yet tested)
+
+User requested: sellers can paste up to 5 image URLs in the Creator Hub form; the field is compulsory; the carousel on Tool Details must look good and be responsive on any device.
+
+### Bug found before implementing
+
+`PhotoCarousel.jsx` and `PhotoCarousel.css` were mismatched (likely a leftover from an earlier session that isn't recorded elsewhere in `AI-CONTEXT`): the CSS expected a `.carousel-main` row containing prev arrow / `.carousel-image-wrapper` / next arrow, then a `.carousel-indicators` row with `.indicator-dots` and `.indicator-counter`. The actual JSX rendered the `<img>` with no wrapper class (losing the responsive `aspect-ratio`/`object-fit` rules), put the arrows outside `.carousel-main` (stacking instead of sitting beside the image), and used non-existent class names (`.carousel-dots`, `.carousel-counter`) for the dots/counter. This meant the carousel was unstyled and non-responsive independent of anything to do with photo count.
+
+### What was proposed
+
+- `PhotoCarousel.jsx` rewritten to match the existing (already-correct) CSS structure — no CSS changes needed, since `PhotoCarousel.css` already had working responsive rules that simply weren't being targeted.
+- `SellerDashboard.jsx`: added a required "Product Photos" field — 1 to 5 URL inputs (`MAX_PHOTOS = 5`), add/remove row buttons, submit-time validation (at least 1 required, each must be a valid URL, capped at 5), thumbnail preview per row. Existing tools' `photos` array populates back into the form on Edit.
+- `SellerDashboard.css`: new rules appended for `.photo-fields`, `.photo-input-row`, `.photo-thumb-preview`, `.btn-photo-remove`, `.btn-photo-add`, `.photo-hint`.
+- `ToolDetails.jsx`/`ToolDetails.css`: no changes needed — already correctly passes/renders `tool.photos` via `PhotoCarousel`.
+
+## Confirmed By User
+
+**No.** User asked for `SYNC PROJECT` before testing either the sign-in fix or the carousel feature. Both remain PROPOSED / NOT YET CONFIRMED. `LAST_CHECKPOINT.md` was intentionally left unchanged (still points to Session 6's confirmed editorial-redesign checkpoint) per the project's rule against marking untested code as implemented.
+
+## What remains unfinished
+
+- User must copy `SellerDashboard.jsx` (sign-in fix + photo fields), `SellerDashboard.css` (new rules), and `PhotoCarousel.jsx` (rewritten) into VS Code and test:
+  1. Signed-out Creator Hub no longer hangs on "Loading..." and shows a working Google sign-in button.
+  2. Form blocks submission with 0 photos; allows up to 5; 6th "Add another photo" is disabled.
+  3. Tool Details carousel shows arrows beside the image, styled dots, a counter, and resizes correctly on mobile/desktop.
+  4. Editing an existing tool repopulates its photo URLs into the form.
+- Once confirmed, `LAST_CHECKPOINT.md`, `CURRENT_STATE.md`, and `TODO.md` need updating to mark these IMPLEMENTED.
+- Everything else in `TODO.md`'s Medium/Future sections remains untouched by this session.
+
+## Lessons for future AI sessions
+
+- A component and its CSS can silently drift apart (as `PhotoCarousel.jsx`/`.css` had) even with no session in `CONVERSATIONS.md` documenting when/why — always compare component markup against its CSS's expected class structure before trusting "the styles are already there."
+- Don't update `LAST_CHECKPOINT.md` on a `SYNC PROJECT` request unless the user has actually confirmed the code works — sync the other context files (TODO, DECISIONS, CURRENT_STATE, CONVERSATIONS) to capture what was proposed instead, so nothing is lost if the session ends before testing happens.
+
+
+#### NOTE BY THE USERR : session 7 implementation has worked
+ 
