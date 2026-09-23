@@ -73,6 +73,7 @@ function App() {
           tool={selectedTool}
           onBack={handleBackToMarketplace}
           onViewTool={handleViewTool}
+          user={user}
         />
       )}
 

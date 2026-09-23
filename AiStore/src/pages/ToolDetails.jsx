@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react'
 import { db } from '../firebase'
 import { collection, query, where, onSnapshot } from 'firebase/firestore'
 import PhotoCarousel from '../components/PhotoCarousel'
+import ReviewSection from '../components/ReviewSection'
 import './ToolDetails.css'
 
-export default function ToolDetails({ tool, onBack, onViewTool }) {
+export default function ToolDetails({ tool, onBack, onViewTool, user }) {
   const [relatedTools, setRelatedTools] = useState([])
+  const [reviews, setReviews] = useState([])
 
   // Fetch more apps in the same category
   useEffect(() => {
@@ -23,6 +25,25 @@ export default function ToolDetails({ tool, onBack, onViewTool }) {
 
     return () => unsubscribe()
   }, [tool.category, tool.id])
+
+  // Fetch reviews for this tool (sorted client-side to avoid needing a composite index)
+  useEffect(() => {
+    const q = query(
+      collection(db, 'reviews'),
+      where('toolId', '==', tool.id)
+    )
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const list = snapshot.docs
+        .map((d) => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
+      setReviews(list)
+    })
+    return () => unsubscribe()
+  }, [tool.id])
+
+  const avgRating = reviews.length
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    : null
 
   const handleTryNow = () => {
     window.open(tool.link, '_blank', 'noopener,noreferrer')
@@ -71,7 +92,10 @@ export default function ToolDetails({ tool, onBack, onViewTool }) {
             </div>
             <div className="info-item">
               <span className="info-label">Rating</span>
-              <span className="info-value">★ {tool.rating || 4.5}</span>
+              <span className="info-value">
+                {avgRating ? `★ ${avgRating.toFixed(1)}` : '—'}
+                {reviews.length > 0 && ` (${reviews.length})`}
+              </span>
             </div>
             <div className="info-item">
               <span className="info-label">Users</span>
@@ -93,6 +117,13 @@ export default function ToolDetails({ tool, onBack, onViewTool }) {
             <div className="divider-h"></div>
           </>
         )}
+
+        {/* SECTION 4: REVIEWS */}
+        <section className="reviews-section">
+          <ReviewSection tool={tool} user={user} reviews={reviews} />
+        </section>
+
+        <div className="divider-h"></div>
 
         {/* SECTION 5: MORE APPS LIKE THIS */}
         {relatedTools.length > 0 && (
