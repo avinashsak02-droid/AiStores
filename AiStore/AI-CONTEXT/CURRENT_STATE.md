@@ -29,17 +29,25 @@ Firestore `tools` collection is the source of truth, `onSnapshot`/`getDocs` used
 ### Photo carousel (pending test)
 
 A bug was found in the existing carousel: `PhotoCarousel.jsx`'s markup didn't match `PhotoCarousel.css`'s expected structure (missing `.carousel-image-wrapper`, arrows placed outside `.carousel-main`, wrong dot/counter class names), so it rendered unstyled and non-responsive even though `ToolDetails.jsx` already passed `tool.photos` correctly. A rewrite of `PhotoCarousel.jsx` (no CSS changes needed) plus a new required "Product Photos" field (1–5 URLs) in `SellerDashboard.jsx`/`.css` has been provided. **Not yet copied into the project or tested.**
-
 ### Current problem
 
 - No image upload for tool details (logo URL / gallery photos are pasted as links, not uploaded).
-- Placeholder values (rating default 4.5, downloads default 0) are shown prominently on the details page as if real.
+- Downloads stat is still a placeholder (default 0, never incremented by anything real).
+- Marketplace list and featured card still show the old placeholder `tool.rating` field (not live) — only the Tool Details page computes a live average from real reviews. See Decision 012 scope note.
 - Seed data logo URLs have not been verified; broken ones now fall back to generated cover art instead of breaking the layout.
-- Seller Dashboard loading bug and photo carousel feature: code written, and confirmed by the user
+- Seller Dashboard loading bug and photo carousel feature: IMPLEMENTED and confirmed by the user.
+- Firestore currently has no visible/reviewed security rules in the repo; reviews worked without any rules changes, which suggests the project is still in open/test-mode rules. Should be locked down before going commercial.
+
+### User Reviews (confirmed)
+
+Buyers can sign in with Google directly on the Tool Details page to post a star rating + text review (one per user per tool, stored in a new `reviews` Firestore collection, editable/deletable by the author). The Tool Details page's Rating stat now shows the live average of real reviews instead of a placeholder. See Decision 012.
+
 ## Current priority
 
-1. adding more pages to the site 
-2. improving rating and price and downloads sections from tool details 
+1. Adding more pages to the site
+2. Fixing the downloads stat
+3. Making the Marketplace list/featured rating live (currently only Tool Details is live)
+4. Reviewing Firestore security rules before going commercial
 
 ## Important instruction
 

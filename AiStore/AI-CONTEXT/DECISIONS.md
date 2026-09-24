@@ -129,3 +129,8 @@ Consequence: no sign-in control is being added to `Navbar.jsx`. Sign-in is only 
 Reason: matches the current product scope — buyer accounts are a "Future" item (see `TODO.md`), not needed yet.
 
 Note: this session found that `Navbar.jsx` currently has no sign-in UI at all (not even a "Sign in" link), which contradicts `DECISIONS.md` Decision 003 and `CONVERSATIONS.md` Session 2's claim that Google auth was "confirmed working." Since this decision means navbar sign-in is intentionally not being added, that discrepancy is now moot rather than a bug — but it's recorded here in case it resurfaces.
+## Decision 012 — User reviews require Google sign-in; rating becomes a live average
+
+### Status
+
+Copied into the project and confirmed working by the user. No Firestore rules changes were needed to make it work, which suggests the project is currently on open/test-mode Firestore rules — flagged as a pre-launch task, not addressed by this decision.
