@@ -120,8 +120,7 @@ Reason: the Creator Hub form's category dropdown never offered "SEO" or "Design"
 
 ## Decision 011 — Seller-only accounts (for now)
 
-Status: **CONFIRMED by user.**
-
+Status: **SUPERSEDED by Decisions 012 and 013** (buyers can now sign in, and the navbar has a common Sign in button). Kept for history.
 Only sellers require accounts at this stage. Buyers browse and use the Marketplace with no login at all.
 
 Consequence: no sign-in control is being added to `Navbar.jsx`. Sign-in is only surfaced inside the Creator Hub (`SellerDashboard.jsx`), triggered when a signed-out user opens it.
@@ -131,6 +130,22 @@ Reason: matches the current product scope — buyer accounts are a "Future" item
 Note: this session found that `Navbar.jsx` currently has no sign-in UI at all (not even a "Sign in" link), which contradicts `DECISIONS.md` Decision 003 and `CONVERSATIONS.md` Session 2's claim that Google auth was "confirmed working." Since this decision means navbar sign-in is intentionally not being added, that discrepancy is now moot rather than a bug — but it's recorded here in case it resurfaces.
 ## Decision 012 — User reviews require Google sign-in; rating becomes a live average
 
+### Decision
+
+Buyers write star + text reviews only after signing in with Google. Reviews live in a top-level Firestore `reviews` collection with doc id `${toolId}_${userId}`, so each user has one review per tool and can edit or delete it. The Tool Details "Rating" stat is the live average of that tool's real reviews ("—" when there are none), replacing the old placeholder.
+
 ### Status
 
 Copied into the project and confirmed working by the user. No Firestore rules changes were needed to make it work, which suggests the project is currently on open/test-mode Firestore rules — flagged as a pre-launch task, not addressed by this decision.
+
+---
+
+## Decision 013 — Common navbar Sign in for buyers and sellers
+
+Status: **IMPLEMENTED and confirmed.**
+
+The navbar shows a "Sign in" button to signed-out visitors. Buyers and sellers use the same Google login. The Seller Dashboard remains closed to signed-out visitors and shows a locked screen with a sign-in button. The login logic lives once in `App.jsx` (`handleLogin`) and is passed to the navbar as `onLogin`.
+
+Reason: buyer accounts now exist (reviews), so the login should be visible everywhere instead of hidden inside the Creator Hub. This supersedes Decision 011.
+
+Note: `SellerDashboard.jsx` and `ReviewSection.jsx` still each have their own `handleSignIn`. Consolidating them onto `App.jsx`'s `handleLogin` is optional cleanup, not required.

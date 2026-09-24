@@ -668,3 +668,57 @@ User requested: sellers can paste up to 5 image URLs in the Creator Hub form; th
 
 #### NOTE BY THE USERR : session 7 implementation has worked
  
+
+
+##### Conversation 8
+# Session 8 — User Reviews (recorded retroactively) and Common Navbar Sign-in
+
+Date: 2026-09-24
+
+## Objective
+
+Record the User Reviews feature, which was implemented after Session 7 but never added to this file. Then add a common Sign in button for buyers and sellers in the navbar.
+
+## Reviews (reconstructed from `LAST_CHECKPOINT.md`, Decision 012 and the repository)
+
+Buyers sign in with Google on the Tool Details page and post a star rating plus text review. Reviews are stored in a new `reviews` collection, doc id `${toolId}_${userId}`. Tool Details shows a live average rating. It was confirmed working with no Firebase config changes. See Decision 012.
+
+## Navbar sign-in (this session)
+
+Since buyers can now have accounts, a common Sign in button was added to the navbar. Only signed-in users can use the Seller Dashboard.
+
+Source check before patching: `Navbar.jsx` only rendered content for signed-in users, and `App.jsx` had no sign-in handler. `SellerDashboard.jsx` already blocked signed-out visitors with a sign-in screen.
+
+Changes, delivered as patches:
+- `App.jsx`: import `googleProvider` and `signInWithPopup`, add `handleLogin` (ignores popup-closed and cancelled errors), pass `onLogin` to the Navbar.
+- `Navbar.jsx`: accept `onLogin`, show a "Sign in" button (reusing `btn-logout-nav`) when signed out.
+- `SellerDashboard.jsx`: reworded the locked-screen text.
+
+Confirmed by user: "OK it works". See Decision 013.
+
+## Problems and discrepancies
+
+- `CURRENT_STATE.md` had stale "pending test" sections for the Seller Dashboard bug and photo carousel, which were already confirmed. Rewritten in this sync.
+- `DECISIONS.md` Decision 012 had only a Status line. Content added.
+- Decision 011 was superseded by this session.
+- `ToolDetails.jsx` still has emoji, a placeholder related-card rating and a "© 2024" footer, now tracked in `TODO.md`.
+
+## Decisions
+
+Decision 013 (common navbar sign-in). Decision 011 marked superseded.
+
+## Rejected approaches
+
+- Building a separate seller-only login flow. One shared Google login is simpler.
+
+## What remains unfinished
+
+- Live rating on the Marketplace list and featured card.
+- Downloads stat.
+- Firestore security rules review.
+- Image upload, more pages, and the Creator Hub optional fields.
+
+## Lessons for future AI sessions
+
+- Check `CONVERSATIONS.md` against `LAST_CHECKPOINT.md` and `DECISIONS.md` at the start of a session. A feature can be confirmed and checkpointed yet missing from the history.
+- When a new decision reverses an old one, mark the old one superseded in the same sync so the files don't contradict each other.

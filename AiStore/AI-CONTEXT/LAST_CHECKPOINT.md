@@ -1,25 +1,24 @@
 # Last Checkpoint
 
 ## Feature
-User Reviews section on Tool Details page
+Common Sign in button in the navbar for buyers and sellers
 
 ## Status
 IMPLEMENTED
 
 ## Files Changed
 - src/App.jsx
-- src/pages/ToolDetails.jsx
-- src/components/ReviewSection.jsx (new)
-- src/components/ReviewSection.css (new)
+- src/components/Navbar.jsx
+- src/pages/SellerDashboard.jsx
 
 ## What Changed
-- Buyers can now sign in with Google (existing auth/googleProvider) directly from the Tool Details page to post a star rating + text review.
-- Reviews stored in a new top-level Firestore collection `reviews`, doc id `${toolId}_${userId}` — one review per user per tool, editable/deletable by its author.
-- Tool Details page's "Rating" stat is now a live average computed from that tool's real reviews (shows "—" when there are no reviews yet), replacing the old hardcoded placeholder.
-- App.jsx now passes the global `user` (from onAuthStateChanged) down to ToolDetails.
+- `App.jsx` has a shared `handleLogin` (Google popup via `signInWithPopup`). Closing the popup does not show an error alert. It is passed to the navbar as `onLogin`.
+- `Navbar.jsx` shows a "Sign in" button when signed out. When signed in it shows the user's name plus Logout, as before. The button reuses the `btn-logout-nav` style.
+- Buyers and sellers use the same Google login. The Seller Dashboard stays closed to signed-out visitors: it shows a locked screen (reworded to say the Creator Hub is only open to signed-in members).
+- This supersedes Decision 011 (no navbar sign-in).
 
 ## Confirmed By User
-Yes — user pasted the two patched files and two new files, no Firebase config changes needed, reviews work end-to-end.
+Yes — user implemented/tested the changes in VS Code ("OK it works").
 
 ## Next Task
-Not specified — open items: Marketplace list/featured card still show the old placeholder rating (not the live average); Firestore security rules should be reviewed/locked down before going commercial; downloads stat still unfixed; adding more pages to the site.
+Not specified. Open items: make the Marketplace list and featured card rating live, fix the downloads stat, review Firestore security rules, add more pages.

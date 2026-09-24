@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { auth } from './firebase'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { auth, googleProvider } from './firebase'
+import { onAuthStateChanged, signOut, signInWithPopup } from 'firebase/auth'
 import './App.css'
 import Navbar from './components/Navbar'
 import Marketplace from './pages/Marketplace'
@@ -37,7 +37,21 @@ function App() {
     setCurrentPage('seller')
     window.scrollTo(0, 0)
   }
-
+  const handleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider)
+    } catch (error) {
+      // Closing the popup is not a real error, so don't show an alert for it
+      if (
+        error.code === 'auth/popup-closed-by-user' ||
+        error.code === 'auth/cancelled-popup-request'
+      ) {
+        return
+      }
+      console.error('Sign-in error:', error)
+      alert('Sign-in failed. Please try again.')
+    }
+  }
   const handleLogout = async () => {
     try {
       await signOut(auth)
@@ -58,6 +72,7 @@ function App() {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         user={user}
+        onLogin={handleLogin}
         onLogout={handleLogout}
       />
 

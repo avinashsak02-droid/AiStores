@@ -1,6 +1,6 @@
 import './Navbar.css'
 
-export default function Navbar({ currentPage, setCurrentPage, user, onLogout }) {
+export default function Navbar({ currentPage, setCurrentPage, user, onLogin, onLogout }) {
   const handleLogout = () => {
     onLogout()
   }
@@ -34,13 +34,17 @@ export default function Navbar({ currentPage, setCurrentPage, user, onLogout }) 
         </div>
 
         <div className="navbar-right">
-          {user && (
+          {user ? (
             <>
               <span className="user-name">{user.displayName || user.email}</span>
               <button onClick={handleLogout} className="btn-logout-nav">
                 Logout
               </button>
             </>
+          ) : (
+            <button onClick={onLogin} className="btn-logout-nav">
+              Sign in
+            </button>
           )}
         </div>
       </div>

@@ -212,7 +212,7 @@ export default function SellerDashboard({ user }) {
         <div className="dashboard-header">
           <div>
             <h1>Seller Dashboard</h1>
-            <p className="seller-email">Sign in to manage your AI tools.</p>
+            <p className="seller-email">The Creator Hub is only open to signed-in members. Sign in to list and manage your AI tools.</p>
           </div>
           <button onClick={handleSignIn} className="btn-add-tool">
             Sign in with Google
