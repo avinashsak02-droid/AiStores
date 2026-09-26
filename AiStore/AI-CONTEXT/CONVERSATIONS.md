@@ -722,3 +722,43 @@ Decision 013 (common navbar sign-in). Decision 011 marked superseded.
 
 - Check `CONVERSATIONS.md` against `LAST_CHECKPOINT.md` and `DECISIONS.md` at the start of a session. A feature can be confirmed and checkpointed yet missing from the history.
 - When a new decision reverses an old one, mark the old one superseded in the same sync so the files don't contradict each other.
+
+
+
+#####Conversation 9
+# Session 9 — Outcome-Based Search: Planning Only (Status: PLANNED, NOT STARTED)
+
+Date: 2026-09-26
+
+## Objective
+
+Plan a major future feature — outcome-based natural-language search ("make me a pdf" → matched to the best AI tool) — without writing any code yet. User explicitly wanted zero risk and a full plan before implementation, and does not currently have budget to build it.
+
+## Discussion summary
+
+Explored zero-cost approaches first (keyword/synonym matching, TF-IDF, in-browser embeddings via transformers.js), all viable with no API spend. User then asked for the best possible version even at some cost, which changes the architecture: a paid LLM call requires a secret API key, which cannot live in frontend code, so this is the first feature requiring a backend component (Firebase Cloud Functions).
+
+Chosen final approach: a Firebase Cloud Function sends the user's query plus the tool catalog (name, description, `useCases`) directly to a cheap/fast LLM per search, asking for structured JSON output (best-match tool id + reasoning). Rejected building embeddings/vector-search infrastructure for now, since the catalog is small enough that sending it whole per search is simpler and still cheap; that's flagged as a future upgrade once the catalog grows into the thousands of tools.
+
+Full build plan (data foundation, backend function, frontend UI, cost/abuse controls, fallback behavior, rollout) recorded in `TODO.md` under "PLANNED — MAJOR FEATURE" rather than a separate file, per user's preference to keep AI-CONTEXT to fewer files.
+
+## Decisions
+
+Decision 014 — outcome-based search will use a paid LLM via Cloud Function, not a free-tier approach, given user's stated budget tolerance and desire for the best result.
+
+## Rejected/deferred approaches
+
+- Keyword/synonym matching, TF-IDF, in-browser embeddings (transformers.js) — all viable and zero-cost, kept as documented alternatives / fallback candidates, not the primary approach.
+- Embeddings-based pre-filter ahead of the LLM call — deferred until catalog scale actually requires it.
+
+## What remains unfinished
+
+- Nothing implemented. This was planning only.
+- Prerequisite before any implementation can start: Decision 009 (`useCases`/`features` fields on tools) must be built and confirmed first — currently still not implemented.
+- User indicated they'll return to this "next month" when budget is available.
+
+## Lessons for future AI sessions
+
+- Do not begin implementing outcome-based search until the user explicitly asks to start, even though a full plan now exists in `TODO.md`.
+- Check whether Decision 009 has been implemented yet before starting — if a future session finds it's still pending, that's the actual first step, not the Cloud Function.
+- This session made no source code changes at all — only AI-CONTEXT files were updated.
