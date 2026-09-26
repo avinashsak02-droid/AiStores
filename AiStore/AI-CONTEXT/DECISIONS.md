@@ -149,3 +149,27 @@ The navbar shows a "Sign in" button to signed-out visitors. Buyers and sellers u
 Reason: buyer accounts now exist (reviews), so the login should be visible everywhere instead of hidden inside the Creator Hub. This supersedes Decision 011.
 
 Note: `SellerDashboard.jsx` and `ReviewSection.jsx` still each have their own `handleSignIn`. Consolidating them onto `App.jsx`'s `handleLogin` is optional cleanup, not required.
+
+
+
+---
+
+## Decision 014 — Outcome-based search: LLM approach chosen, deferred for budget
+
+Status: **PLANNED, NOT STARTED.**
+
+### Decision
+
+When outcome-based natural-language search is built, it will use a paid LLM call through a new Firebase Cloud Function (the project's first backend component), rather than a zero-cost keyword/TF-IDF/in-browser-embeddings approach.
+
+### Reason
+
+User wants the best possible result rather than the cheapest, and decided a small ongoing cost is acceptable. At the current and near-term catalog size, sending the tool catalog directly to a cheap/fast LLM per search is simpler and higher quality than building embeddings/vector-search infrastructure, and avoids the engineering risk of in-browser ML (bundle size, device compatibility).
+
+### Consequence
+
+This is the first feature requiring a backend component (Firebase Cloud Functions) and a secret API key, which must never be placed in frontend code or committed to GitHub.
+
+### Status
+
+Not started. Full technical plan lives in `TODO.md` under "PLANNED — MAJOR FEATURE." Depends on Decision 009 (`useCases`/`features` fields) being implemented first.
