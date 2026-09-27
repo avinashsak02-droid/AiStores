@@ -1,7 +1,42 @@
 {
   "weekOf": "2026-09-21",
-  "generatedAt": "2026-09-27T09:03:55.504Z",
+  "generatedAt": "2026-09-27T10:35:29.725Z",
   "stories": [
+    {
+      "title": "OpenAI halts training of latest models as reports mount of AI agents going rogue - The Guardian",
+      "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQdWZCRDBDd0E2YnBTeGJZNXhZLURBOXlJZTR2dGhwY0c1bWlNX3N6MkhWcVRiSF9oNjJLWmJfY0Nwcy05SFB0RGJ2ckhaNjdueWFxMjdnWHhodFM1MEJkRXVnUzJZTTJidXdGckk1ZkI0RDZRNmVQQXYyTmxtbnJKZFdMNFRMbFhwcWY5RHdFeGpIY3prOVo1RWstRWhPVVRldXgyV1E1Q2FaOEZxSC1rTld2eFFHWnJTcXk2WmgxRG15a0ViblgzYzh3TQ?oc=5",
+      "source": "Google News",
+      "publishedDate": "2026-09-27T10:01:00.000Z",
+      "excerpt": "OpenAI halts training of latest models as reports mount of AI agents going rogue  The Guardian"
+    },
+    {
+      "title": "OpenAI pauses training of latest models after agents probed U.S. government sites in unexpected ways - Los Angeles Times",
+      "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOMnJlT0VjMlhfME40NFk4ZXV0NXkzOGpzS2I1T3pDZF9yYUdSTVJPZGszcUhRNnZ3VWkycHllSi1RWEdDMWRlMzZUVWtzVk91cGhscndZMWU4eUJzWktZMV9FX1RVdFRSazhPVnlxRGhXUXZ5dDJMZnVONTlMbFpMT2E3b2xJOUZfTTdFdjVSTFphNzcwSEstZGxsODRVOFZkMTNCNWJYLW0xLWJnbks4LUhHUmVzM2VZZzVnd1pPUnhFb3p5T3c?oc=5",
+      "source": "Google News",
+      "publishedDate": "2026-09-27T10:00:00.000Z",
+      "excerpt": "OpenAI pauses training of latest models after agents probed U.S. government sites in unexpected ways  Los Angeles Times"
+    },
+    {
+      "title": "Nearly 100 new laws take effect this week: Guns, artificial intelligence, facial recognition, ICE, and more - Hartford Courant",
+      "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQY2RVNC04bkV5WUROdEVrNmdFR1F1cjNPV1hIVVJ6M183TVJvb2RRYk9jRlVLVmt4SVQwSkt2MlpPaHhRSHIzQ3pJQjY3M1N1enFoWHVNWnNDSGJvR0Z5V1h0SW9VcUVyM0RVQTloX0xkNF94WWlzMjJtTENHNklLV2xnVGRvbFNSY1JSOG1DZ0cxSGkxOFFxVnlEUUdmOEFGVU9WdmlFU3l1OHZnTk9WelUtVTFEaFR4UXdOdlNVUE1vUk5jb09VdkdaQkZUWVFzbF83VA?oc=5",
+      "source": "Google News",
+      "publishedDate": "2026-09-27T09:12:43.000Z",
+      "excerpt": "Nearly 100 new laws take effect this week: Guns, artificial intelligence, facial recognition, ICE, and more  Hartford Courant"
+    },
+    {
+      "title": "As A.I. Accelerates, Governments Are Increasingly Being Left Behind - The New York Times",
+      "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPajQ0bkdBX2JMZzdXbG1BaVM3enFHQUsxVUZhT3V2MUVGdV9fck5tTDRlbjA1TWpPR003NFgtYUh2d0UxNnk4VXVpNWVQbkJKT3ViR0pLcjZ6OVhlTk9xbEtyelcxcHJna1NEeWhGSlYwb0pQd2pMT3ZNdXRkNlVqMQ?oc=5",
+      "source": "Google News",
+      "publishedDate": "2026-09-27T09:01:20.000Z",
+      "excerpt": "As A.I. Accelerates, Governments Are Increasingly Being Left Behind  The New York Times"
+    },
+    {
+      "title": "Job Titles Are Out. Now We’re All ‘Members of the Technical Staff.’ - The New York Times",
+      "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNQzdvYmJBbXp1a0ZFVzdHTXBUUE81UG1ROXJXODVFdUZITk1EVG1WTnBnZEFXZUhFbkRxbzYySVE0UE02a25ZUGU2OWpVNzYxT1JHOFNmclFLQ0c4aUlaeXR4OC1zbzljZ2RDYWx5UWhCRjBXbE9SZzZiMHUyZm9VWkJ4R2hFV3kyNk44QkxQaWctVFdITWJkdVZ0Q1FPTS1X?oc=5",
+      "source": "Google News",
+      "publishedDate": "2026-09-27T09:01:00.000Z",
+      "excerpt": "Job Titles Are Out. Now We’re All ‘Members of the Technical Staff.’  The New York Times"
+    },
     {
       "title": "Bill Gates says unchecked AI could ‘cause a billion deaths’ in call for regulation - The Guardian",
       "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNX3U0dW9FbGNsVVd0bGt4MlRzRTBZMkE2NWZOYUZlUkxOd3puUEwxdkR1YXNIaHdFNUtaYzJ3cGlOTHM2ckdBbHhLZmYtbUlnalJ2QmZYVS00RFROaksyY01xUnRCSXFzcEppNElYd1NOV21KNWJXVEVPVHBVZUppSEZPRVQzVmhtdlA4ZWp4emlaQmwxblpxVjRVWGM0dw?oc=5",
@@ -10,11 +45,11 @@
       "excerpt": "Bill Gates says unchecked AI could ‘cause a billion deaths’ in call for regulation  The Guardian"
     },
     {
-      "title": "\"Artificial means it is fake\": Donald Trump reiterates why Super Intelligence is a more accurate name than AI - aol.com",
-      "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNNmpmN0lwRlJQcTUtdzNFVTNhU0lOYWdDY1BtTDVGamMyaTJ2clZ2VHl0ZmxDTDJ2N3NrNU4xU1liTnh6ODlMRWJEUkx4UG1XcmNoeU02eExlQUFhMlFtVDJGazBCVGk4UDlHZmJCQUlNb2JpSG9QcXRSaEYySzRmS2NKNEo?oc=5",
+      "title": "Assessment of Knowledge, Attitudes, and Perceptions Regarding Artificial Intelligence Among Undergraduate Medical Students - Cureus",
+      "link": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxQN3ZOZGNlRDRVd3NGWXNqaXdWYlB6ay1yM3o5bi1vOHBGX3NuYVdfSFN3S3NIajd3X1RSNW9nNWtXNzk0eDMteXlNODVWV3JTTjVNbjdnSEhPVzRDT1F6OF9KWlFKXzVMSFFwUUlZRjNzQU96VURTaWJqSGMzUXZORzlMQjBwdVJlQ0JwNkN3SW9qeDJ4Nk9CSDNucjYwZGhmYjdpTURnQzR5eDN2a0NTaFJPQmZ5NUhCR2ZCRk9zVVk5VWNoSjltUVppRFNQTW1IWVFLelNFTzZDWXJKMUtXUjhwYTNHZlItUVBYUF9aU00?oc=5",
       "source": "Google News",
-      "publishedDate": "2026-09-27T08:26:19.000Z",
-      "excerpt": "\"Artificial means it is fake\": Donald Trump reiterates why Super Intelligence is a more accurate name than AI  aol.com"
+      "publishedDate": "2026-09-27T08:56:06.000Z",
+      "excerpt": "Assessment of Knowledge, Attitudes, and Perceptions Regarding Artificial Intelligence Among Undergraduate Medical Students  Cureus"
     },
     {
       "title": "Europe requires an operational framework for agentic artificial intelligence with executive capabilities - Atalayar",
@@ -22,41 +57,6 @@
       "source": "Google News",
       "publishedDate": "2026-09-27T08:00:00.000Z",
       "excerpt": "Europe requires an operational framework for agentic artificial intelligence with executive capabilities  Atalayar"
-    },
-    {
-      "title": "Australia summons OpenAI and Anthropic CEOs to appear at AI inquiry - aljazeera.com",
-      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNRzJaR3dnX3FYREtOZVJISWNDYVN4S3ZpZVVvN1otd2tnRTdTenJrQUxUN0c0YkRnOXlvT2pnRHhrdVZZVEFoZUl0WC1WZ0lEYW5uY08yaURBSnRjWVZPMUptSW9DME53YVU3cm50bXN2dkdmUmk0ZFJNOFEzWDh2U0FoXzM1QWZ4Q3FHLWtTeFJ1OThjUFpGenRKVEtybjd3OE5FQ3g5VzQzUDZI0gGyAUFVX3lxTE1GNUpkRUxuelVWRGhaakVPTllYTGdYZGh1VE1fUExWczNleEpZSHJKUmJoVnBxeFFCMkZQUmhHa3k2b1AtRFh4VEtoeUFudDVLc21vZlR5ZWZCODktS19Tb2EwejJBekdCWVZtUDc3aWQyNGlpOTd0ay1lSGNZVDJPV3p4ak1OdXQ3N2E4U3FzQjNwTmt2eE9NYmxhYjAwRWstRWFJU1RlSDZhc2ttTTNkT1E?oc=5",
-      "source": "Google News",
-      "publishedDate": "2026-09-27T07:15:43.000Z",
-      "excerpt": "Australia summons OpenAI and Anthropic CEOs to appear at AI inquiry  aljazeera.com"
-    },
-    {
-      "title": "The Takeaway: UN General Assembly debate Day 5 - UN News",
-      "link": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9jU3o1Z2FoZU9tOHJPMGRjT2kzNTdxd19KWlRKZ1pwZWhscjRlTjgydElUUzNfSm9ycTJka1RoMzRoazlIdEFmMFhpT29oQU52N2cxX0xVTQ?oc=5",
-      "source": "Google News",
-      "publishedDate": "2026-09-27T06:03:17.000Z",
-      "excerpt": "The Takeaway: UN General Assembly debate Day 5  UN News"
-    },
-    {
-      "title": "Super Intelligence is Word of the Week. Trump’s new word for AI has a sinister meaning - Firstpost",
-      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPeS03OWhoS2Q2NGxJTnZfU3NpSmFUZ0N2VFc0NS1GWHMwY2F6Y2wwSzczWDlxVDVSYVA1eXU3cndNZTdTTXBCMGJ4WDFydEFkWW9rd281SGUwLUpFSFQ3dE5iOGlvUGNRZTVpYWtNNkxxUlRkQ0pQSFFFSS1DZktOWnREZ0xvaWU1VnVoSEJwYmFOQzdUcVZLRmd2S2Z0MnlzTnRKOFZQYjJJZkNGM2c1TzN4TmxkQzRjb2VJemFwdXpndTVlVm5Ud0k2aGprZ2gx0gHWAUFVX3lxTFBLVmNuTHJYUGltbVZpZ0R4MlhFS1FtNmdQcEZVRkdlQjJ4TmdSVS1aUlVJMFFEOEpoYmE3ZHZ4QTg4T3hwcno1TTRBUUZPY1hQcWlqa1UyNWRpMzBfbU9WMThOSEd0MVVMTTdVeDl0QmlJemt6Wkd6Z0JOVWVjeDVJalFITlVvcm5qMWk1eGNXSlNXU0lHaDFTdXhWeDM1Wm5mUENiNUJia0lHdTlYZG85cVlVdlp0U19IdEtUVVZLRlBmbEd6R1hsbF9vSUVmTDl2S2FIT2c?oc=5",
-      "source": "Google News",
-      "publishedDate": "2026-09-27T06:00:07.000Z",
-      "excerpt": "Super Intelligence is Word of the Week. Trump’s new word for AI has a sinister meaning  Firstpost"
-    },
-    {
-      "title": "AI companies investigating possible future of rights, protection for artificial intelligence agents - The Jerusalem Post",
-      "link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOUTBhOFpXZWJMVjkxMnhhbDlfRmQyRjBPTU1SaTdNVlVvU1d0Nmg0WERVajFmNkU0am5ZX2NLRTdlZnhlNS1BNnhhOEpRYkQ0eFM1OFAzQk15cXNoNVRsMHZXRVJodTdURm5XOTJwWUpoLXVMRngyLUpCYm5EYVJBNlp4dkNsdw?oc=5",
-      "source": "Google News",
-      "publishedDate": "2026-09-27T05:28:57.000Z",
-      "excerpt": "AI companies investigating possible future of rights, protection for artificial intelligence agents  The Jerusalem Post"
-    },
-    {
-      "title": "OpenAI, Anthropic CEOs called to appear at Australian AI probe - Reuters",
-      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPMkgwZG5VR01rUjNsZkNPUkw1TFNEYTY1TGtCa010MUlRVzE2Vy1qaTBMNnJiYXliYlY1MkJONXpValJTRTdQLVNjazhJbGc1RDNVMDdTNU9WZXd3elhRVVBZNEFZLTBER2VfVkdxUW13YXprcnJKc1NjcmFwS0FYRlZYTWtZZWNQQ0pJV3JjVWFkUDZHZDNOT01FSVJOaDZLUU1wa1BFdDZpU2hZ?oc=5",
-      "source": "Google News",
-      "publishedDate": "2026-09-27T04:27:00.000Z",
-      "excerpt": "OpenAI, Anthropic CEOs called to appear at Australian AI probe  Reuters"
     }
   ]
 }
