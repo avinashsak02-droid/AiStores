@@ -31,6 +31,12 @@ export default function Navbar({ currentPage, setCurrentPage, user, onLogin, onL
           >
             FOR CREATORS
           </button>
+          <button
+            className={`navbar-link ${currentPage === 'weekly-report' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('weekly-report')}
+          >
+            WEEKLY AI REPORT
+          </button>
         </div>
 
         <div className="navbar-right">

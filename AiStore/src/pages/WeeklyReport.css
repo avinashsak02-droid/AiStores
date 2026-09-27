@@ -1,0 +1,128 @@
+.gazette {
+  padding-bottom: 2rem;
+}
+
+/* ---------- Hero ---------- */
+.gz-hero {
+  width: var(--content-w);
+  margin-inline: auto;
+  padding-block: clamp(3rem, 8vw, 6.5rem) clamp(2rem, 4vw, 3.25rem);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.gz-title {
+  margin-top: 1.75rem;
+  font-size: clamp(3rem, 7vw, 6rem);
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.gz-title em { font-style: italic; }
+
+.gz-lede {
+  margin-top: 1.25rem;
+  max-width: 34rem;
+  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+  color: var(--muted);
+}
+
+.gz-motion-toggle { flex-shrink: 0; }
+
+/* ---------- Story index ---------- */
+.gz-index {
+  width: var(--content-w);
+  margin-inline: auto;
+}
+
+.gz-story {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+  padding-block: 1.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.gz-art {
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--fg);
+  overflow: hidden;
+}
+
+/* Subtle drift/tilt/shimmer — transform + opacity only, GPU-friendly.
+   Only applied once .is-live is added (element is in view + motion enabled). */
+@keyframes gz-drift {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  25%      { transform: translateY(-2%) rotate(-0.6deg) scale(1.015); }
+  50%      { transform: translateY(0.5%) rotate(0.4deg) scale(1); }
+  75%      { transform: translateY(-1%) rotate(0.3deg) scale(1.01); }
+}
+
+.gz-art.is-live .cover svg,
+.gz-art.is-live .cover img {
+  animation: gz-drift 9s ease-in-out infinite;
+}
+
+/* Stagger so not every card animates in lockstep */
+.gz-story:nth-child(2n) .gz-art.is-live .cover svg,
+.gz-story:nth-child(2n) .gz-art.is-live .cover img {
+  animation-delay: 1.2s;
+}
+.gz-story:nth-child(3n) .gz-art.is-live .cover svg,
+.gz-story:nth-child(3n) .gz-art.is-live .cover img {
+  animation-delay: 2.4s;
+}
+
+.gz-story-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gz-story-meta {
+  color: var(--muted);
+}
+
+.gz-story-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.gz-story-title:hover { color: var(--wine); }
+
+.gz-story-excerpt {
+  max-width: 46rem;
+  color: var(--muted);
+}
+
+/* ---------- Empty / loading ---------- */
+.gz-empty {
+  width: var(--content-w);
+  margin-inline: auto;
+  padding: 4rem 0;
+  text-align: center;
+}
+.gz-empty p { color: var(--muted); margin-top: 0.5rem; }
+
+/* Respect OS-level reduced motion as a safety net even if JS/localStorage
+   somehow says otherwise. */
+@media (prefers-reduced-motion: reduce) {
+  .gz-art.is-live .cover svg,
+  .gz-art.is-live .cover img {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .gz-story {
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+}

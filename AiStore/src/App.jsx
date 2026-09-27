@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import Marketplace from './pages/Marketplace'
 import ToolDetails from './pages/ToolDetails'
 import SellerDashboard from './pages/SellerDashboard'
+import WeeklyReport from './pages/WeeklyReport'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('marketplace')
@@ -99,6 +100,8 @@ function App() {
           setCurrentPage={setCurrentPage}
         />
       )}
+
+      {currentPage === 'weekly-report' && <WeeklyReport />}
     </div>
   )
 }
