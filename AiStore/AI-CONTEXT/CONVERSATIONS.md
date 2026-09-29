@@ -762,3 +762,59 @@ Decision 014 — outcome-based search will use a paid LLM via Cloud Function, no
 - Do not begin implementing outcome-based search until the user explicitly asks to start, even though a full plan now exists in `TODO.md`.
 - Check whether Decision 009 has been implemented yet before starting — if a future session finds it's still pending, that's the actual first step, not the Cloud Function.
 - This session made no source code changes at all — only AI-CONTEXT files were updated.
+
+#####Conversation 10
+# Session 10 — Weekly AI Report Feature (Planned and Implemented)
+
+Date: 2026-09-27
+
+## Objective
+
+Plan and build a new "Weekly AI Report" page: an animated, newspaper-style page showing recent AI news, updating automatically each week, while keeping the site fast on low-end devices and low-bandwidth connections.
+
+## Planning phase
+
+Three open questions were worked through with the user before writing any code:
+1. **Getting the news** — chose free RSS aggregation (TechCrunch AI, VentureBeat AI, MIT Technology Review, The Verge AI, Google News) over a paid LLM-summarized version, explicitly to avoid ongoing cost.
+2. **The "moving newspaper" animation** — chose lightweight CSS-only animation (transform/opacity keyframes on images/SVGs) over a cinemagraph-style video hero or canvas/WebGL, explicitly for low-end-device safety.
+3. **Performance** — static JSON file committed by a scheduled job, IntersectionObserver-gated animation, `prefers-reduced-motion` support plus a manual toggle, no new JS animation library.
+
+A key architectural decision made during planning: avoid Firebase Cloud Functions entirely for this feature (unlike the outcome-based-search plan in Decision 014), since Cloud Functions require the paid Blaze plan just to make outbound HTTP calls to non-Google domains like RSS feeds. Instead, a GitHub Actions workflow runs a Node fetch script on a schedule and commits a static JSON file to the repo — zero billing setup, zero ongoing cost. See Decision 015.
+
+## Implementation
+
+New files: `.github/workflows/weekly-ai-report.yml`, `scripts/fetch-weekly-report.js`, `public/weekly-report.json` (seed + generated), `src/hooks/useInView.js`, `src/pages/WeeklyReport.jsx`, `src/pages/WeeklyReport.css`.
+Modified: `App.jsx` (new page route), `Navbar.jsx` (new nav link), `package.json` (added `rss-parser` devDependency).
+
+## Problems encountered and resolved
+
+1. **`rss-parser` not found locally** — `npm install` hadn't been run after the `package.json` edit. Resolved by running it.
+2. **GitHub Actions couldn't see the workflow file** — the `.github/workflows/` folder was created inside the nested `AiStore/AiStore/` project subfolder instead of at the true git repo root (a recurrence of the same nested-folder issue first seen in Session 1). GitHub Actions only detects workflows at the actual repo root. Fixed by moving `.github` up one level and adding `working-directory: AiStore` to the workflow job so its npm/node steps still run in the right place.
+3. **First real workflow run failed (exit 128)** — the commit step's `git add AiStore/public/weekly-report.json` double-applied the `AiStore/` prefix, since the job's `working-directory: AiStore` already puts the shell there. Fixed to `git add public/weekly-report.json`.
+
+## Confirmed Result
+
+- Local dev test passed (seed placeholder story rendered with the drift animation).
+- Manual run of `node scripts/fetch-weekly-report.js` confirmed real headlines populate `public/weekly-report.json`.
+- Manual trigger of the GitHub Actions workflow (`workflow_dispatch`) completed successfully after the path fix, producing a real commit with updated data.
+
+## Decisions
+
+Decision 015 — Weekly AI Report uses free RSS + GitHub Actions + static JSON, not Cloud Functions or an LLM summary; animation is CSS-only, gated by IntersectionObserver and `prefers-reduced-motion`.
+
+## Rejected/deferred approaches
+
+- LLM-summarized "newspaper article" style report — rejected for cost, in favor of raw aggregated headlines.
+- Cinemagraph-style video hero and canvas/WebGL animation — rejected in favor of CSS-only animation, for low-end device safety.
+- Firebase Cloud Functions for the fetch — rejected due to the Blaze (paid) plan requirement for outbound non-Google HTTP calls.
+
+## What remains unfinished
+
+- Site is not yet deployed anywhere, so the weekly automated commit doesn't yet surface on a live, running site — this is a pre-existing, separate TODO item.
+- A final manual browser check of the page with real (non-placeholder) data, confirming animation/motion-toggle behavior, is still worth doing.
+- Minor maintenance flag from Actions logs: Node 20 is nearing deprecation in GitHub-hosted runners; not urgent.
+
+## Lessons for future AI sessions
+
+- The nested `AiStore/AiStore/` folder structure (present since Session 1) keeps causing path-related bugs whenever a new top-level tool/config (like `.github/workflows/`) is introduced — anything that must live at the true repo root needs this double-checked explicitly, not assumed.
+- When a workflow job sets `working-directory` for `run:` steps, remember it applies to *every* `run:` block in that job, including git commands late in the job — a path that's already relative to that directory should not be prefixed again.

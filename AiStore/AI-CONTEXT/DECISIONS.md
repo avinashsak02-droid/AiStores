@@ -173,3 +173,30 @@ This is the first feature requiring a backend component (Firebase Cloud Function
 ### Status
 
 Not started. Full technical plan lives in `TODO.md` under "PLANNED — MAJOR FEATURE." Depends on Decision 009 (`useCases`/`features` fields) being implemented first.
+
+
+---
+
+## Decision 015 — Weekly AI Report: static JSON + GitHub Actions, not Cloud Functions
+
+Status: **IMPLEMENTED and confirmed.**
+
+### Decision
+
+The new Weekly AI Report page (an animated, newspaper-style page of recent AI news) sources its data from free RSS feeds, fetched by a Node script (`scripts/fetch-weekly-report.js`) that runs on a schedule via a GitHub Actions workflow (`.github/workflows/weekly-ai-report.yml`), which commits a static `public/weekly-report.json` file back to the repo. The frontend reads that file directly — no runtime API calls, no Firestore reads, no LLM summarization.
+
+### Reason
+
+User chose the free/no-summarization option over an LLM-written summary. Firebase Cloud Functions were considered (reusing the pattern from Decision 014) but rejected for this feature specifically: Cloud Functions require the paid Blaze plan just to make outbound HTTP requests to non-Google domains (like RSS feeds), even if actual usage would stay within free-tier limits. GitHub Actions achieves the same "runs weekly, writes fresh data" behavior with zero billing setup and no ongoing cost.
+
+### Consequence
+
+The site must be deployed somewhere with auto-deploy-on-push for the weekly update to actually go live automatically; until then, the data updates in the repo but not on a running site. This is a pre-existing, separate TODO item (deployment), not a gap introduced by this decision.
+
+### Animation approach
+
+Headline "photo" animations use CSS keyframes on `transform`/`opacity` only (GPU-friendly), gated by an `IntersectionObserver`-based hook (`useInView`) so only visible cards animate, respecting `prefers-reduced-motion` and a manual "Reduce motion" toggle. No JS animation library (e.g. GSAP) or video/canvas effects were used, keeping bundle size and runtime cost minimal — this was an explicit user choice over richer (video/WebGL) options.
+
+### Status
+
+Implemented and confirmed: local dev test passed, manual fetch script run confirmed real headlines populate `public/weekly-report.json`, and the GitHub Actions workflow completed successfully via manual `workflow_dispatch`, committing the updated file.
