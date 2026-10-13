@@ -1,128 +1,646 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Oswald:wght@500;700&display=swap');
+
+/* =========================================================
+   The Weekly AI Gazette — a living newspaper
+   All rules are prefixed gz- (Decision 007).
+   Motion lives under .is-motion; .is-still shows everything static.
+   ========================================================= */
+
 .gazette {
-  padding-bottom: 2rem;
+  --paper: #e7d9b8;
+  --paper-hi: #efe3c7;
+  --paper-lo: #d2bf94;
+  --ink: #1b150f;
+  --ink-soft: rgba(27, 21, 15, 0.64);
+  --rule: rgba(27, 21, 15, 0.85);
+  --stain: rgba(120, 80, 30, 0.18);
+  --head: 'Oswald', 'Arial Narrow', Impact, sans-serif;
+  --slab: 'Alfa Slab One', Rockwell, Georgia, serif;
+
+  min-height: 100vh;
+  padding: clamp(1rem, 3vw, 2.5rem) 0 clamp(2rem, 5vw, 4rem);
+  background: radial-gradient(ellipse at 50% 0%, #3a2e22 0%, #1c1611 72%);
 }
 
-/* ---------- Hero ---------- */
-.gz-hero {
-  width: var(--content-w);
+/* ---------- The sheet ---------- */
+.gz-paper-wrap {
+  width: min(100% - 1.5rem, 1120px);
   margin-inline: auto;
-  padding-block: clamp(3rem, 8vw, 6.5rem) clamp(2rem, 4vw, 3.25rem);
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.45);
 }
 
-.gz-title {
-  margin-top: 1.75rem;
-  font-size: clamp(3rem, 7vw, 6rem);
-  line-height: 0.94;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
-}
-.gz-title em { font-style: italic; }
-
-.gz-lede {
-  margin-top: 1.25rem;
-  max-width: 34rem;
-  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
-  color: var(--muted);
+.gz-sheet {
+  position: relative;
+  padding: clamp(0.9rem, 3vw, 2.25rem);
+  color: var(--ink);
+  scroll-margin-top: 5rem;
+  background:
+    radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(90, 55, 15, 0.35) 100%),
+    radial-gradient(circle at 18% 22%, var(--stain) 0, transparent 22%),
+    radial-gradient(circle at 82% 68%, var(--stain) 0, transparent 26%),
+    linear-gradient(180deg, var(--paper-hi), var(--paper) 40%, var(--paper-lo));
 }
 
-.gz-motion-toggle { flex-shrink: 0; }
-
-/* ---------- Story index ---------- */
-.gz-index {
-  width: var(--content-w);
-  margin-inline: auto;
+/* paper fibre */
+.gz-sheet::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  background-image: var(--grain);
 }
 
-.gz-story {
-  display: grid;
-  grid-template-columns: 9rem minmax(0, 1fr);
-  gap: 1.75rem;
-  align-items: start;
-  padding-block: 1.75rem;
-  border-bottom: 1px solid var(--line);
+/* fold creases */
+.gz-sheet::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 49.8%, rgba(60, 35, 10, 0.1) 50%, rgba(255, 255, 255, 0.08) 50.2%, transparent 50.4%),
+    linear-gradient(180deg, transparent 49.8%, rgba(60, 35, 10, 0.08) 50%, rgba(255, 255, 255, 0.06) 50.2%, transparent 50.4%);
 }
 
-.gz-art {
-  aspect-ratio: 4 / 3;
-  border: 1px solid var(--fg);
+.is-motion.is-opening .gz-sheet {
+  transform-origin: 50% 0;
+  animation: gz-unfold 1.3s var(--ease);
+}
+
+@keyframes gz-unfold {
+  0% { transform: perspective(1600px) rotateX(18deg) scaleY(0.5); clip-path: inset(0 0 85% 0); opacity: 0.2; }
+  100% { transform: none; clip-path: inset(0 0 0 0); opacity: 1; }
+}
+
+.gz-page { position: relative; }
+.gz-page > * { position: relative; z-index: 1; }
+
+.is-motion .gz-page { animation: gz-page-in 0.65s var(--ease); }
+.gz-page.is-turning { opacity: 0; transition: opacity 0.35s ease; }
+
+@keyframes gz-page-in {
+  from { clip-path: inset(0 0 0 100%); opacity: 0.4; }
+  to { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+
+/* page-turn shadow that sweeps right to left */
+.gz-curl {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
   overflow: hidden;
 }
-
-/* Subtle drift/tilt/shimmer — transform + opacity only, GPU-friendly.
-   Only applied once .is-live is added (element is in view + motion enabled). */
-@keyframes gz-drift {
-  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-  25%      { transform: translateY(-2%) rotate(-0.6deg) scale(1.015); }
-  50%      { transform: translateY(0.5%) rotate(0.4deg) scale(1); }
-  75%      { transform: translateY(-1%) rotate(0.3deg) scale(1.01); }
+.gz-curl::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 60%;
+  transform: translateX(110%);
+  background: linear-gradient(100deg, rgba(0, 0, 0, 0) 0%, rgba(60, 35, 10, 0.35) 45%, var(--paper-hi) 50%, rgba(255, 255, 255, 0) 51%);
+  animation: gz-curl-sweep 0.95s var(--ease) forwards;
+}
+@keyframes gz-curl-sweep {
+  from { transform: translateX(110%); }
+  to { transform: translateX(-70%); }
 }
 
-.gz-art.is-live .cover svg,
-.gz-art.is-live .cover img {
-  animation: gz-drift 9s ease-in-out infinite;
+/* ---------- Shared small type ---------- */
+.gz-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
 }
 
-/* Stagger so not every card animates in lockstep */
-.gz-story:nth-child(2n) .gz-art.is-live .cover svg,
-.gz-story:nth-child(2n) .gz-art.is-live .cover img {
-  animation-delay: 1.2s;
-}
-.gz-story:nth-child(3n) .gz-art.is-live .cover svg,
-.gz-story:nth-child(3n) .gz-art.is-live .cover img {
-  animation-delay: 2.4s;
-}
-
-.gz-story-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+/* ---------- Masthead ---------- */
+.gz-masthead {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 4px double var(--ink);
 }
 
-.gz-story-meta {
-  color: var(--muted);
+.gz-emblem,
+.gz-sun {
+  width: clamp(3rem, 8vw, 5.5rem);
+  height: auto;
+  color: var(--ink);
 }
 
-.gz-story-title {
+.gz-nameplate { text-align: center; }
+
+.gz-the {
+  display: block;
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
-  line-height: 1.1;
+  font-style: italic;
+  font-size: clamp(1rem, 2.4vw, 1.8rem);
+  transform: rotate(-4deg);
+  margin-bottom: -0.3rem;
+}
+
+.gz-name {
+  font-family: var(--slab);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 8.4vw, 6.4rem);
+  line-height: 0.95;
   letter-spacing: -0.01em;
-  text-decoration: none;
+  text-transform: uppercase;
+}
+.gz-cap { color: var(--wine); }
+
+.gz-tagline {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.8rem;
+  border-block: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: clamp(0.5rem, 1.1vw, 0.68rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.is-motion .gz-sun-rays {
+  transform-origin: 50% 50%;
+  animation: gz-spin 70s linear infinite;
+}
+@keyframes gz-spin { to { transform: rotate(360deg); } }
+
+/* ---------- Info bar ---------- */
+.gz-infobar {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  border-bottom: 1px solid var(--rule);
+}
+.gz-infobar > div {
+  padding: 0.55rem 0.8rem;
+  border-right: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.gz-infobar > div:last-child { border-right: 0; }
+
+/* ---------- Lead story ---------- */
+.gz-lead {
+  padding: 1rem 0 0.8rem;
+  text-align: center;
+  border-bottom: 3px double var(--ink);
+}
+
+.gz-lead-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.4rem;
+}
+.gz-lead-flag { display: inline-flex; align-items: center; gap: 0.7rem; }
+
+.gz-pointer { font-size: 2.2rem; line-height: 1; }
+.is-motion .gz-pointer { animation: gz-nudge 2.4s ease-in-out infinite; }
+@keyframes gz-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+
+.gz-stamp {
+  display: inline-block;
+  padding: 0.25rem 0.8rem;
+  background: var(--ink);
+  color: var(--paper-hi);
+  font-family: var(--head);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+}
+.is-motion .gz-stamp {
+  animation:
+    gz-stamp 0.5s var(--ease) var(--print-delay, 0.25s) backwards,
+    gz-pulse 7s ease-in-out 4s infinite;
+}
+@keyframes gz-stamp {
+  from { transform: rotate(-12deg) scale(2.4); opacity: 0; }
+  to { transform: rotate(-2deg) scale(1); opacity: 1; }
+}
+@keyframes gz-pulse { 0%, 90%, 100% { opacity: 1; } 94% { opacity: 0.35; } 97% { opacity: 1; } }
+
+.gz-lead-title {
+  font-family: var(--head);
+  font-weight: 700;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+.gz-lead-title[data-size='xl'] { font-size: clamp(2.8rem, 9vw, 7.6rem); }
+.gz-lead-title[data-size='lg'] { font-size: clamp(2.4rem, 7.2vw, 6rem); }
+.gz-lead-title[data-size='md'] { font-size: clamp(2rem, 5.6vw, 4.6rem); }
+
+.gz-lead-title button {
+  display: block;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
   transition: color var(--transition);
 }
-.gz-story-title:hover { color: var(--wine); }
+.gz-lead-title button:hover { color: var(--wine); }
 
-.gz-story-excerpt {
-  max-width: 46rem;
-  color: var(--muted);
+.gz-word { display: inline-block; white-space: nowrap; }
+
+/* letters "print" onto the page, one after another */
+.is-motion .gz-lead .gz-char { display: inline-block; opacity: 0; transform: translateY(0.14em); }
+.is-motion .gz-lead.is-in .gz-char {
+  animation: gz-print 0.45s var(--ease) forwards;
+  animation-delay: calc(var(--print-delay, 0.25s) + var(--i) * 15ms);
+}
+@keyframes gz-print {
+  from { opacity: 0; transform: translateY(0.14em); }
+  to { opacity: 1; transform: none; }
 }
 
-/* ---------- Empty / loading ---------- */
-.gz-empty {
-  width: var(--content-w);
-  margin-inline: auto;
-  padding: 4rem 0;
-  text-align: center;
+/* ---------- Middle band (stack | plate | block) ---------- */
+.gz-triptych {
+  display: grid;
+  grid-template-columns: var(--cols);
+  border-bottom: 1px solid var(--rule);
 }
-.gz-empty p { color: var(--muted); margin-top: 0.5rem; }
+.gz-triptych > * { padding: 1rem 0.9rem; min-width: 0; }
+.gz-triptych > * + * { border-left: 1px solid var(--rule); }
 
-/* Respect OS-level reduced motion as a safety net even if JS/localStorage
-   somehow says otherwise. */
+.gz-band {
+  padding: 1rem 0.9rem;
+  border-bottom: 1px solid var(--rule);
+}
+.gz-band .gz-greek {
+  -webkit-mask-image: linear-gradient(90deg, #000 0 48%, transparent 48% 52%, #000 52% 100%);
+  mask-image: linear-gradient(90deg, #000 0 48%, transparent 48% 52%, #000 52% 100%);
+}
+
+/* ---------- Stories ---------- */
+.gz-story { position: relative; }
+
+.gz-story-title {
+  font-family: var(--head);
+  font-weight: 700;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+.gz-story-title button {
+  display: block;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+.gz-kicker + .gz-story-title { margin-top: 0.4rem; }
+
+/* ink underline that draws in on hover/focus */
+.gz-title-text {
+  --uline: var(--wine);
+  padding-bottom: 2px;
+  background-image: linear-gradient(var(--uline), var(--uline));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 0.45s var(--ease);
+}
+.gz-story-title button:hover .gz-title-text,
+.gz-story-title button:focus-visible .gz-title-text { background-size: 100% 3px; }
+
+/* "Read" tag slides in on hover */
+.gz-readtag {
+  position: absolute;
+  top: -0.2rem;
+  right: 0;
+  padding: 0.15rem 0.5rem;
+  background: var(--wine);
+  color: var(--paper-hi);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  opacity: 0;
+  transform: translateY(-4px) rotate(3deg);
+  transition: opacity 0.25s ease, transform 0.25s var(--ease);
+  pointer-events: none;
+}
+.gz-story:hover .gz-readtag,
+.gz-story:focus-within .gz-readtag { opacity: 1; transform: rotate(3deg); }
+
+.gz-blurb {
+  margin-top: 0.7rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.gz-story--stack .gz-story-title { font-size: clamp(1.8rem, 3.2vw, 2.9rem); }
+
+.gz-story--block .gz-story-title {
+  padding: 0.6rem 0.7rem;
+  background: var(--ink);
+  color: var(--paper-hi);
+  font-size: clamp(1.3rem, 2.4vw, 2rem);
+}
+.gz-story--block .gz-title-text { --uline: var(--paper-hi); }
+
+.gz-story--drop .gz-story-title { font-size: clamp(1.5rem, 3vw, 2.4rem); }
+.gz-initial {
+  float: left;
+  margin: 0.04em 0.12em 0 0;
+  padding: 0.06em 0.12em 0;
+  background: var(--ink);
+  color: var(--paper-hi);
+  font-family: var(--slab);
+  font-size: 3.4em;
+  line-height: 0.86;
+}
+
+/* decorative small-print texture (aria-hidden in the markup) */
+.gz-greek {
+  margin-top: 0.8rem;
+  height: calc(var(--lines, 10) * 6px);
+  opacity: 0.5;
+  background: repeating-linear-gradient(to bottom, rgba(27, 21, 15, 0.55) 0 2px, transparent 2px 6px);
+}
+
+/* scroll-in: stories fade up, small print is "pressed" top to bottom */
+.is-motion .gz-story { opacity: 0; }
+.is-motion .gz-story.is-in { animation: gz-rise 0.8s var(--ease) both; }
+@keyframes gz-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.is-motion .gz-greek { clip-path: inset(0 0 100% 0); }
+.is-motion .gz-story.is-in .gz-greek { animation: gz-press 1.5s ease-out 0.35s both; }
+@keyframes gz-press {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+/* ---------- Plate (the "moving photograph") ---------- */
+.gz-figure { margin: 0; }
+
+.gz-plate {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  background: var(--paper-lo);
+  cursor: zoom-in;
+}
+div.gz-plate { cursor: default; }
+
+.gz-plate-media {
+  position: absolute;
+  inset: 0;
+  display: block;
+  filter: sepia(0.6) contrast(1.15) saturate(0.75);
+}
+.gz-plate .cover { position: absolute; inset: 0; }
+.gz-media { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* halftone print dots */
+.gz-plate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  background: radial-gradient(rgba(0, 0, 0, 0.5) 1px, transparent 1.5px) 0 0 / 4px 4px;
+}
+
+/* light shimmer that crosses the plate now and then */
+.gz-plate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -40%;
+  width: 40%;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(100deg, transparent, rgba(255, 240, 200, 0.4), transparent);
+}
+.gz-plate.is-live::before { animation: gz-sweep 8s ease-in-out infinite; }
+@keyframes gz-sweep {
+  0%, 60% { transform: translateX(0); opacity: 0; }
+  65% { opacity: 1; }
+  100% { transform: translateX(400%); opacity: 0; }
+}
+
+/* three different kinds of motion, assigned per story */
+.gz-plate.is-live.gz-mv-0 .gz-plate-media :is(svg, img, video) { animation: gz-mv-0 14s ease-in-out infinite; }
+.gz-plate.is-live.gz-mv-1 .gz-plate-media :is(svg, img, video) { animation: gz-mv-1 11s ease-in-out infinite; }
+.gz-plate.is-live.gz-mv-2 .gz-plate-media :is(svg, img, video) { animation: gz-mv-2 16s ease-in-out infinite; }
+@keyframes gz-mv-0 { 0%, 100% { transform: scale(1.06) translate(0, 0); } 50% { transform: scale(1.06) translate(-2%, -1.5%); } }
+@keyframes gz-mv-1 { 0%, 100% { transform: scale(1.04); } 50% { transform: scale(1.14); } }
+@keyframes gz-mv-2 { 0%, 100% { transform: scale(1.08) rotate(0deg); } 50% { transform: scale(1.08) rotate(-1.2deg) translateY(-1%); } }
+
+.gz-figcap {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 0.3rem;
+  border-top: 3px double var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---------- Page two ---------- */
+.gz-runhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 4px double var(--ink);
+}
+.gz-runhead-name {
+  font-family: var(--slab);
+  font-size: clamp(1.4rem, 3.4vw, 2.4rem);
+  text-transform: uppercase;
+}
+
+.gz-sechead { padding: 1rem 0 0.6rem; border-bottom: 1px solid var(--rule); }
+.gz-sechead-text {
+  font-family: var(--head);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4.6vw, 3.4rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+.is-motion .gz-sechead-text { clip-path: inset(0 100% 0 0); }
+.is-motion .gz-sechead.is-in .gz-sechead-text { animation: gz-ink 1s var(--ease) both; }
+@keyframes gz-ink { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+.gz-wire { display: grid; grid-template-columns: 1fr 1fr; }
+.gz-wire > * { padding: 1.2rem 1rem; border-bottom: 1px solid var(--rule); }
+.gz-wire > :nth-child(odd) { border-right: 1px solid var(--rule); }
+
+/* ---------- Footer strip ---------- */
+.gz-foot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 4px double var(--ink);
+  font-family: var(--head);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.gz-foot-item b { margin-left: 0.3rem; font-family: var(--slab); font-size: 1.25em; font-weight: 400; }
+
+.gz-foot-btn {
+  padding: 0.4rem 0.9rem;
+  border: 2px solid var(--ink);
+  font-family: var(--head);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background var(--transition), color var(--transition);
+}
+.gz-foot-btn:hover:not(:disabled) { background: var(--ink); color: var(--paper-hi); }
+.gz-foot-btn:disabled { opacity: 0.5; cursor: default; }
+.gz-foot-btn--turn { background: var(--ink); color: var(--paper-hi); }
+.gz-foot-btn--turn:hover:not(:disabled) { background: var(--wine); border-color: var(--wine); }
+
+/* ---------- Empty / error ---------- */
+.gz-empty { padding: 4rem 1rem; text-align: center; }
+.gz-empty h2 { font-family: var(--head); font-weight: 700; font-size: clamp(2rem, 5vw, 3.4rem); text-transform: uppercase; }
+.gz-empty p { margin-top: 0.6rem; color: var(--ink-soft); }
+
+/* ---------- Story panel (newspaper cutting) ---------- */
+.gz-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  overflow-y: auto;
+  background: rgba(12, 8, 4, 0.78);
+}
+.is-motion .gz-overlay { animation: gz-fade 0.25s ease; }
+@keyframes gz-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.gz-clipping {
+  position: relative;
+  width: min(40rem, 100%);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(90, 55, 15, 0.3) 100%),
+    linear-gradient(180deg, var(--paper-hi), var(--paper));
+  border: 1px solid var(--ink);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  transform: rotate(-0.6deg);
+}
+.is-motion .gz-clipping { animation: gz-drop 0.5s var(--ease); }
+@keyframes gz-drop {
+  from { transform: translateY(-30px) rotate(-3deg); opacity: 0; }
+  to { transform: rotate(-0.6deg); opacity: 1; }
+}
+
+.gz-clip-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.7rem;
+  font-size: 2rem;
+  line-height: 1;
+}
+.gz-clip-flag {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+  padding: 0.2rem 0.7rem;
+  background: var(--wine);
+  color: var(--paper-hi);
+  font-family: var(--head);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+}
+.gz-clip-title {
+  margin: 0.4rem 0 1rem;
+  font-family: var(--head);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+.gz-clip-plate { margin-bottom: 1rem; }
+.gz-clip-plate .gz-plate { aspect-ratio: 16 / 9; }
+.gz-clip-blurb {
+  margin-bottom: 1rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .gz-infobar { grid-template-columns: 1fr; }
+  .gz-infobar > div { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .gz-infobar > div:last-child { border-bottom: 0; }
+
+  .gz-triptych { grid-template-columns: 1fr; }
+  .gz-triptych > * + * { border-left: 0; border-top: 1px solid var(--rule); }
+  .gz-plate-cell { order: -1; }
+
+  .gz-wire { grid-template-columns: 1fr; }
+  .gz-wire > :nth-child(odd) { border-right: 0; }
+}
+
+@media (max-width: 560px) {
+  .gz-masthead { grid-template-columns: 1fr; }
+  .gz-emblem,
+  .gz-sun { display: none; }
+  .gz-foot { justify-content: center; }
+}
+
+/* The global reduced-motion rule shortens animations to ~0ms; make sure
+   infinite ones then run once instead of strobing. */
 @media (prefers-reduced-motion: reduce) {
-  .gz-art.is-live .cover svg,
-  .gz-art.is-live .cover img {
-    animation: none !important;
-  }
-}
-
-@media (max-width: 640px) {
-  .gz-story {
-    grid-template-columns: 5.5rem minmax(0, 1fr);
-    gap: 1rem;
-  }
+  .gazette *,
+  .gazette *::before,
+  .gazette *::after { animation-iteration-count: 1 !important; }
 }
