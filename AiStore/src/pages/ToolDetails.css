@@ -62,7 +62,7 @@
   justify-content: center;
 }
 
-.tool-logo {
+.td-logo {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -291,4 +291,11 @@
   .related-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* CoverArt fallback fills its logo/thumbnail box */
+.tool-logo-wrapper .cover,
+.related-icon .cover {
+  position: absolute;
+  inset: 0;
 }

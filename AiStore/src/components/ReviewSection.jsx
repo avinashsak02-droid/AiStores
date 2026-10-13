@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { doc, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
 import { signInWithPopup } from 'firebase/auth'
 import { db, auth, googleProvider } from '../firebase'
@@ -27,6 +27,12 @@ export default function ReviewSection({ tool, user, reviews }) {
   const [rating, setRating] = useState(myReview?.rating || 0)
   const [text, setText] = useState(myReview?.text || '')
   const [saving, setSaving] = useState(false)
+  
+  // Reviews arrive after the first render, so keep the form in sync with them
+  useEffect(() => {
+    setRating(myReview?.rating || 0)
+    setText(myReview?.text || '')
+  }, [myReview?.rating, myReview?.text])
 
   const handleSignIn = async () => {
     try {

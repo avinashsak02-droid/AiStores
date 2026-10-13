@@ -19,8 +19,8 @@
   max-width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border: var(--border-thin);
-  background: #FAFAF9;
+  border: 1px solid var(--fg);
+  background: var(--bg-soft);
 }
 
 .carousel-image {
@@ -34,7 +34,7 @@
 .carousel-arrow {
   background: var(--fg);
   color: var(--bg);
-  border: var(--border-thin);
+  border: 1px solid var(--fg);
   width: 44px;
   height: 44px;
   display: flex;
@@ -49,8 +49,7 @@
 .carousel-arrow:hover {
   background: var(--bg);
   color: var(--fg);
-  box-shadow: var(--shadow-hard);
-  transform: translate(-2px, -2px);
+  transform: translateY(-2px);
 }
 
 .carousel-prev {
@@ -67,7 +66,7 @@
 }
 
 .indicator-counter {
-  font-family: var(--font-ui);
+  font-family: var(--font-mono);
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--fg);

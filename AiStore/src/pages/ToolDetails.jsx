@@ -3,11 +3,16 @@ import { db } from '../firebase'
 import { collection, query, where, onSnapshot } from 'firebase/firestore'
 import PhotoCarousel from '../components/PhotoCarousel'
 import ReviewSection from '../components/ReviewSection'
+import CoverArt from '../components/CoverArt'
+import { ArrowUpRight } from '../components/Icons'
 import './ToolDetails.css'
 
 export default function ToolDetails({ tool, onBack, onViewTool, user }) {
   const [relatedTools, setRelatedTools] = useState([])
   const [reviews, setReviews] = useState([])
+  // Remember which logo URL failed, so we can show cover art instead
+  const [failedLogo, setFailedLogo] = useState(null)
+  const showLogo = tool.logo && tool.logo !== failedLogo
 
   // Fetch more apps in the same category
   useEffect(() => {
@@ -58,14 +63,19 @@ export default function ToolDetails({ tool, onBack, onViewTool, user }) {
 
       {/* MAIN CONTENT */}
       <div className="tool-container">
-               {/* SECTION 1: APP NAME + LOGO + LAUNCH BUTTON */}
+        {/* SECTION 1: APP NAME + LOGO + LAUNCH BUTTON */}
         <section className="tool-header-section">
           <div className="tool-header-inner">
             <div className="tool-logo-wrapper">
-              {tool.logo ? (
-                <img src={tool.logo} alt={tool.name} className="tool-logo" />
+              {showLogo ? (
+                <img
+                  src={tool.logo}
+                  alt={tool.name}
+                  className="td-logo"
+                  onError={() => setFailedLogo(tool.logo)}
+                />
               ) : (
-                <div className="tool-logo-fallback">{tool.icon}</div>
+                <CoverArt seed={tool.id || tool.name} showIcon={false} />
               )}
             </div>
             <div className="tool-header-text">
@@ -73,7 +83,7 @@ export default function ToolDetails({ tool, onBack, onViewTool, user }) {
               <p className="tool-tagline">{tool.description}</p>
             </div>
             <button className="btn-launch-header" onClick={handleTryNow}>
-              🚀 Launch
+              Launch <ArrowUpRight />
             </button>
           </div>
         </section>
@@ -120,7 +130,7 @@ export default function ToolDetails({ tool, onBack, onViewTool, user }) {
 
         {/* SECTION 4: REVIEWS */}
         <section className="reviews-section">
-          <ReviewSection tool={tool} user={user} reviews={reviews} />
+          <ReviewSection key={tool.id} tool={tool} user={user} reviews={reviews} />
         </section>
 
         <div className="divider-h"></div>
@@ -129,10 +139,10 @@ export default function ToolDetails({ tool, onBack, onViewTool, user }) {
         {relatedTools.length > 0 && (
           <section className="related-section">
             <h2 className="section-title">More {tool.category} Tools</h2>
-                      <div className="related-grid">
+            <div className="related-grid">
               {relatedTools.map(relatedTool => (
-                <div 
-                  key={relatedTool.id} 
+                <div
+                  key={relatedTool.id}
                   className="related-card"
                   onClick={() => onViewTool(relatedTool)}
                   role="button"
@@ -143,13 +153,13 @@ export default function ToolDetails({ tool, onBack, onViewTool, user }) {
                     {relatedTool.logo ? (
                       <img src={relatedTool.logo} alt={relatedTool.name} />
                     ) : (
-                      relatedTool.icon
+                      <CoverArt seed={relatedTool.id || relatedTool.name} showIcon={false} />
                     )}
                   </div>
                   <h3 className="related-name">{relatedTool.name}</h3>
                   <p className="related-desc">{relatedTool.description}</p>
                   <div className="related-meta">
-                    <span className="related-rating">★ {relatedTool.rating || 4.5}</span>
+                    <span>{relatedTool.category}</span>
                     <span className="related-price">{relatedTool.price}</span>
                   </div>
                 </div>
@@ -161,7 +171,7 @@ export default function ToolDetails({ tool, onBack, onViewTool, user }) {
 
       {/* FOOTER */}
       <footer className="tool-details-footer">
-        <p>&copy; 2024 AIStore. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} AIStore. All rights reserved.</p>
       </footer>
     </div>
   )
