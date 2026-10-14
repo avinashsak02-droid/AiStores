@@ -1,9 +1,26 @@
+## 🗓️ ROADMAP TO LAUNCH — build phase ends 31 Dec 2026
+
+Plan made on 14 Oct 2026. After 31 Dec the focus moves to marketing and gaining users.
+
+- **Phase 0 — Foundations (14–20 Oct):** deploy ✅, Firestore rules ✅, clean fake seed ratings/downloads, tidy `ToolDetails.jsx`.
+- **Phase 1 — Data foundation (21 Oct–3 Nov):** Creator Hub collects `creator`, `overview`, `useCases`, `features`; backfill seed tools; fix the Usage stat by counting Launch clicks; live ratings on the Marketplace list and featured card; image upload for logo and gallery (check whether Firebase Storage needs the Blaze plan).
+- **Phase 2 — Discovery (4–17 Nov):** outcome-based search (plan below) with plain-search fallback; comparison page for any two tools; saved/favourite tools.
+- **Phase 3 — Money (18 Nov–1 Dec):** payments and monetized accounts. Timebox hard. Launch with the simple option (paid featured listings or creator pro plans); commission and creator payouts are a post-launch goal. Razorpay suits an India-based setup.
+- **Phase 4 — Engagement and content (2–15 Dec):** news based on preferences (light version: user picks topics, Gazette filters by them); AI Tests and AI Shorts (meaning to be clarified with the user); Terms, Privacy and Contact pages; admin moderation (report/remove a listing); SEO basics. **Feature freeze 15 Dec.**
+- **Phase 5 — Hardening (16–31 Dec):** phone/tablet testing, performance pass, error and empty states, payment and rules testing with a second account, soft-launch checklist, buffer.
+
+**If behind schedule, cut in this order:** AI Shorts, AI Tests, preference-based news, creator public profiles, real payouts. Do not cut Phase 0, Phase 1 or outcome search.
+
+**Trello board "AiStore ToDO":** Done = Basic Functionality, Reviews, Weekly News Gazette. To Do = Payments, Monetize accounts, AI Shorts, News based on preferences, AI Tests, Outcome based searching/NLP, Usage, Comparison page of any two preferred AIs.
+
+---
+
 ## 🔵 PLANNED — MAJOR FEATURE (waiting on budget, not started)
 
 ### Outcome-based search
 Users type a natural-language outcome ("make me a pdf", "convert my txt file to a ppt with transitions and animations") and the site understands the intent and returns the best-matching AI tool(s), instead of requiring exact keyword search.
 
-**Status:** NOT STARTED. Waiting on budget ("next month when I get money"). Do not begin implementation until the user explicitly asks to start.
+**Status:** NOT STARTED. Waiting on budget ("next month when I get money"). Do not begin implementation until the user explicitly asks to start. It is scheduled for Phase 2 (4–17 Nov) in the roadmap above.
 
 **Chosen approach:** LLM-powered matching via a Firebase Cloud Function, using per-tool `useCases` tagging as the data the model reasons over. A small budget is acceptable — user wants the best result, not the free option. Catalog size is currently small, so the whole catalog can be sent to the LLM per search; no vector database / embeddings pre-filter needed yet.
 
@@ -31,16 +48,22 @@ Users type a natural-language outcome ("make me a pdf", "convert my txt file to 
 - [x] make ratings feature — implemented as user reviews (Decision 012), confirmed working
 - [x] common Sign in button in the navbar for buyers and sellers (Decision 013), confirmed working
 - [x] Weekly AI Report page + automated weekly data pipeline (Decision 015), confirmed working
-- [ ] fix the downloads stat (still a placeholder default of 0)
+- [x] Firestore security rules locked down (tools + reviews), confirmed working (Decision 016). Later features (Usage counter, favourites, user preferences) will need rule additions.
+- [x] deploy the site to production — live on Vercel (`ai-stores-omega.vercel.app`), auto-deploys on push to `main` (Decision 017). The Weekly AI Report's Monday commits now go live automatically.
+- [ ] clean up fake seed ratings and downloads (seed data shows invented numbers like 150,000 downloads — misleading for a commercial product)
+- [ ] fix the downloads stat (still a placeholder default of 0) — plan: count Launch clicks (needs a Firestore rules change)
 - [ ] make Marketplace list + featured card rating live (currently only the Tool Details page uses the real review average; related cards on Tool Details also show a placeholder 4.5)
-- [ ] review/lock down Firestore security rules before going commercial (reviews worked with no rules changes — likely still open/test-mode)
-- [ ] deploy the site to production — also needed before the Weekly AI Report's automated weekly commits actually surface on a live site
+- [ ] save a copy of the Firestore rules in the repo (e.g. `firestore.rules`), since they currently live only in Firebase Console
 
 ## 🟡 MEDIUM PRIORITY
-- [ ] add more pages to the site
+- [ ] add more pages to the site (Terms, Privacy, Contact are needed before taking payments)
 - [ ] clean up `ToolDetails.jsx`: remove the 🚀 emoji and `tool.icon` fallbacks (use CoverArt), replace the hardcoded "© 2024" footer
 - [ ] optional cleanup: reuse `App.jsx` `handleLogin` in SellerDashboard and ReviewSection instead of their own `handleSignIn`
-- [ ] Creator Hub form: collect `creator`, `overview`, `useCases`, `features` (Decision 009) — now also a prerequisite for outcome-based search 
+- [ ] Creator Hub form: collect `creator`, `overview`, `useCases`, `features` (Decision 009) — now also a prerequisite for outcome-based search
+- [ ] admin/moderation: report a listing, remove a listing
+- [ ] saved/favourite tools for signed-in users
+- [ ] creator public profile page
+- [ ] SEO basics: page titles, sitemap, shareable links per tool
 - [ ] consider bumping the Weekly AI Report workflow's `node-version` from 20 to a newer LTS (Node 20 was flagged as deprecating soon in Actions logs) — not urgent, purely maintenance
 - [ ] do a final manual browser check of the Weekly AI Report page with real (non-placeholder) data — confirm drift animation and "Reduce motion" toggle behave as expected
 
@@ -48,3 +71,4 @@ Users type a natural-language outcome ("make me a pdf", "convert my txt file to 
 - [x] buyer accounts — partially done: buyers can sign in with Google (navbar + reviews). Full buyer profiles, purchase history, etc. still not implemented.
 - [ ] image upload for logo and gallery photos (currently pasted URLs)
 - [ ] history of visited sites
+- [ ] custom domain

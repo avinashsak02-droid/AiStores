@@ -200,3 +200,28 @@ Headline "photo" animations use CSS keyframes on `transform`/`opacity` only (GPU
 ### Status
 
 Implemented and confirmed: local dev test passed, manual fetch script run confirmed real headlines populate `public/weekly-report.json`, and the GitHub Actions workflow completed successfully via manual `workflow_dispatch`, committing the updated file.
+
+
+
+
+---
+
+## Decision 016 — Firestore rules: public read, owner-only write
+
+Status: **IMPLEMENTED and confirmed.**
+
+`tools` and `reviews` are publicly readable. Writes require sign-in and ownership: a tool's `sellerId` must equal the user's uid, and a review's doc id must be `${toolId}_${uid}`. Clients cannot edit `rating` or `downloads` on tools, and review ratings must be integers from 1 to 5.
+
+Reason: the original test-mode rules expired on 2026-10-17 and left the database open to anyone.
+
+Consequences: the seed script no longer works from the client. Features that write other fields from the client (Usage counter, favourites, preferences) need rule changes first. The rules live in Firebase Console, so a copy should eventually be saved in the repo (e.g. `firestore.rules`).
+
+---
+
+## Decision 017 — Hosting on Vercel with auto-deploy
+
+Status: **IMPLEMENTED and confirmed.**
+
+The site is hosted on Vercel, connected to the GitHub repo, and auto-deploys on every push to `main`. The Vercel project's Root Directory must stay `AiStore` (the project sits in a nested folder). Any new Vercel or Firebase domain must be added to Firebase Authentication, Authorized domains, or Google sign-in will fail.
+
+Reason: free, zero-config for Vite, and it removes the manual deploy step, so the weekly news commit publishes itself.
