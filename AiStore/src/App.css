@@ -11,6 +11,7 @@
   --muted: #5f5950;
   --line: rgba(17, 17, 17, 0.16);
   --wine: #7a1f26;
+  --nav-bg: rgba(233, 225, 214, 0.8);
 
   --font-display: 'Instrument Serif', 'Times New Roman', serif;
   --font-body: 'Work Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -211,3 +212,47 @@ input, textarea, select { font: inherit; color: inherit; }
   text-transform: uppercase;
   color: var(--muted);
 }
+
+/* ---------- Dark theme ---------- */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #141210;
+  --bg-soft: #1d1a16;
+  --bg-deep: #27231d;
+  --fg: #ece4d6;
+  --muted: #a39b8d;
+  --line: rgba(236, 228, 214, 0.16);
+  --wine: #d4646d; /* lighter wine so it stays readable on dark */
+  --nav-bg: rgba(20, 18, 16, 0.8);
+}
+
+/* Marketplace: chip borders and the creator call-to-action */
+[data-theme='dark'] .mk-chip { border-color: rgba(236, 228, 214, 0.28); }
+[data-theme='dark'] .mk-cta { background: var(--bg-deep); color: var(--fg); border-top: 1px solid var(--line); }
+[data-theme='dark'] .mk-cta-text,
+[data-theme='dark'] .eyebrow.light { color: var(--muted); }
+[data-theme='dark'] .btn--light { color: var(--fg); border-color: rgba(236, 228, 214, 0.45); }
+[data-theme='dark'] .btn--light::before { background: var(--fg); }
+[data-theme='dark'] .btn--light:hover { color: var(--bg); border-color: var(--fg); }
+
+/* Logo tiles stay light so dark logos remain visible */
+[data-theme='dark'] .tool-row-thumb,
+[data-theme='dark'] .tool-logo-wrapper,
+[data-theme='dark'] .related-icon,
+[data-theme='dark'] .tool-header,
+[data-theme='dark'] .logo-preview-img,
+[data-theme='dark'] .photo-thumb-preview { background: #f0eae0; }
+
+/* Creator Hub (SellerDashboard.css still has hardcoded white) */
+[data-theme='dark'] .form-input,
+[data-theme='dark'] .form-textarea,
+[data-theme='dark'] .logo-preview-form,
+[data-theme='dark'] .tool-card,
+[data-theme='dark'] .btn-edit,
+[data-theme='dark'] .btn-delete,
+[data-theme='dark'] .btn-photo-remove,
+[data-theme='dark'] .btn-photo-add { background: var(--bg-soft); }
+[data-theme='dark'] .tool-actions { background: var(--bg-deep); }
+[data-theme='dark'] .btn-delete,
+[data-theme='dark'] .btn-photo-remove { color: #ef7a7a; }

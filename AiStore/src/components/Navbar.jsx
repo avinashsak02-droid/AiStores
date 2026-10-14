@@ -1,6 +1,7 @@
+import { MoonIcon, SunIcon } from './Icons'
 import './Navbar.css'
 
-export default function Navbar({ currentPage, setCurrentPage, user, onLogin, onLogout }) {
+export default function Navbar({ currentPage, setCurrentPage, user, onLogin, onLogout, theme, onToggleTheme }) {
   const handleLogout = () => {
     onLogout()
   }
@@ -40,6 +41,15 @@ export default function Navbar({ currentPage, setCurrentPage, user, onLogin, onL
         </div>
 
         <div className="navbar-right">
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={onToggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          >
+            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+          </button>
           {user ? (
             <>
               <span className="user-name">{user.displayName || user.email}</span>

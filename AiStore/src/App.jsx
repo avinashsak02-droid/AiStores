@@ -7,12 +7,14 @@ import Marketplace from './pages/Marketplace'
 import ToolDetails from './pages/ToolDetails'
 import SellerDashboard from './pages/SellerDashboard'
 import WeeklyReport from './pages/WeeklyReport'
+import useTheme from './hooks/useTheme'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('marketplace')
   const [selectedTool, setSelectedTool] = useState(null)
   const [user, setUser] = useState(null)
   const [loadingAuth, setLoadingAuth] = useState(true)
+  const [theme, toggleTheme] = useTheme()
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -75,6 +77,8 @@ function App() {
         user={user}
         onLogin={handleLogin}
         onLogout={handleLogout}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       {currentPage === 'marketplace' && (

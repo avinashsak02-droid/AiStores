@@ -2,7 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(233, 225, 214, 0.8);
+  background: var(--nav-bg);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
   border-bottom: 1px solid var(--line);
@@ -132,7 +132,20 @@
   background: var(--fg);
   color: var(--bg);
 }
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--line);
+  transition: border-color var(--transition), color var(--transition);
+}
 
+.theme-toggle:hover {
+  border-color: var(--wine);
+  color: var(--wine);
+}
 /* Mobile Layout adjustments */
 @media (max-width: 640px) {
   .navbar-inner { 

@@ -50,7 +50,8 @@ Users type a natural-language outcome ("make me a pdf", "convert my txt file to 
 - [x] Weekly AI Report page + automated weekly data pipeline (Decision 015), confirmed working
 - [x] Firestore security rules locked down (tools + reviews), confirmed working (Decision 016). Later features (Usage counter, favourites, user preferences) will need rule additions.
 - [x] deploy the site to production — live on Vercel (`ai-stores-omega.vercel.app`), auto-deploys on push to `main` (Decision 017). The Weekly AI Report's Monday commits now go live automatically.
-- [ ] clean up fake seed ratings and downloads (seed data shows invented numbers like 150,000 downloads — misleading for a commercial product)
+- [x] dark mode with navbar toggle (Decision 018), confirmed working
+- [ ] clean up fake seed ratings and downloads(seed data shows invented numbers like 150,000 downloads — misleading for a commercial product)
 - [ ] fix the downloads stat (still a placeholder default of 0) — plan: count Launch clicks (needs a Firestore rules change)
 - [ ] make Marketplace list + featured card rating live (currently only the Tool Details page uses the real review average; related cards on Tool Details also show a placeholder 4.5)
 - [ ] save a copy of the Firestore rules in the repo (e.g. `firestore.rules`), since they currently live only in Firebase Console
@@ -60,6 +61,7 @@ Users type a natural-language outcome ("make me a pdf", "convert my txt file to 
 - [ ] clean up `ToolDetails.jsx`: remove the 🚀 emoji and `tool.icon` fallbacks (use CoverArt), replace the hardcoded "© 2024" footer
 - [ ] optional cleanup: reuse `App.jsx` `handleLogin` in SellerDashboard and ReviewSection instead of their own `handleSignIn`
 - [ ] Creator Hub form: collect `creator`, `overview`, `useCases`, `features` (Decision 009) — now also a prerequisite for outcome-based search
+- [ ] restyle `SellerDashboard.css` onto the design tokens (it still has hardcoded white and undefined variables; dark mode currently patches around it)
 - [ ] admin/moderation: report a listing, remove a listing
 - [ ] saved/favourite tools for signed-in users
 - [ ] creator public profile page

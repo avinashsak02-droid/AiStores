@@ -225,3 +225,18 @@ Status: **IMPLEMENTED and confirmed.**
 The site is hosted on Vercel, connected to the GitHub repo, and auto-deploys on every push to `main`. The Vercel project's Root Directory must stay `AiStore` (the project sits in a nested folder). Any new Vercel or Firebase domain must be added to Firebase Authentication, Authorized domains, or Google sign-in will fail.
 
 Reason: free, zero-config for Vite, and it removes the manual deploy step, so the weekly news commit publishes itself.
+
+---
+
+## Decision 018 — Dark mode via a `data-theme` attribute and CSS variables
+
+Status: **IMPLEMENTED and confirmed.**
+
+The theme is set by `data-theme="light|dark"` on `<html>`. Dark values override the existing design tokens in `App.css`, plus a small block of overrides for colors that were hardcoded in page CSS. The default follows the OS preference, and the user's toggle choice is saved in localStorage (`aistore-theme`). An inline script in `index.html` applies it before React loads to avoid a flash of the wrong theme.
+
+Reason: the whole site already runs on CSS variables, so this was the smallest and most reliable approach.
+
+Consequences:
+- New CSS should use the tokens (`--bg`, `--fg`, `--muted`, `--line`, `--wine`, `--nav-bg`), not hardcoded colors, or it will break in dark mode.
+- The Weekly AI Report is intentionally the same in both themes (`--bg`, `--fg` and `--wine` are pinned on `.gazette`).
+- Logo tiles keep a light background in dark mode so dark logos stay visible.

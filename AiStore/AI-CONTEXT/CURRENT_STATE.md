@@ -12,6 +12,7 @@ The AI Store prototype is working, deployed, and confirmed by the user through t
 - Weekly AI Report — an animated newspaper-style page with automatically updating AI news (Decision 015).
 - Real Firestore security rules (Decision 016).
 - Production deployment on Vercel (Decision 017).
+- Dark mode with a navbar toggle (Decision 018).
 
 See `LAST_CHECKPOINT.md` for the most recent checkpoint. The roadmap to the 31 Dec 2026 deadline is in `TODO.md`.
 
@@ -21,7 +22,7 @@ Deployed on Vercel at `ai-stores-omega.vercel.app`, auto-deploying on push to `m
 
 ## Visual design
 
-Parchment/editorial look. Design tokens live in `App.css`, with per-page class prefixes (`mk-`, `td-`, `tool-row-`, `gz-` for the Weekly Report page), and Creator Hub rules are scoped under `.seller-dashboard`. See Decisions 006–010.
+Light and dark themes. The parchment/editorial look is the light theme. Dark mode is chosen by `useTheme` (saved choice, else OS preference), applied as `data-theme` on `<html>`, and toggled from the navbar. The dark tokens and overrides for hardcoded colors are at the end of `App.css`. The Weekly AI Report keeps its parchment look in both themes. Design tokens live in `App.css`, with per-page class prefixes (`mk-`, `td-`, `tool-row-`, `gz-` for the Weekly Report page), and Creator Hub rules are scoped under `.seller-dashboard`. See Decisions 006–010.
 
 ## Authentication
 
@@ -69,6 +70,7 @@ Parchment/editorial look. Design tokens live in `App.css`, with per-page class p
 - Seed logo URLs are unverified. Broken logos fall back to generated cover art.
 - The Firestore rules exist only in Firebase Console, not in the repo.
 - Mobile and tablet layouts have had limited testing.
+- `SellerDashboard.css` is still the old Session 1 stylesheet (hardcoded `white`, undefined `--accent` and `--border-thin`, unscoped class names), despite earlier notes saying it was restyled. Dark mode works around it with overrides in `App.css`; a proper restyle onto the design tokens would remove the need for them.
 
 ## Current priority
 
