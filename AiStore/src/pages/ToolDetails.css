@@ -299,3 +299,40 @@
   position: absolute;
   inset: 0;
 }
+/* Creator name in the info grid is text, so it should be smaller than the numbers */
+.info-value--text {
+  font-size: 1.3rem;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+/* Overview / use cases / features (only rendered when the seller filled them in) */
+.td-about-section {
+  padding-block: 2.5rem;
+  display: grid;
+  gap: 2.5rem;
+}
+
+.td-overview {
+  max-width: 46rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--muted);
+  white-space: pre-line;
+}
+
+.td-lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2.5rem;
+}
+
+.td-list li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.td-list li::before {
+  content: '→ ';
+  color: var(--wine);
+}

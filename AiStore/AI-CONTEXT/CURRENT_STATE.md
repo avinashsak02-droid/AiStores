@@ -1,6 +1,6 @@
 # AI Store — Current State
 
-Last updated: 2026-10-14
+Last updated: 2026-10-20
 
 ## Overall status
 
@@ -38,7 +38,7 @@ Light and dark themes. The parchment/editorial look is the light theme. Dark mod
 
 ## Data / Firebase
 
-- `tools` collection: product listings, including `photos` (1–5 URLs, required in the Creator Hub form) and `logo`.
+- `tools` collection: product listings, including `photos` (1–5 URLs, required in the Creator Hub form), `logo`, and the optional/required content fields `creator`, `overview`, `useCases` (array, required, 1–8) and `features` (array, optional, max 8). Tools created before 2026-10-20 do not have these fields.
 - `reviews` collection: one review per user per tool, doc id `${toolId}_${userId}`, editable and deletable by its author.
 - Firestore security rules are set in Firebase Console (not stored in the repo) and confirmed working: public read on `tools` and `reviews`, owner-only writes, rating and downloads protected from client edits, review ratings limited to integers 1–5. See Decision 016.
 - Side effects of the rules: the seed button (`addSeedData.js`) no longer works from the client, and old tools owned by `seller_1` or `admin-seed` can't be edited from the site (only from the Firebase Console).
@@ -48,8 +48,8 @@ Light and dark themes. The parchment/editorial look is the light theme. Dark mod
 ## Product pages
 
 - Marketplace: hero and search, category chips, featured entry, numbered index, creator call-to-action.
-- Tool Details: header with logo and Launch button, info grid (category, status, live rating, users), photo carousel, reviews, related tools.
-- Creator Hub: add, edit and delete tools, with the photo fields.
+- Tool Details: header with logo and Launch button, info grid (category, creator, status, live rating, users), Overview / use cases / features section (shown only when the tool has them), photo carousel, reviews, related tools.
+- Creator Hub: add, edit and delete tools, with the photo fields and the creator, overview, use cases and features fields.
 - Weekly AI Report: newspaper-style page listing recent AI news headlines pulled from free RSS feeds, each with a subtle CSS-only drift animation (in-view only, respects `prefers-reduced-motion` + a manual toggle).
 
 ## Weekly AI Report — pipeline detail
@@ -63,10 +63,11 @@ Light and dark themes. The parchment/editorial look is the light theme. Dark mod
 
 - Seed data shows invented ratings and downloads (e.g. 150,000), which is misleading for a commercial product.
 - The downloads/users stat is a placeholder (default 0, never incremented).
-- The Marketplace list and featured card do not show the live review average. Related cards on Tool Details still fall back to a placeholder rating of 4.5.
-- `ToolDetails.jsx` still uses a `🚀` emoji in the Launch button, `tool.icon` fallbacks, and a hardcoded "© 2024" footer.
+- The Marketplace list and featured card do not show the live review average. (Related cards on Tool Details show no rating at all; the old placeholder 4.5 is gone.)
+- `FeaturedCard.jsx` and `FeaturedCard.css` are dead code (not imported anywhere) and can be deleted.
+- Existing tools, including the seed tools, have no `useCases`, so they can't feed outcome-based search until backfilled.
 - No image upload: the logo and gallery photos are pasted URLs.
-- The Creator Hub form does not collect `creator`, `overview`, `useCases` or `features` (Decision 009, not confirmed).
+
 - Seed logo URLs are unverified. Broken logos fall back to generated cover art.
 - The Firestore rules exist only in Firebase Console, not in the repo.
 - Mobile and tablet layouts have had limited testing.
@@ -74,9 +75,8 @@ Light and dark themes. The parchment/editorial look is the light theme. Dark mod
 
 ## Current priority
 
-1. Cleaning up fake seed ratings and downloads
-2. Tidying `ToolDetails.jsx` (emoji, old fallbacks)
-3. Phase 1 of the roadmap: Creator Hub data fields, Usage stat, live ratings on the Marketplace
+1. Cleaning up fake seed ratings and downloads, removing off-brand seed tools, backfilling real tools with use cases (Firebase Console)
+2. Phase 1 of the roadmap: Usage stat (count Launch clicks, needs a rules change), live ratings on the Marketplace, image upload
 
 ## Important instruction
 

@@ -1,30 +1,24 @@
 # Last Checkpoint
 
 ## Feature
-Dark mode with a navbar toggle
+Creator Hub data fields: creator, overview, use cases, features (Decision 009)
 
 ## Status
 IMPLEMENTED
 
 ## Files Changed
-- index.html
-- src/hooks/useTheme.js (new)
-- src/components/Icons.jsx
-- src/components/Navbar.jsx
-- src/components/Navbar.css
-- src/App.jsx
-- src/App.css
-- src/pages/WeeklyReport.css
+- src/pages/SellerDashboard.jsx
+- src/pages/ToolDetails.jsx
+- src/pages/ToolDetails.css
 
 ## What Changed
-- Added a light/dark theme switch. A `data-theme` attribute on `<html>` selects the theme, and a dark token set in `App.css` overrides the colors.
-- The `useTheme` hook uses the saved choice (localStorage key `aistore-theme`), otherwise the OS preference. An inline script in `index.html` sets the theme before React loads, so there is no flash.
-- Navbar has a sun/moon toggle button. The navbar background now uses a new `--nav-bg` variable.
-- A dark override block at the end of `App.css` fixes hardcoded colors: category chips, the creator call-to-action, the Creator Hub's white inputs and cards, and logo tiles (kept light so dark logos stay visible).
-- The Weekly AI Report keeps its fixed parchment colors in both themes (`--bg`, `--fg` and `--wine` are pinned on `.gazette`).
+- The Creator Hub form now collects `creator` (optional), `overview` (optional), `useCases` (required, at least 1) and `features` (optional). Use cases and features are one-per-line text boxes saved as arrays, max 8 lines each.
+- Edit repopulates all four fields. Leaving `creator` blank falls back to the Google account name via `getCreator`.
+- Tool Details shows the Creator in the info grid, and an Overview / "What you can do with it" / "Key features" section that only renders when the data exists, so old tools look unchanged.
+- No Firestore rules change was needed.
 
 ## Confirmed By User
-Yes — user implemented/tested the changes in VS Code ("ok it works").
+Yes — user implemented/tested the changes in VS Code. All 5 test groups passed (full listing, required-only fallback, validation alerts, editing, layout and old-data check).
 
 ## Next Task
-Clean up fake seed ratings and downloads, then tidy `ToolDetails.jsx` (remove old emoji and leftover fallbacks).
+Clean up the fake seed ratings and downloads in Firebase Console, remove off-brand seed tools, and backfill real tools with proper use cases. Then the Usage stat (count Launch clicks), then live ratings on the Marketplace list.

@@ -818,3 +818,60 @@ Decision 015 — Weekly AI Report uses free RSS + GitHub Actions + static JSON, 
 
 - The nested `AiStore/AiStore/` folder structure (present since Session 1) keeps causing path-related bugs whenever a new top-level tool/config (like `.github/workflows/`) is introduced — anything that must live at the true repo root needs this double-checked explicitly, not assumed.
 - When a workflow job sets `working-directory` for `run:` steps, remember it applies to *every* `run:` block in that job, including git commands late in the job — a path that's already relative to that directory should not be prefixed again.
+
+
+
+
+#####Conversation 11
+# Session 11 — Repository Review and Creator Hub Data Fields (Decision 009)
+
+Date: 2026-10-20
+
+## Objective
+
+After a 6-day break (spent on funding work, including a Shark Tank application), review the repository and pick the most important development. Then build it.
+
+## Repository review findings (verified against source)
+
+- `ToolDetails.jsx` was already cleaned up. `CURRENT_STATE.md` and `TODO.md` still listed a 🚀 emoji, `tool.icon` fallbacks, a hardcoded "© 2024" footer and a placeholder 4.5 rating on related cards. The source has none of these: the Launch button uses `ArrowUpRight`, the footer uses `new Date().getFullYear()`, fallbacks use `CoverArt`, and related cards show no rating.
+- `FeaturedCard.jsx` and `FeaturedCard.css` are dead code (not imported anywhere).
+- `LAST_CHECKPOINT.md` listed the ToolDetails tidy-up as the next task, which was already done.
+- `public/weekly-report.json` in the provided files showed `weekOf: 2026-10-12`, so the Monday 19 Oct run needs checking in the GitHub Actions tab.
+- Seed data still holds invented ratings and downloads (e.g. 150,000), and the Marketplace sort and featured entry are driven by `downloads`. Fixing this needs the Firebase Console because of the Firestore rules.
+
+## Decision made
+
+The most important next development was Phase 1, the Creator Hub data fields (Decision 009), because outcome-based search depends on `useCases` and the form was too thin for real startups. The fake-number cleanup was flagged as a quick prerequisite, mainly for credibility with investors.
+
+## What was implemented
+
+Delivered as FIND / REPLACE patches across 3 files:
+- `SellerDashboard.jsx`: new form fields `creator` (optional), `overview` (optional), `useCases` (required, at least 1) and `features` (optional). Use cases and features are one-per-line text boxes saved as arrays, max 8 lines each (`MAX_LIST_ITEMS`). Edit repopulates the fields. Validation alerts added.
+- `ToolDetails.jsx`: Creator shown in the info grid via `getCreator`, plus an Overview / "What you can do with it" / "Key features" section that only renders when data exists.
+- `ToolDetails.css`: styles for the new section (`td-` prefix, `.info-value--text`).
+
+## Confirmed Result
+
+User copied the patches into VS Code and ran a 5-group test script (full listing, required-only fallback, validation alerts, editing, layout and old-data check). **All tests passed.** No Firestore rules change was needed.
+
+## Decisions
+
+Decision 009 is now IMPLEMENTED and confirmed. `useCases` is required because outcome-based search (Decision 014) depends on it.
+
+## Rejected approaches
+
+- Add/remove row buttons for use cases and features (like the photo fields). One-per-line text boxes were chosen as simpler.
+
+## What remains unfinished
+
+- Fake seed ratings and downloads still need cleaning in Firebase Console. Off-brand seed tools (e.g. ChatGPT, Claude) should be removed given the 15 Oct narrative change.
+- Existing and seed tools have no `useCases`, so they must be backfilled (or replaced with real new-AI startups listed through the Creator Hub) before outcome search can start.
+- Test listings `SlideSmith` and `QuickNote AI` should be deleted when no longer needed.
+- Delete the dead `FeaturedCard` files.
+- Next roadmap items: Usage stat (count Launch clicks, needs a Firestore rules change, so the current rules should be pasted first), live ratings on the Marketplace list, image upload.
+- Confirm the 19 Oct weekly report run succeeded.
+
+## Lessons for future AI sessions
+
+- Check the source before trusting TODO and CURRENT_STATE items. Several listed issues in `ToolDetails.jsx` had already been fixed without the context files being updated.
+- The Firestore rules live only in Firebase Console, so any feature that writes new fields from the client should start by asking the user for the current rules.

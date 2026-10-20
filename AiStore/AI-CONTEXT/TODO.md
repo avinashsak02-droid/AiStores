@@ -3,7 +3,7 @@
 Plan made on 14 Oct 2026. After 31 Dec the focus moves to marketing and gaining users.
 
 - **Phase 0 — Foundations (14–20 Oct):** deploy ✅, Firestore rules ✅, clean fake seed ratings/downloads, tidy `ToolDetails.jsx`.
-- **Phase 1 — Data foundation (21 Oct–3 Nov):** Creator Hub collects `creator`, `overview`, `useCases`, `features`; backfill seed tools; fix the Usage stat by counting Launch clicks; live ratings on the Marketplace list and featured card; image upload for logo and gallery (check whether Firebase Storage needs the Blaze plan).
+- **Phase 1 — Data foundation (21 Oct–3 Nov):** Creator Hub collects `creator`, `overview`, `useCases`, `features` ✅ (done 20 Oct); backfill seed tools; fix the Usage stat by counting Launch clicks; live ratings on the Marketplace list and featured card; image upload for logo and gallery (check whether Firebase Storage needs the Blaze plan).
 - **Phase 2 — Discovery (4–17 Nov):** outcome-based search (plan below) with plain-search fallback; comparison page for any two tools; saved/favourite tools.
 - **Phase 3 — Money (18 Nov–1 Dec):** payments and monetized accounts. Timebox hard. Launch with the simple option (paid featured listings or creator pro plans); commission and creator payouts are a post-launch goal. Razorpay suits an India-based setup.
 - **Phase 4 — Engagement and content (2–15 Dec):** news based on preferences (light version: user picks topics, Gazette filters by them); AI Tests and AI Shorts (meaning to be clarified with the user); Terms, Privacy and Contact pages; admin moderation (report/remove a listing); SEO basics. **Feature freeze 15 Dec.**
@@ -52,15 +52,19 @@ Users type a natural-language outcome ("make me a pdf", "convert my txt file to 
 - [x] deploy the site to production — live on Vercel (`ai-stores-omega.vercel.app`), auto-deploys on push to `main` (Decision 017). The Weekly AI Report's Monday commits now go live automatically.
 - [x] dark mode with navbar toggle (Decision 018), confirmed working
 - [ ] clean up fake seed ratings and downloads(seed data shows invented numbers like 150,000 downloads — misleading for a commercial product)
+- [ ] backfill existing tools with `useCases` (and `overview`/`features`), or delete off-brand seed tools and re-list real new-AI startups through the Creator Hub (Firebase Console for old `admin-seed`/`seller_1` tools)
+- [ ] delete dead code: `src/components/FeaturedCard.jsx` and `FeaturedCard.css`
+- [ ] delete the test listings `SlideSmith` and `QuickNote AI` once no longer needed
+- [ ] check the GitHub Actions tab to confirm the Monday 19 Oct weekly report run succeeded
 - [ ] fix the downloads stat (still a placeholder default of 0) — plan: count Launch clicks (needs a Firestore rules change)
 - [ ] make Marketplace list + featured card rating live (currently only the Tool Details page uses the real review average; related cards on Tool Details also show a placeholder 4.5)
 - [ ] save a copy of the Firestore rules in the repo (e.g. `firestore.rules`), since they currently live only in Firebase Console
 
 ## 🟡 MEDIUM PRIORITY
 - [ ] add more pages to the site (Terms, Privacy, Contact are needed before taking payments)
-- [ ] clean up `ToolDetails.jsx`: remove the 🚀 emoji and `tool.icon` fallbacks (use CoverArt), replace the hardcoded "© 2024" footer
+- [x] clean up `ToolDetails.jsx` — checked against the source on 2026-10-20: already done (no emoji or `tool.icon` fallbacks, footer uses the current year)
 - [ ] optional cleanup: reuse `App.jsx` `handleLogin` in SellerDashboard and ReviewSection instead of their own `handleSignIn`
-- [ ] Creator Hub form: collect `creator`, `overview`, `useCases`, `features` (Decision 009) — now also a prerequisite for outcome-based search
+- [x] Creator Hub form: collect `creator`, `overview`, `useCases`, `features` (Decision 009) — confirmed working 2026-10-20
 - [ ] restyle `SellerDashboard.css` onto the design tokens (it still has hardcoded white and undefined variables; dark mode currently patches around it)
 - [ ] admin/moderation: report a listing, remove a listing
 - [ ] saved/favourite tools for signed-in users

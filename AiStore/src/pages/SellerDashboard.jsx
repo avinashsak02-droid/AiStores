@@ -5,6 +5,7 @@ import { db, auth, googleProvider } from '../firebase'
 import './SellerDashboard.css'
 
 const MAX_PHOTOS = 5
+const MAX_LIST_ITEMS = 8
 
 export default function SellerDashboard({ user }) {
   const [tools, setTools] = useState([])
@@ -17,7 +18,11 @@ export default function SellerDashboard({ user }) {
     category: 'Coding',
     link: '',
     price: 'Free',
-    photos: ['']
+    photos: [''],
+    creator: '',
+    overview: '',
+    useCases: '',
+    features: ''
   })
   const [loading, setLoading] = useState(true)
 
@@ -89,7 +94,11 @@ export default function SellerDashboard({ user }) {
       category: 'Coding',
       link: '',
       price: 'Free',
-      photos: ['']
+      photos: [''],
+      creator: '',
+      overview: '',
+      useCases: '',
+      features: ''
     })
   }
 
@@ -135,7 +144,29 @@ export default function SellerDashboard({ user }) {
       }
     }
 
-    const dataToSave = { ...formData, photos: validPhotos }
+        // Turn the one-per-line text boxes into arrays
+    const toList = (text) =>
+      text.split('\n').map(line => line.trim()).filter(line => line !== '')
+    const useCases = toList(formData.useCases)
+    const features = toList(formData.features)
+
+    if (useCases.length === 0) {
+      alert('Please add at least 1 use case (one per line).')
+      return
+    }
+    if (useCases.length > MAX_LIST_ITEMS || features.length > MAX_LIST_ITEMS) {
+      alert(`Use cases and features can have at most ${MAX_LIST_ITEMS} lines each.`)
+      return
+    }
+
+    const dataToSave = {
+      ...formData,
+      creator: formData.creator.trim(),
+      overview: formData.overview.trim(),
+      useCases,
+      features,
+      photos: validPhotos
+    }
 
     try {
       if (editingId) {
@@ -178,7 +209,11 @@ export default function SellerDashboard({ user }) {
       category: tool.category,
       link: tool.link,
       price: tool.price,
-      photos: tool.photos && tool.photos.length > 0 ? tool.photos : ['']
+            photos: tool.photos && tool.photos.length > 0 ? tool.photos : [''],
+      creator: tool.creator || '',
+      overview: tool.overview || '',
+      useCases: (tool.useCases || []).join('\n'),
+      features: (tool.features || []).join('\n')
     })
     setEditingId(tool.id)
     setShowForm(true)
@@ -280,14 +315,68 @@ export default function SellerDashboard({ user }) {
               value={formData.description}
               onChange={handleInputChange}
               className="form-input form-textarea"
+                            rows="4"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="creator">Creator / Company Name</label>
+            <input
+              id="creator"
+              type="text"
+              name="creator"
+              placeholder="Leave blank to use your Google account name"
+              value={formData.creator}
+              onChange={handleInputChange}
+              className="form-input"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="overview">Overview</label>
+            <textarea
+              id="overview"
+              name="overview"
+              placeholder="A longer explanation: who it is for, what problem it solves..."
+              value={formData.overview}
+              onChange={handleInputChange}
+              className="form-input form-textarea"
+              rows="5"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="useCases">Use Cases * (one per line)</label>
+            <textarea
+              id="useCases"
+              name="useCases"
+              placeholder={'Turn a text file into a slide deck\nSummarize long PDFs\nWrite product descriptions'}
+              value={formData.useCases}
+              onChange={handleInputChange}
+              className="form-input form-textarea"
+              rows="5"
+            />
+            <p className="photo-hint">
+              Describe what people can get done with your tool, in plain words. Max {MAX_LIST_ITEMS} lines.
+            </p>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="features">Key Features (one per line)</label>
+            <textarea
+              id="features"
+              name="features"
+              placeholder={'Animated slide transitions\nExports to PDF and PPTX'}
+              value={formData.features}
+              onChange={handleInputChange}
+              className="form-input form-textarea"
               rows="4"
             />
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="link">Product URL *</label>
-              <input
+              <label htmlFor="link">Product URL *</label>              <input
                 id="link"
                 type="url"
                 name="link"

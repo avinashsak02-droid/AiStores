@@ -5,6 +5,7 @@ import PhotoCarousel from '../components/PhotoCarousel'
 import ReviewSection from '../components/ReviewSection'
 import CoverArt from '../components/CoverArt'
 import { ArrowUpRight } from '../components/Icons'
+import { getCreator } from '../utils/tool'
 import './ToolDetails.css'
 
 export default function ToolDetails({ tool, onBack, onViewTool, user }) {
@@ -97,6 +98,10 @@ export default function ToolDetails({ tool, onBack, onViewTool, user }) {
               <span className="info-value">{tool.category}</span>
             </div>
             <div className="info-item">
+              <span className="info-label">Creator</span>
+              <span className="info-value info-value--text">{getCreator(tool)}</span>
+            </div>
+            <div className="info-item">
               <span className="info-label">Status</span>
               <span className="info-value">{tool.price}</span>
             </div>
@@ -115,6 +120,46 @@ export default function ToolDetails({ tool, onBack, onViewTool, user }) {
         </section>
 
         <div className="divider-h"></div>
+
+                {/* SECTION 2B: OVERVIEW / USE CASES / FEATURES (only shown if filled in) */}
+        {(tool.overview || tool.useCases?.length > 0 || tool.features?.length > 0) && (
+          <>
+            <section className="td-about-section">
+              {tool.overview && (
+                <div>
+                  <h2 className="section-title">Overview</h2>
+                  <p className="td-overview">{tool.overview}</p>
+                </div>
+              )}
+              {(tool.useCases?.length > 0 || tool.features?.length > 0) && (
+                <div className="td-lists">
+                  {tool.useCases?.length > 0 && (
+                    <div>
+                      <h2 className="section-title">What you can do with it</h2>
+                      <ul className="td-list">
+                        {tool.useCases.map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {tool.features?.length > 0 && (
+                    <div>
+                      <h2 className="section-title">Key features</h2>
+                      <ul className="td-list">
+                        {tool.features.map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </section>
+
+            <div className="divider-h"></div>
+          </>
+        )}
 
         {/* SECTION 3: CAROUSEL */}
         {tool.photos && tool.photos.length > 0 && (

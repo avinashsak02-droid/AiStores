@@ -100,9 +100,9 @@ Reason: the reference design relies on strong cover artwork, and the database ha
 
 ## Decision 009 — Read optional product fields without changing the database
 
-Status: PROPOSED, NOT YET CONFIRMED — unchanged this session.
+Status: **IMPLEMENTED and confirmed** (2026-10-20).
 
-The UI is intended to read `creator`, `image`, `overview`, `useCases` (array) and `features` (array) if a product has them, and hide those sections when missing. Creator falls back to `sellerName`, then "Independent creator" (this fallback, in `utils/tool.jsx`, is confirmed working). No Firestore schema change or data migration has been made, and the Creator Hub form does not collect `overview`, `useCases` or `features` yet — the current `ToolDetails.jsx` does not render those sections. Adding these inputs to the Creator Hub form is a natural next step.
+The UI is intended to read `creator`, `image`, `overview`, `useCases` (array) and `features` (array) if a product has them, and hide those sections when missing. Creator falls back to `sellerName`, then "Independent creator" (this fallback, in `utils/tool.jsx`, is confirmed working). Implemented: the Creator Hub form now collects `creator` (optional), `overview` (optional), `useCases` (required, at least 1) and `features` (optional), as one-per-line text boxes stored as arrays with a maximum of 8 lines each. `ToolDetails.jsx` renders the creator and the Overview / use cases / features sections, and hides them when empty. `useCases` is required because outcome-based search (Decision 014) depends on it. No Firestore schema migration was needed and old tools still render normally. Old tools must be backfilled by hand.
 
 ---
 
